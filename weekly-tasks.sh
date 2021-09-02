@@ -1,7 +1,7 @@
 #!/bin/bash
 
 USER=rust-pve-2
-MONTH=$(date +"%m")
+MONTH=$(date +"%-m")
 LOGDATE=$(date +"%m-%d-%Y-%s")
 LOGFILE=weekly-tasks_${LOGDATE}.log
 FULLLOG=/home/${USER}/rust/log/${LOGFILE}

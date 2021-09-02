@@ -1,6 +1,6 @@
 #!/bin/bash
 #set -euo pipefail
-BASEDIR=/rust-backups
+BASEDIR=/game-backups
 RUSTDIR=rust
 PREFIX=${USER}-backup
 DIR=${PREFIX}-`date +%F`
@@ -30,7 +30,7 @@ fi
 
 echo "$@"
 
-if [[ $1 = "list" ]]
+if [[ $1 == "list" ]]
   then
   # echo 'in list loop'
   if [[ -z $2 ]]
@@ -44,7 +44,7 @@ fi
 
 
 
-if [[ $PWD = $HOME ]]
+if [[ $PWD == $HOME ]]
   then
   # we're in the homedir, continue.
   # echo 'in homedir'
@@ -85,7 +85,7 @@ if [[ $PWD = $HOME ]]
         esac
       done
     tar -tf ${BASEDIR}/${PREFIX}-${TODAY}/$1 *home/${USER}/rust/serverfiles/oxide/* > /dev/null 2>&1
-    if [[ ! "$?" = 2 ]]
+    if [[ ! "$?" == 2 ]]
       # oxide found
       then
       echo "Extract Oxide files?"
@@ -141,7 +141,7 @@ if [[ $PWD = $HOME ]]
         esac
       done
     tar -tf ${BASEDIR}/${PREFIX}-${2}/${1} *home/${USER}/rust/serverfiles/oxide/* > /dev/null 2>&1
-    if [[ ! "$?" = 2 ]]
+    if [[ ! "$?" == 2 ]]
       # oxide found
       then
       echo "Extract Oxide files?"

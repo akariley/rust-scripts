@@ -33,7 +33,7 @@ if [[ -d ${HOME}/${RUSTDIR}/serverfiles/oxide ]]
 fi
 
 echo
-if [ $(/usr/bin/mount | grep -c ${BASEDIR}) != 1 ]
+if [ $(/usr/bin/mount | grep -c ${BASEDIR}) !== 1 ]
   then
   # Directory not mounted... try and mount.
   ${MKNICE} /usr/bin/mount /game-backups/ || exit 1

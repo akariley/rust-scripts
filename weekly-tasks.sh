@@ -9,23 +9,26 @@ FULLLOG=/home/${USER}/rust/log/${LOGFILE}
 # read in lgsm vars we need
 # TODO: validate these: https://askubuntu.com/questions/367136/how-do-i-read-a-variable-from-a-file
 
+LGSMCONFIG=""
+
 source ./.config
+
+if [ ! -e ${LGSMCONFIG ] || [ ${LGSMCONFIG} == "" ]
+then
+  echo "LGSMCONFIG is not set in ./.config or file does not exist.  Aborting."
+  exit 1
+fi 
 
 RCONIP=$(grep ^ip ${LGSMCONFIG} | awk -F'=' '{print $2}' | tr -d '"')
 RCONPORT=$(grep ^rconport ${LGSMCONFIG} | awk -F'=' '{print $2}' | tr -d '"')
 RCONPASSWORD=$(grep ^rconpassword ${LGSMCONFIG} | awk -F'=' '{print $2}' | tr -d '"')
 
-echo $RCONIP
-echo $RCONPORT
-echo $RCONPASSWORD
-
-exit 255
 exec  >> ${FULLLOG} 2>&1
 
 echo "Restart cycle start: $(date +"%c")"
 touch /home/${USER}/rust/.disable_monitor
 echo "Sending restart command to server via rcon..."
-timeout 2 /usr/bin/webrcon-cli ${RCONIP}:${RCONPORT} ${RCONPASSWORD} "restart 3600 'weekly restart'"
+timeout 2 /usr/bin/webrcon-cli ${RCONIP}:${RCONPORT} ${RCONPASSWORD} "restart 60 'weekly restart'"
 while pgrep RustDedicated > /dev/null
 do
   sleep 60

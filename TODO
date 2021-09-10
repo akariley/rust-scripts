@@ -1,1 +1,2 @@
 -- read vars from backup file instead of config?
+-- make scripts validate input from .config file

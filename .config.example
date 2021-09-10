@@ -1,4 +1,4 @@
-USER=<username>
+USER=$(whoami)
 MONTH=$(date +"%-m")
 LOGDATE=$(date +"%m-%d-%Y-%s")
 LOGFILE=weekly-tasks_${LOGDATE}.log

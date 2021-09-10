@@ -13,10 +13,11 @@ source ./.config
 
 RCONIP=$(grep ^ip ${LGSMCONFIG} | awk -F'=' '{print $2}' | tr -d '"')
 RCONPORT=$(grep ^rconport ${LGSMCONFIG} | awk -F'=' '{print $2}' | tr -d '"')
-RCONPASSWORD=$(grep ^rconpassword ${LGSMCONFIG})
+RCONPASSWORD=$(grep ^rconpassword ${LGSMCONFIG} | awk -F'=' '{print $2}' | tr -d '"')
 
 echo $RCONIP
 echo $RCONPORT
+echo $RCONPASSWORD
 
 exit 255
 exec  >> ${FULLLOG} 2>&1

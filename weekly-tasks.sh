@@ -13,7 +13,7 @@ LGSMCONFIG=""
 
 source ./.config
 
-if [ ! -e ${LGSMCONFIG ] || [ ${LGSMCONFIG} == "" ]
+if [ ! -e ${LGSMCONFIG} ] || [ ${LGSMCONFIG} == "" ]
 then
   echo "LGSMCONFIG is not set in ./.config or file does not exist.  Aborting."
   exit 1

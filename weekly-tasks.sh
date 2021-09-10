@@ -11,9 +11,11 @@ FULLLOG=/home/${USER}/rust/log/${LOGFILE}
 
 source ./.config
 
-RCONIP=$(grep ^ip ${LGSMCONFIG})
+RCONIP=$(grep ^ip ${LGSMCONFIG} | awk -F'=' '{print $2}')
 RCONPORT=$(grep ^rconport ${LGSMCONFIG})
 RCONPASSWORD=$(grep ^rconpassword ${LGSMCONFIG})
+
+echo $RCONIP
 
 exit 255
 exec  >> ${FULLLOG} 2>&1

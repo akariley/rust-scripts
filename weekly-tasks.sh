@@ -37,7 +37,18 @@ echo "Shutdown complete, proceeding."
 find /home/${USER}/rust/lgsm/lock/ -type f -delete
 #/home/${USER}/rust/backup.sh
 #/home/${USER}/rust/rustserver update-lgsm
-#/home/${USER}/rust/rustserver update > /dev/null
+echo "Checking for Rust update..."
+/home/${USER}/rust/rustserver check-update | grep -q 'Update available'
+statuscode=$?
+echo "Status code for Rust update check was: $statuscode"
+if [[ $statuscode -eq 0 ]];
+then
+  # there's a rust update
+  echo "Rust update found, updating..."
+  /home/${USER}/rust/rustserver update > /dev/null
+fi
+echo "No Rust update found, proceeding..."
+
 #/home/${USER}/rust/rustserver mods-update > /dev/null
 # we need to see if this is the first Thursday of the month.
 # TODO: https://stackoverflow.com/questions/24777597/value-too-great-for-base-error-token-is-08

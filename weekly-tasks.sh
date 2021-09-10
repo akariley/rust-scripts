@@ -12,7 +12,7 @@ FULLLOG=/home/${USER}/rust/log/${LOGFILE}
 source ./.config
 
 RCONIP=$(grep ^ip ${LGSMCONFIG} | awk -F'=' '{print $2}' | tr -d '"')
-RCONPORT=$(grep ^rconport ${LGSMCONFIG} | tr -d '"')
+RCONPORT=$(grep ^rconport ${LGSMCONFIG} | awk -F'=' '{print $2}' | tr -d '"')
 RCONPASSWORD=$(grep ^rconpassword ${LGSMCONFIG})
 
 echo $RCONIP

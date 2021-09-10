@@ -2,11 +2,15 @@
 #set -euo pipefail
 BASEDIR=/game-backups
 RUSTDIR=rust
-PREFIX=$USER
-DIR=${PREFIX}/`date +%m`
-FILENAME=$PREFIX'-'`date +%Y-%b-%d-%H%M`
+DIR=${USER}/$(date +%m)
+FILENAME=${USER}-$(date +%Y-%b-%d-%H%M)
 FULLNAME=${BASEDIR}/${DIR}/${FILENAME}.tar.gz
 MKNICE='ionice -c 3'
+
+echo $FILENAME.tar.gz
+echo $FULLNAME
+
+exit 1
 
 #
 #   ${HOME}/${RUSTDIR}/serverfiles/oxide

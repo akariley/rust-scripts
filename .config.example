@@ -6,18 +6,42 @@ FULLLOG=/home/${USER}/rust/log/${LOGFILE}
 
 LGSMCONFIG=/path/to/lgsmserver.cfg
 
-# is your backup location a mount point? and if so, do you have permission to mount
-# it if it's not mounted? 1 = yes, 0 = no
-BACKISMOUNT=1
+#################
+# GENERAL OPTIONS
+#################
 
+# where did you install your Rust server?  Tqhis is relative to your home dir.
+# ie: for an install in /home/foo/rust/, put 'rust'
+# leave empty if you installed the server into the home directory.
+RUSTDIR=rust
 
-
+# node is used to send commands to a running Rust server.
 # if you installed node globally the default should work (usually /usr/bin/webrcon-cli)
 # otherwise you'll need to know where you installed it.
 # a local npm install usually puts it here: ~/node_modules/webrcon-cli/dist/bin/webrcon-cli.js
-WEBRCONCMD=$(which webrcon-cli)
+WEBRCONCMD=/usr/bin/webrcon-cli
 
-# where did you install your Rust server?  This is relative to your home dir.
-# ie: for an install in /home/foo/rust/, put 'rust'
-# leave empty if you installed the server into the home directory.
-RUSTINSTALLDIR=rust
+
+
+################
+# BACKUP OPTIONS
+################
+
+# is your backup location a mount point? and if so, do you have permission to mount
+# it if it's not mounted? 1 = yes, 0 = no
+BACKUPISMOUNT=1
+
+
+# where are your backups stored? we default to ~/backups/
+BACKUPDIR=${HOME}/backups
+
+
+# code follows
+
+if [ ! -z ${RUSTDIR} ]
+then
+  INSTALLDIR=${HOME}/${RUSTDIR}
+else
+  INSTALLDIR=${HOME}
+fi
+

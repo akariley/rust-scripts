@@ -50,7 +50,7 @@ then
   # let's get a new map seed.
   newseed=$(shuf -i 1-2147483647 -n1)
   echo "New seed is ${newseed}."
-  sed -i "s/seed=".*"/seed="${newseed}"/g" /home/${USER}/rust/lgsm/config-lgsm/rustserver/rustserver.cfg
+  sed -i "s/seed=".*"/seed="${newseed}"/g" ${LGSMCONFIG}
   # are we doing a blueprint wipe?
   if [[ $MONTH%2 -eq 1 ]];
   then

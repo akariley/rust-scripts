@@ -27,7 +27,7 @@ exec  >> ${FULLLOG} 2>&1
 echo "Restart cycle start: $(date +"%c")"
 touch /home/${USER}/rust/.disable_monitor
 echo "Sending restart command to server via rcon..."
-timeout 2 /usr/bin/webrcon-cli ${RCONIP}:${RCONPORT} ${RCONPASSWORD} "restart 60 'weekly restart'"
+timeout 2 /usr/bin/webrcon-cli ${RCONIP}:${RCONPORT} ${RCONPASSWORD} "restart 3600 'weekly restart'"
 while pgrep RustDedicated > /dev/null
 do
   sleep 60
@@ -35,8 +35,8 @@ done
 # remove lock files
 echo "Shutdown complete, proceeding." 
 find /home/${USER}/rust/lgsm/lock/ -type f -delete
-#/home/${USER}/rust/backup.sh
-#/home/${USER}/rust/rustserver update-lgsm
+/home/${USER}/rust/backup.sh
+/home/${USER}/rust/rustserver update-lgsm
 echo "Checking for Rust update..."
 /home/${USER}/rust/rustserver check-update | grep -q 'Update available'
 statuscode=$?
@@ -49,13 +49,11 @@ then
 fi
 echo "No Rust update found, proceeding..."
 
-#/home/${USER}/rust/rustserver mods-update > /dev/null
+/home/${USER}/rust/rustserver mods-update > /dev/null
 # we need to see if this is the first Thursday of the month.
 # TODO: https://stackoverflow.com/questions/24777597/value-too-great-for-base-error-token-is-08
-# HACK
 #
-#
-if [ $(date +\%d) -le 07 ] && [ 1 -eq 2 ]
+if [ $(date +\%d) -le 07 ]
 then
   # we're doing the wipe today.
   # let's get a new map seed.
@@ -75,12 +73,12 @@ then
     find /home/${USER}/rust/serverfiles/oxide/data/Backpacks -type f -delete
   fi
 fi
-#rm -vr /home/${USER}/rust/.disable_monitor
+rm -vr /home/${USER}/rust/.disable_monitor
 echo "Starting server."
-#/home/${USER}/rust/rustserver start
+/home/${USER}/rust/rustserver start
 sleep 10
 echo "Setting affinity..."
-#taskset -cp 1 $(pgrep RustDedicated)
+taskset -cp 1 $(pgrep RustDedicated)
 
 echo "Done!"
 echo "Restart cycle ended: $(date +"%c")"

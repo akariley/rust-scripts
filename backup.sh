@@ -56,6 +56,7 @@ then
   # check if the server is running.
   if pgrep RustDedicated > /dev/null
   then
+    echo "Server is running; sending 'server.save' via rcon."
     RCONIP=$(grep ^ip ${LGSMCONFIG} | awk -F'=' '{print $2}' | tr -d '"')
     RCONPORT=$(grep ^rconport ${LGSMCONFIG} | awk -F'=' '{print $2}' | tr -d '"')
     RCONPASSWORD=$(grep ^rconpassword ${LGSMCONFIG} | awk -F'=' '{print $2}' | tr -d '"')

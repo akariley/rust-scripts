@@ -33,6 +33,7 @@ BACKUPISMOUNT=1
 
 
 # where are your backups stored? we default to ~/backups/
+#BACKUPDIR=/game-backups/${USER}
 BACKUPDIR=${HOME}/backups
 
 # what prefix would you like for the backup files?  We default to ${BACKUPDIR}/<day of month>/

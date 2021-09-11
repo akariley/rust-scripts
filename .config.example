@@ -4,6 +4,7 @@ LOGDATE=$(date +"%m-%d-%Y-%s")
 LOGFILE=weekly-tasks_${LOGDATE}.log
 FULLLOG=/home/${USER}/rust/log/${LOGFILE}
 
+#LGSMCONFIG=/home/rust-testing/rust/lgsm/config-lgsm/rustserver/rustserver.cfg
 LGSMCONFIG=/path/to/lgsmserver.cfg
 
 #################
@@ -39,7 +40,10 @@ BACKUPDIR=${HOME}/backups
 # what prefix would you like for the backup files?  We default to ${BACKUPDIR}/<day of month>/
 BACKUPDIRPREFIX=$(date +%m)
 
-
+# do we issue a 'server.save' command to the rust server when the backup script is run?
+# 1 = yes, 0 = no
+# WARNING: backups won't run if your LGSMCONFIG variable is not correct if this is set.
+SAVEONBACKUP=1
 
 # code follows
 

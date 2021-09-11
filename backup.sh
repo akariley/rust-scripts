@@ -12,7 +12,7 @@ then
     SAVEONBACKUP=0
   fi
   # check if LGSMCONFIG is filled out.
-  if [ -e ${LGSMCONFIG} ]
+  if [ ! -e ${LGSMCONFIG} ]
   then
     echo "Warning: SAVEONBACKUP is true, but LGSMCONFIG isn't a valid path.  Disabling SAVEONBACKUP for this run."
     SAVEONBACKUP=0
@@ -45,11 +45,6 @@ if [[ -d ${INSTALLDIR}/serverfiles/oxide ]]
   )
 fi
 
-echo "${MKNICE} tar zcvf $FULLNAME "${backuplist[@]}""
-
-
-
-
 # code follows
 
 if [[ -d ${BACKUPDIR}/${BACKUPDIRPREFIX}/ ]]
@@ -74,7 +69,6 @@ then
   # end save check
 fi
 
-sleep 2
 echo "Making ${FULLNAME}"
 echo "${MKNICE} tar zcvf $FULLNAME "${backuplist[@]}""
 

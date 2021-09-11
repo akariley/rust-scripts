@@ -10,7 +10,7 @@ LGSMCONFIG=/path/to/lgsmserver.cfg
 # GENERAL OPTIONS
 #################
 
-# where did you install your Rust server?  Tqhis is relative to your home dir.
+# where did you install your Rust server?  This is relative to your home dir.
 # ie: for an install in /home/foo/rust/, put 'rust'
 # leave empty if you installed the server into the home directory.
 RUSTDIR=rust

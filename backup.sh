@@ -1,16 +1,15 @@
 #!/bin/bash
 #set -euo pipefail
-BASEDIR=/game-backups
-RUSTDIR=rust
-DIR=${USER}/$(date +%m)
-FILENAME=${USER}-$(date +%Y-%b-%d-%H%M)
-FULLNAME=${BASEDIR}/${DIR}/${FILENAME}.tar.gz
-MKNICE='ionice -c 3'
 
 source ./.config
 
-echo $FILENAME.tar.gz
-echo $FULLNAME
+FILENAME=${USER}-$(date +%Y-%b-%d-%H%M)
+FULLNAME=${BACKUPDIR}/${BACKUPDIRPREFIX}/${FILENAME}.tar.gz
+MKNICE='ionice -c 3'
+
+
+echo "File: $FILENAME.tar.gz"
+echo "Path: $FULLNAME"
 
 
 
@@ -41,25 +40,27 @@ fi
 
 echo "${MKNICE} tar zcvf $FULLNAME "${backuplist[@]}""
 
-exit 1
+
 
 
 # code follows
 
-if [ $(/usr/bin/mount | grep -c ${BASEDIR}) !== 1 ]
-  then
-  # Directory not mounted... try and mount.
-  ${MKNICE} /usr/bin/mount /game-backups/ || exit 1
-fi
+#if [ $(/usr/bin/mount | grep -c ${BASEDIR}) !== 1 ]
+#  then
+#  # Directory not mounted... try and mount.
+#  ${MKNICE} /usr/bin/mount /game-backups/ || exit 1
+#fi
 
-if [[ -d ${BASEDIR}/${DIR} ]]
+if [[ -d ${BACKUPDIR}/${BACKUPDIRPREFIX}/ ]]
   then
-  echo "Directory ${BASEDIR}/${DIR} exists."
+  echo "Directory ${BACKUPDIR}/${BACKUPDIRPREFIX}/ exists."
 else
-  echo "Directory ${BASEDIR}/${DIR} does not exist... making it."
-  ${MKNICE} mkdir -p --mode=700 ${BASEDIR}/${DIR} || exit 1
+  echo "Directory ${BACKUPDIR}/${BACKUPDIRPREFIX}/ does not exist... making it."
+  echo "${MKNICE} mkdir -p --mode=700 ${BACKUPDIR}/${BACKUPDIRPREFIX}/"
 fi
 # Directory made... proceed.
+
+exit 1
 
 # check if the server is running; if so, save.
 if pgrep RustDedicated > /dev/null

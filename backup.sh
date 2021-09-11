@@ -7,10 +7,12 @@ FILENAME=${USER}-$(date +%Y-%b-%d-%H%M)
 FULLNAME=${BASEDIR}/${DIR}/${FILENAME}.tar.gz
 MKNICE='ionice -c 3'
 
+source ./.config
+
 echo $FILENAME.tar.gz
 echo $FULLNAME
 
-exit 1
+
 
 #
 #   ${HOME}/${RUSTDIR}/serverfiles/oxide
@@ -22,12 +24,13 @@ exit 1
 backuplist=(
   ${HOME}/${RUSTDIR}/lgsm/config-lgsm/rustserver
   ${HOME}/${RUSTDIR}/serverfiles/server/rustserver
-  ${HOME}/${RUSTDIR}/log
-  ${HOME}/${RUSTDIR}/backup.sh
-  ${HOME}/${RUSTDIR}/restore.sh
-  ${HOME}/${RUSTDIR}/weekly-tasks.sh
-  ${HOME}/${RUSTDIR}/lootlogs-maint.sh
+  ${HOME}/${RUSTDIR}/log/console
 )
+
+
+excludelist=(
+)
+
 
 if [[ -d ${HOME}/${RUSTDIR}/serverfiles/oxide ]]
   then
@@ -36,7 +39,13 @@ if [[ -d ${HOME}/${RUSTDIR}/serverfiles/oxide ]]
   )
 fi
 
-echo
+echo "${MKNICE} tar zcvf $FULLNAME "${backuplist[@]}""
+
+exit 1
+
+
+# code follows
+
 if [ $(/usr/bin/mount | grep -c ${BASEDIR}) !== 1 ]
   then
   # Directory not mounted... try and mount.

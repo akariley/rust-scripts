@@ -24,19 +24,14 @@ FILENAME=${USER}-$(date +%Y-%b-%d-%H%M)
 FULLNAME=${BACKUPDIR}/${BACKUPDIRPREFIX}/${FILENAME}.tar.gz
 MKNICE='ionice -c 3'
 
-
-echo "File: $FILENAME.tar.gz"
-echo "Path: $FULLNAME"
-
 backuplist=(
   ${INSTALLDIR}/lgsm/config-lgsm/rustserver
   ${INSTALLDIR}/serverfiles/server/rustserver
   ${INSTALLDIR}/log/console
 )
 
-excludelist=(
-)
-
+#excludelist=(
+#)
 
 if [[ -d ${INSTALLDIR}/serverfiles/oxide ]]
   then
@@ -52,23 +47,24 @@ if [[ -d ${BACKUPDIR}/${BACKUPDIRPREFIX}/ ]]
   echo "Directory ${BACKUPDIR}/${BACKUPDIRPREFIX}/ exists."
 else
   echo "Directory ${BACKUPDIR}/${BACKUPDIRPREFIX}/ does not exist... making it."
-  echo "${MKNICE} mkdir -p --mode=700 ${BACKUPDIR}/${BACKUPDIRPREFIX}/"
+  ${MKNICE} mkdir -p --mode=700 ${BACKUPDIR}/${BACKUPDIRPREFIX}/
 fi
 # Directory made... proceed.
 if [ ${SAVEONBACKUP} -eq 1 ]
 then
   # do a server.save first
+  # check if the server is running.
   if pgrep RustDedicated > /dev/null
   then
     RCONIP=$(grep ^ip ${LGSMCONFIG} | awk -F'=' '{print $2}' | tr -d '"')
     RCONPORT=$(grep ^rconport ${LGSMCONFIG} | awk -F'=' '{print $2}' | tr -d '"')
     RCONPASSWORD=$(grep ^rconpassword ${LGSMCONFIG} | awk -F'=' '{print $2}' | tr -d '"')
-    echo "timeout 5 ${WEBRCONCMD} ${RCONIP}:${RCONPORT} ${RCONPASSWORD} "server.save""
+    timeout 5 ${WEBRCONCMD} ${RCONIP}:${RCONPORT} ${RCONPASSWORD} "server.save"
     #end server run check
   fi
   # end save check
 fi
 
 echo "Making ${FULLNAME}"
-echo "${MKNICE} tar zcvf $FULLNAME "${backuplist[@]}""
+${MKNICE} tar zcvf $FULLNAME "${backuplist[@]}"
 

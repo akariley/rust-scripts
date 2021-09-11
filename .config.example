@@ -35,6 +35,10 @@ BACKUPISMOUNT=1
 # where are your backups stored? we default to ~/backups/
 BACKUPDIR=${HOME}/backups
 
+# what prefix would you like for the backup files?  We default to ${BACKUPDIR}/<day of month>/
+BACKUPDIRPREFIX=$(date +%m)
+
+
 
 # code follows
 

@@ -22,9 +22,9 @@ echo $FULLNAME
 # array of directories to backup
 #
 backuplist=(
-  ${HOME}/${RUSTDIR}/lgsm/config-lgsm/rustserver
-  ${HOME}/${RUSTDIR}/serverfiles/server/rustserver
-  ${HOME}/${RUSTDIR}/log/console
+  ${INSTALLDIR}/lgsm/config-lgsm/rustserver
+  ${INSTALLDIR}/serverfiles/server/rustserver
+  ${INSTALLDIR}/log/console
 )
 
 
@@ -32,10 +32,10 @@ excludelist=(
 )
 
 
-if [[ -d ${HOME}/${RUSTDIR}/serverfiles/oxide ]]
+if [[ -d ${INSTALLDIR}/serverfiles/oxide ]]
   then
   backuplist+=(
-    ${HOME}/${RUSTDIR}/serverfiles/oxide
+    ${INSTALLDIR}/serverfiles/oxide
   )
 fi
 

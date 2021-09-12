@@ -2,7 +2,7 @@
 #set -euo pipefail
 BACKUPDIR=/game-backups
 RUSTDIR=rust
-BACKUPDIRPREFIX=${USER}-backup
+#BACKUPDIRPREFIX=${USER}-backup
 DIR=${BACKUPDIRPREFIX}/`date +%F`
 FILENAME=${BACKUPDIRPREFIX}/`date +%H%M`
 FULLNAME=${BACKUPDIR}/${DIR}/${FILENAME}.tar.gz
@@ -80,7 +80,7 @@ fi
       exit
     fi
     # no date, assuming today
-    if [[ -e ${BACKUPDIR}/${BACKUPDIRPREFIX}/${USER}-${TODAY}/$1 ]]
+    if [[ -e ${BACKUPDIR}/${BACKUPDIRPREFIX}/$1 ]]
       then
       echo
       echo "Extracting from ${BACKUPDIR}/${BACKUPDIRPREFIX}/${USER}-${TODAY}/${1}..."
@@ -120,7 +120,7 @@ fi
         esac
       done
     else
-      echo "Error: ${BACKUPDIR}/${BACKUPDIRPREFIX}/${USER}-${TODAY}/$1 does not exist.  Did you input the correct date?"
+      echo "Error: ${BACKUPDIR}/${BACKUPDIRPREFIX}/$1 does not exist.  Did you input the correct date?"
       exit 1
     fi
   echo

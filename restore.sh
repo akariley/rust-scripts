@@ -60,7 +60,7 @@ if [[ $PWD == $HOME ]]
     # check if server is running.
     if [[ -e ${HOME}/${RUSTDIR}/.rustserver.lock ]]
       then
-      echo "WARNING: Server is running.  Stop it first. (and make a backup!)"
+      echo "Error: Server is running.  Stop it first. (and make a backup!)"
       exit
     fi
     # no date, assuming today
@@ -73,14 +73,14 @@ if [[ $PWD == $HOME ]]
       echo "Extract maps?"
       select yn in "Yes" "No"; do
         case $yn in
-          Yes ) tar zxvf ${BASEDIR}/${PREFIX}-${TODAY}/$1 --strip-components=2 home/${USER}/rust/serverfiles/server/rustserver/proceduralmap* ; break;;
+          Yes ) echo "tar zxvf ${BASEDIR}/${PREFIX}-${TODAY}/$1 --strip-components=2 home/${USER}/rust/serverfiles/server/rustserver/proceduralmap*" ; break;;
           No ) break;;
         esac
       done
     echo "Extract configs?"
       select yn in "Yes" "No"; do
         case $yn in
-          Yes ) tar zxvf ${BASEDIR}/${PREFIX}-${TODAY}/$1 --strip-components=2 home/${USER}/rust/lgsm/config-lgsm/rustserver/ ; tar zxvf ${BASEDIR}/${PREFIX}-${TODAY}/$1 --strip-components=2 home/${USER}/rust/serverfiles/server/rustserver/cfg* ; break;;
+          Yes ) echo "tar zxvf ${BASEDIR}/${PREFIX}-${TODAY}/$1 --strip-components=2 home/${USER}/rust/lgsm/config-lgsm/rustserver/ ; tar zxvf ${BASEDIR}/${PREFIX}-${TODAY}/$1 --strip-components=2 home/${USER}/rust/serverfiles/server/rustserver/cfg*" ; break;;
           No ) break;;
         esac
       done
@@ -91,7 +91,7 @@ if [[ $PWD == $HOME ]]
       echo "Extract Oxide files?"
       select yn in "Yes" "No"; do
         case $yn in
-          Yes ) tar zxvf ${BASEDIR}/${PREFIX}-${TODAY}/$1 --strip-components=2 home/${USER}/rust/serverfiles/oxide/ ; break;;
+          Yes ) echo "tar zxvf ${BASEDIR}/${PREFIX}-${TODAY}/$1 --strip-components=2 home/${USER}/rust/serverfiles/oxide/" ; break;;
           No ) break;;
         esac
       done
@@ -99,7 +99,7 @@ if [[ $PWD == $HOME ]]
     echo "Extract blueprints?"
       select yn in "Yes" "No"; do
         case $yn in
-          Yes ) tar zxvf ${BASEDIR}/${PREFIX}-${TODAY}/$1 --strip-components=2 home/${USER}/rust/serverfiles/server/rustserver/player.blueprints* ; break;;
+          Yes ) echo "tar zxvf ${BASEDIR}/${PREFIX}-${TODAY}/$1 --strip-components=2 home/${USER}/rust/serverfiles/server/rustserver/player.blueprints*" ; break;;
           No ) break;;
         esac
       done
@@ -129,14 +129,14 @@ if [[ $PWD == $HOME ]]
       echo "Extract maps?"
       select yn in "Yes" "No"; do
         case $yn in
-          Yes ) tar zxvf ${BASEDIR}/${PREFIX}-${2}/${1} --strip-components=2 home/${USER}/rust/serverfiles/server/rustserver/proceduralmap* ; break;;
+          Yes ) echo "tar zxvf ${BASEDIR}/${PREFIX}-${2}/${1} --strip-components=2 home/${USER}/rust/serverfiles/server/rustserver/proceduralmap*" ; break;;
           No ) break;;
         esac
       done
       echo "Extract configs?"
       select yn in "Yes" "No"; do
         case $yn in
-          Yes ) tar zxvf ${BASEDIR}/${PREFIX}-${2}/${1} --strip-components=2 home/${USER}/rust/lgsm/config-lgsm/rustserver/ ; tar zxvf ${BASEDIR}/${PREFIX}-${2}/${1} --strip-components=2 home/${USER}/rust/serverfiles/server/rustserver/cfg* ; break;;
+          Yes ) echo "tar zxvf ${BASEDIR}/${PREFIX}-${2}/${1} --strip-components=2 home/${USER}/rust/lgsm/config-lgsm/rustserver/ ; tar zxvf ${BASEDIR}/${PREFIX}-${2}/${1} --strip-components=2 home/${USER}/rust/serverfiles/server/rustserver/cfg*" ; break;;
           No ) break;;
         esac
       done
@@ -147,7 +147,7 @@ if [[ $PWD == $HOME ]]
       echo "Extract Oxide files?"
       select yn in "Yes" "No"; do
         case $yn in
-          Yes ) tar zxvf ${BASEDIR}/${PREFIX}-${2}/${1} --strip-components=2 home/${USER}/rust/serverfiles/oxide/ ; break;;
+          Yes ) echo "tar zxvf ${BASEDIR}/${PREFIX}-${2}/${1} --strip-components=2 home/${USER}/rust/serverfiles/oxide/" ; break;;
           No ) break;;
         esac
       done
@@ -155,7 +155,7 @@ if [[ $PWD == $HOME ]]
       echo "Extract blueprints?"
       select yn in "Yes" "No"; do
         case $yn in
-          Yes ) tar zxvf ${BASEDIR}/${PREFIX}-${2}/${1} --strip-components=2 home/${USER}/rust/serverfiles/server/rustserver/player.blueprints* ; break;;
+          Yes ) echo "tar zxvf ${BASEDIR}/${PREFIX}-${2}/${1} --strip-components=2 home/${USER}/rust/serverfiles/server/rustserver/player.blueprints*" ; break;;
           No ) break;;
         esac
       done

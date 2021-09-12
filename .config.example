@@ -45,6 +45,14 @@ BACKUPDIRPREFIX=$(date +%m)
 # WARNING: backups won't run if your LGSMCONFIG variable is not correct if this is set.
 SAVEONBACKUP=1
 
+# date suffix for backups.  we default to YYYY-Month-Numerical_date-24HR_time
+# ex: 2021-Sep-12-0826 is September 12th, 2021 at 8:26am.
+# (this is 'date +%Y-%b-%d-%H%M') if curious.
+# The username will be prefixed (username-2021-Sep-12-0826)
+BACKUPDATE=$(date +%Y-%b-%d-%H%M)
+
+
+# an array of files and paths to backup.
 
 BACKUPLIST=(
   ${INSTALLDIR}/lgsm/config-lgsm/rustserver

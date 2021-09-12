@@ -85,40 +85,17 @@ fi
       echo
       echo "Extracting from ${BACKUPDIR}/${BACKUPDIRPREFIX}/$1..."
       echo
+      for backuppath in "${BACKUPLIST[@]}"
+      do
+      echo "Extract $backuppath?"
+      select yn in "Yes" "No"; do
+        case $yn in
+          Yes ) echo "tar zxvf ${BACKUPDIR}/${BACKUPDIRPREFIX}/$1 --strip-components=2 $backuppath -C ${INSTALLDIR}" ; break;;
+          No ) break;;
+        esac
+        done
+      done
       echo
-      echo "Extract maps?"
-      select yn in "Yes" "No"; do
-        case $yn in
-          Yes ) echo "tar zxvf ${BACKUPDIR}/${BACKUPDIRPREFIX}/$1 --strip-components=2 home/${USER}/rust/serverfiles/server/rustserver/proceduralmap*" ; break;;
-          No ) break;;
-        esac
-      done
-    echo "Extract configs?"
-      select yn in "Yes" "No"; do
-        case $yn in
-          Yes ) echo "tar zxvf ${BACKUPDIR}/${BACKUPDIRPREFIX}/$1 --strip-components=2 home/${USER}/rust/lgsm/config-lgsm/rustserver/ ; tar zxvf ${BACKUPDIR}/${BACKUPDIRPREFIX}/$1 --strip-components=2 home/${USER}/rust/serverfiles/server/rustserver/cfg*" ; break;;
-          No ) break;;
-        esac
-      done
-    tar -tf ${BACKUPDIR}/${BACKUPDIRPREFIX}/$1 *home/${USER}/rust/serverfiles/oxide/* > /dev/null 2>&1
-    if [[ ! "$?" == 2 ]]
-      # oxide found
-      then
-      echo "Extract Oxide files?"
-      select yn in "Yes" "No"; do
-        case $yn in
-          Yes ) echo "tar zxvf ${BACKUPDIR}/${BACKUPDIRPREFIX}/$1 --strip-components=2 home/${USER}/rust/serverfiles/oxide/" ; break;;
-          No ) break;;
-        esac
-      done
-    fi
-    echo "Extract blueprints?"
-      select yn in "Yes" "No"; do
-        case $yn in
-          Yes ) echo "tar zxvf ${BACKUPDIR}/${BACKUPDIRPREFIX}/$1 --strip-components=2 home/${USER}/rust/serverfiles/server/rustserver/player.blueprints*" ; break;;
-          No ) break;;
-        esac
-      done
     else
       echo "Error: ${BACKUPDIR}/${BACKUPDIRPREFIX}/$1 does not exist.  Did you input the correct date?"
       exit 1
@@ -141,48 +118,21 @@ fi
       echo
       echo "Extracting from ${BACKUPDIR}/${2}/${1}..."
       echo
+      for backuppath in "${BACKUPLIST[@]}"
+      do
+      echo "Extract $backuppath?"
+      select yn in "Yes" "No"; do
+        case $yn in
+          Yes ) echo "tar zxvf ${BACKUPDIR}/${2}/${1} --strip-components=2 $backuppath -C ${INSTALLDIR}" ; break;;
+          No ) break;;
+        esac
+        done
+      done
       echo
-      echo "Extract maps?"
-      select yn in "Yes" "No"; do
-        case $yn in
-          Yes ) echo "tar zxvf ${BACKUPDIR}/${2}/${1} --strip-components=2 home/${USER}/rust/serverfiles/server/rustserver/proceduralmap*" ; break;;
-          No ) break;;
-        esac
-      done
-      echo "Extract configs?"
-      select yn in "Yes" "No"; do
-        case $yn in
-          Yes ) echo "tar zxvf ${BACKUPDIR}/${2}/${1} --strip-components=2 home/${USER}/rust/lgsm/config-lgsm/rustserver/ ; tar zxvf ${BACKUPDIR}/${2}/${1} --strip-components=2 home/${USER}/rust/serverfiles/server/rustserver/cfg*" ; break;;
-          No ) break;;
-        esac
-      done
-    tar -tf ${BACKUPDIR}/${2}/${1} *home/${USER}/rust/serverfiles/oxide/* > /dev/null 2>&1
-    if [[ ! "$?" == 2 ]]
-      # oxide found
-      then
-      echo "Extract Oxide files?"
-      select yn in "Yes" "No"; do
-        case $yn in
-          Yes ) echo "tar zxvf ${BACKUPDIR}/${2}/${1} --strip-components=2 home/${USER}/rust/serverfiles/oxide/" ; break;;
-          No ) break;;
-        esac
-      done
-    fi
-      echo "Extract blueprints?"
-      select yn in "Yes" "No"; do
-        case $yn in
-          Yes ) echo "tar zxvf ${BACKUPDIR}/${2}/${1} --strip-components=2 home/${USER}/rust/serverfiles/server/rustserver/player.blueprints*" ; break;;
-          No ) break;;
-        esac
-      done
-    echo
-    
-      else
-      # file doesn't exist.
+    else
       echo "Error: ${BACKUPDIR}/${2}/${1} does not exist.  Did you input the correct date?"
       exit 1
     fi
-    # echo "Extracting from ${BACKUPDIR}/${2}/${1}..."
     echo
     exit
     fi # end date / file check loop

@@ -52,6 +52,14 @@ SAVEONBACKUP=1
 BACKUPDATE=$(date +%Y-%b-%d-%H%M)
 
 
+
+if [ ! -z ${RUSTDIR} ]
+then
+  INSTALLDIR=${HOME}/${RUSTDIR}
+else
+  INSTALLDIR=${HOME}
+fi
+
 # an array of files and paths to backup.
 
 BACKUPLIST=(
@@ -61,12 +69,9 @@ BACKUPLIST=(
   ${INSTALLDIR}/serverfiles/oxide
 )
 
-# code follows
-
-if [ ! -z ${RUSTDIR} ]
+if [ -d ${INSTALLDIR}/serverfiles/oxide ]
 then
-  INSTALLDIR=${HOME}/${RUSTDIR}
-else
-  INSTALLDIR=${HOME}
+  BACKUPLIST+=(
+    ${INSTALLDIR}/serverfiles/oxide
+  )
 fi
-

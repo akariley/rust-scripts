@@ -20,7 +20,7 @@ then
   # end sanity checks.
 fi
 
-FILENAME=${USER}-$(date +%Y-%b-%d-%H%M)
+FILENAME=${USER}-${BACKUPDATESUFFIX}
 
 if [ -z ${BACKUPDIRPREFIX} ]
 then

@@ -45,6 +45,14 @@ BACKUPDIRPREFIX=$(date +%m)
 # WARNING: backups won't run if your LGSMCONFIG variable is not correct if this is set.
 SAVEONBACKUP=1
 
+
+BACKUPLIST=(
+  ${INSTALLDIR}/lgsm/config-lgsm/rustserver
+  ${INSTALLDIR}/serverfiles/server/rustserver
+  ${INSTALLDIR}/log/console
+  ${INSTALLDIR}/serverfiles/oxide
+)
+
 # code follows
 
 if [ ! -z ${RUSTDIR} ]

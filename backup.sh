@@ -32,22 +32,6 @@ fi
 
 MKNICE='ionice -c 3'
 
-backuplist=(
-  ${INSTALLDIR}/lgsm/config-lgsm/rustserver
-  ${INSTALLDIR}/serverfiles/server/rustserver
-  ${INSTALLDIR}/log/console
-)
-
-#excludelist=(
-#)
-
-if [[ -d ${INSTALLDIR}/serverfiles/oxide ]]
-  then
-  backuplist+=(
-    ${INSTALLDIR}/serverfiles/oxide
-  )
-fi
-
 # code follows
 
 if [[ -d ${BACKUPDIR}/${BACKUPDIRPREFIX}/ ]]

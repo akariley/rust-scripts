@@ -77,6 +77,7 @@ then
     echo
     for backuppath in "${BACKUPLIST[@]}";
     do
+      backuppath=$(echo ${backuppath} | cut -d/ -f2-)
       echo "Extract $backuppath?"
       select yn in "Yes" "No"; do
       case $yn in
@@ -98,9 +99,6 @@ else
     echo "Error: Server is running.  Stop it first. (and make a backup!)"
     exit 2
   fi
-
-
-
   if [[ -e ${BACKUPDIR}/${2}/${1} ]]
   then
     echo
@@ -108,6 +106,7 @@ else
     echo
     for backuppath in "${BACKUPLIST[@]}"
     do
+      backuppath=$(echo ${backuppath} | cut -d/ -f2-)
       echo "Extract $backuppath?"
       select yn in "Yes" "No"; do
       case $yn in

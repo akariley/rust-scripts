@@ -83,7 +83,7 @@ fi
     if [[ -e ${BACKUPDIR}/${BACKUPDIRPREFIX}/$1 ]]
       then
       echo
-      echo "Extracting from ${BACKUPDIR}/${BACKUPDIRPREFIX}/${USER}-${TODAY}/${1}..."
+      echo "Extracting from ${BACKUPDIR}/${BACKUPDIRPREFIX}/$1..."
       echo
       echo
       echo "Extract maps?"

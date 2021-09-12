@@ -62,8 +62,6 @@ fi
 
 
 
-if [[ $PWD == $HOME ]]
-  then
   # we're in the homedir, continue.
   # echo 'in homedir'
   # echo 'Deleting test dir...'
@@ -188,8 +186,4 @@ if [[ $PWD == $HOME ]]
     echo
     exit
     fi # end date / file check loop
-else
-  echo "You need to run this file from ${HOME}; you're in ${PWD} currently."
-  exit 1
-  echo
-fi
+

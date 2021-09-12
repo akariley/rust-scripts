@@ -57,6 +57,7 @@ then
   else
     ls -1 ${BACKUPDIR}/${2}
   fi
+  exit
 fi
 
 # got a backup file, check if it's another day's

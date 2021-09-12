@@ -89,25 +89,25 @@ fi
       echo "Extract maps?"
       select yn in "Yes" "No"; do
         case $yn in
-          Yes ) echo "tar zxvf ${BACKUPDIR}/${BACKUPDIRPREFIX}/${USER}-${TODAY}/$1 --strip-components=2 home/${USER}/rust/serverfiles/server/rustserver/proceduralmap*" ; break;;
+          Yes ) echo "tar zxvf ${BACKUPDIR}/${BACKUPDIRPREFIX}/$1 --strip-components=2 home/${USER}/rust/serverfiles/server/rustserver/proceduralmap*" ; break;;
           No ) break;;
         esac
       done
     echo "Extract configs?"
       select yn in "Yes" "No"; do
         case $yn in
-          Yes ) echo "tar zxvf ${BACKUPDIR}/${BACKUPDIRPREFIX}/${USER}-${TODAY}/$1 --strip-components=2 home/${USER}/rust/lgsm/config-lgsm/rustserver/ ; tar zxvf ${BACKUPDIR}/${BACKUPDIRPREFIX}/${USER}-${TODAY}/$1 --strip-components=2 home/${USER}/rust/serverfiles/server/rustserver/cfg*" ; break;;
+          Yes ) echo "tar zxvf ${BACKUPDIR}/${BACKUPDIRPREFIX}/$1 --strip-components=2 home/${USER}/rust/lgsm/config-lgsm/rustserver/ ; tar zxvf ${BACKUPDIR}/${BACKUPDIRPREFIX}/$1 --strip-components=2 home/${USER}/rust/serverfiles/server/rustserver/cfg*" ; break;;
           No ) break;;
         esac
       done
-    tar -tf ${BACKUPDIR}/${BACKUPDIRPREFIX}/${USER}-${TODAY}/$1 *home/${USER}/rust/serverfiles/oxide/* > /dev/null 2>&1
+    tar -tf ${BACKUPDIR}/${BACKUPDIRPREFIX}/$1 *home/${USER}/rust/serverfiles/oxide/* > /dev/null 2>&1
     if [[ ! "$?" == 2 ]]
       # oxide found
       then
       echo "Extract Oxide files?"
       select yn in "Yes" "No"; do
         case $yn in
-          Yes ) echo "tar zxvf ${BACKUPDIR}/${BACKUPDIRPREFIX}/${USER}-${TODAY}/$1 --strip-components=2 home/${USER}/rust/serverfiles/oxide/" ; break;;
+          Yes ) echo "tar zxvf ${BACKUPDIR}/${BACKUPDIRPREFIX}/$1 --strip-components=2 home/${USER}/rust/serverfiles/oxide/" ; break;;
           No ) break;;
         esac
       done
@@ -115,7 +115,7 @@ fi
     echo "Extract blueprints?"
       select yn in "Yes" "No"; do
         case $yn in
-          Yes ) echo "tar zxvf ${BACKUPDIR}/${BACKUPDIRPREFIX}/${USER}-${TODAY}/$1 --strip-components=2 home/${USER}/rust/serverfiles/server/rustserver/player.blueprints*" ; break;;
+          Yes ) echo "tar zxvf ${BACKUPDIR}/${BACKUPDIRPREFIX}/$1 --strip-components=2 home/${USER}/rust/serverfiles/server/rustserver/player.blueprints*" ; break;;
           No ) break;;
         esac
       done

@@ -53,10 +53,10 @@ then
   # echo 'in list loop'
   if [[ -z $2 ]]
     then
-    ls ${BACKUPDIR}/${BACKUPDIRPREFIX}/
+    ls -1 ${BACKUPDIR}/${BACKUPDIRPREFIX}/
     exit
   fi
-  ls ${BACKUPDIR}/${BACKUPDIRPREFIX}/${2}
+  ls -1 ${BACKUPDIR}/${BACKUPDIRPREFIX}/${2}
   exit
 fi
 

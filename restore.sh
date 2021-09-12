@@ -72,18 +72,18 @@ then
   # no date, assuming today
   if [[ -e ${BACKUPDIR}/${BACKUPDIRPREFIX}/$1 ]]
   then
-    echo
     echo "Extracting from ${BACKUPDIR}/${BACKUPDIRPREFIX}/$1..."
-    echo
-    for backuppath in "${BACKUPLIST[@]}";
+    for backuppath in "${BACKUPLIST[@]}"
     do
-      backuppath=$(echo ${backuppath} | cut -d/ -f2-)
+      backuppath=$(echo "${backuppath}" | cut -d/ -f2-)
       echo "Extract $backuppath?"
-      select yn in "Yes" "No"; do
-      case $yn in
-        Yes ) echo "tar zxvf ${BACKUPDIR}/${BACKUPDIRPREFIX}/$1 --strip-components=2 $backuppath -C ${INSTALLDIR}" ; break;;
-        No ) break;;
-      esac
+      select yn in "Yes" "No"
+      do
+        case $yn in
+          Yes ) echo "tar zxvf ${BACKUPDIR}/${BACKUPDIRPREFIX}/$1 --strip-components=2 $backuppath -C ${INSTALLDIR}" ; break;;
+          No ) break;;
+        esac
+      done
     done
     echo
   else
@@ -108,11 +108,13 @@ else
     do
       backuppath=$(echo ${backuppath} | cut -d/ -f2-)
       echo "Extract $backuppath?"
-      select yn in "Yes" "No"; do
-      case $yn in
-        Yes ) echo "tar zxvf ${BACKUPDIR}/${2}/${1} --strip-components=2 $backuppath -C ${INSTALLDIR}" ; break;;
-        No ) break;;
-      esac
+      select yn in "Yes" "No"
+      do
+        case $yn in
+          Yes ) echo "tar zxvf ${BACKUPDIR}/${2}/${1} --strip-components=2 $backuppath -C ${INSTALLDIR}" ; break;;
+          No ) break;;
+        esac
+      done
     done
     echo
   else

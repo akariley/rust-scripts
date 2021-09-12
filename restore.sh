@@ -30,10 +30,10 @@ fi
 # home/${USER}/rust/serverfiles/oxide/
 
 
-# error codes
+# return codes
 #
 # 1 = syntax error
-# 2 = 
+# 2 = server running
 
 if [[ -z $1 ]]
   then
@@ -73,11 +73,11 @@ fi
   # TODO: proper regex for format.
   if [[ -z $2 ]]
     then
-    # check if server is running.
-    if [[ -e ${HOME}/${RUSTDIR}/.rustserver.lock ]]
+    # check for lock files.
+    if [[ -e ${INSTALLDIR}/lgsm/lock/rustserver.lock ]]
       then
       echo "Error: Server is running.  Stop it first. (and make a backup!)"
-      exit
+      exit 2
     fi
     # no date, assuming today
     if [[ -e ${BACKUPDIR}/${BACKUPDIRPREFIX}/$1 ]]
@@ -127,11 +127,11 @@ fi
   else
     # they put a date and a file, extract from it instead of $today    
     
-    # check if server is running.
-    if [[ -e ${HOME}/${RUSTDIR}/.rustserver.lock ]]
+    # check for lock files.
+    if [[ -e ${INSTALLDIR}/lgsm/lock/rustserver.lock ]]
       then
-      echo "WARNING: Server is running.  Stop it first. (and make a backup!)"
-      exit
+      echo "Error: Server is running.  Stop it first. (and make a backup!)"
+      exit 2
     fi
     
     

@@ -21,7 +21,15 @@ then
 fi
 
 FILENAME=${USER}-$(date +%Y-%b-%d-%H%M)
-FULLNAME=${BACKUPDIR}/${BACKUPDIRPREFIX}/${FILENAME}.tar.gz
+
+if [ -z ${BACKUPDIRPREFIX} ]
+then
+  #no prefix so omit the var
+  FULLNAME=${BACKUPDIR}/${FILENAME}.tar.gz
+else
+  FULLNAME=${BACKUPDIR}/${BACKUPDIRPREFIX}/${FILENAME}.tar.gz
+fi
+
 MKNICE='ionice -c 3'
 
 backuplist=(

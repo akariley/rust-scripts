@@ -10,14 +10,15 @@ TODAY=`date +%F`
 #TODAY=$(date +%Y-%b-%d-%H%M)
 source ./.config
 
+
 FILENAME=${USER}-$(date +%Y-%b-%d-%H%M)
 
-if [ -z ${BACKUPDIRBACKUPDIRPREFIX} ]
+if [ -z ${BACKUPDIRPREFIX} ]
 then
   #no prefix so omit the var
   FULLNAME=${BACKUPDIR}/${FILENAME}.tar.gz
 else
-  FULLNAME=${BACKUPDIR}/${BACKUPDIRBACKUPDIRPREFIX}/${FILENAME}.tar.gz
+  FULLNAME=${BACKUPDIR}/${BACKUPDIRPREFIX}/${FILENAME}.tar.gz
 fi
 
 #
@@ -48,7 +49,7 @@ fi
 echo "$@"
 
 if [[ $1 == "list" ]]
-  then
+then
   # echo 'in list loop'
   if [[ -z $2 ]]
     then

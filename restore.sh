@@ -1,12 +1,25 @@
 #!/bin/bash
 #set -euo pipefail
-BASEDIR=/game-backups
+BACKUPDIR=/game-backups
 RUSTDIR=rust
 PREFIX=${USER}-backup
 DIR=${PREFIX}-`date +%F`
 FILENAME=${PREFIX}-`date +%H%M`
-FULLNAME=${BASEDIR}/${DIR}/${FILENAME}.tar.gz
+FULLNAME=${BACKUPDIR}/${DIR}/${FILENAME}.tar.gz
 TODAY=`date +%F`
+
+source ./.config
+
+FILENAME=${USER}-$(date +%Y-%b-%d-%H%M)
+
+if [ -z ${BACKUPDIRPREFIX} ]
+then
+  #no prefix so omit the var
+  FULLNAME=${BACKUPDIR}/${FILENAME}.tar.gz
+else
+  FULLNAME=${BACKUPDIR}/${BACKUPDIRPREFIX}/${FILENAME}.tar.gz
+fi
+
 
 # if modded
 # home/${USER}/rust/serverfiles/oxide/
@@ -35,10 +48,10 @@ if [[ $1 == "list" ]]
   # echo 'in list loop'
   if [[ -z $2 ]]
     then
-    ls ${BASEDIR}/${PREFIX}-${TODAY}
+    ls ${BACKUPDIR}/${PREFIX}-${TODAY}
     exit
   fi
-  ls ${BASEDIR}/${PREFIX}-${2}
+  ls ${BACKUPDIR}/${PREFIX}-${2}
   exit
 fi
 
@@ -64,34 +77,34 @@ if [[ $PWD == $HOME ]]
       exit
     fi
     # no date, assuming today
-    if [[ -e ${BASEDIR}/${PREFIX}-${TODAY}/$1 ]]
+    if [[ -e ${BACKUPDIR}/${PREFIX}-${TODAY}/$1 ]]
       then
       echo
-      echo "Extracting from ${BASEDIR}/${PREFIX}-${TODAY}/${1}..."
+      echo "Extracting from ${BACKUPDIR}/${PREFIX}-${TODAY}/${1}..."
       echo
       echo
       echo "Extract maps?"
       select yn in "Yes" "No"; do
         case $yn in
-          Yes ) echo "tar zxvf ${BASEDIR}/${PREFIX}-${TODAY}/$1 --strip-components=2 home/${USER}/rust/serverfiles/server/rustserver/proceduralmap*" ; break;;
+          Yes ) echo "tar zxvf ${BACKUPDIR}/${PREFIX}-${TODAY}/$1 --strip-components=2 home/${USER}/rust/serverfiles/server/rustserver/proceduralmap*" ; break;;
           No ) break;;
         esac
       done
     echo "Extract configs?"
       select yn in "Yes" "No"; do
         case $yn in
-          Yes ) echo "tar zxvf ${BASEDIR}/${PREFIX}-${TODAY}/$1 --strip-components=2 home/${USER}/rust/lgsm/config-lgsm/rustserver/ ; tar zxvf ${BASEDIR}/${PREFIX}-${TODAY}/$1 --strip-components=2 home/${USER}/rust/serverfiles/server/rustserver/cfg*" ; break;;
+          Yes ) echo "tar zxvf ${BACKUPDIR}/${PREFIX}-${TODAY}/$1 --strip-components=2 home/${USER}/rust/lgsm/config-lgsm/rustserver/ ; tar zxvf ${BACKUPDIR}/${PREFIX}-${TODAY}/$1 --strip-components=2 home/${USER}/rust/serverfiles/server/rustserver/cfg*" ; break;;
           No ) break;;
         esac
       done
-    tar -tf ${BASEDIR}/${PREFIX}-${TODAY}/$1 *home/${USER}/rust/serverfiles/oxide/* > /dev/null 2>&1
+    tar -tf ${BACKUPDIR}/${PREFIX}-${TODAY}/$1 *home/${USER}/rust/serverfiles/oxide/* > /dev/null 2>&1
     if [[ ! "$?" == 2 ]]
       # oxide found
       then
       echo "Extract Oxide files?"
       select yn in "Yes" "No"; do
         case $yn in
-          Yes ) echo "tar zxvf ${BASEDIR}/${PREFIX}-${TODAY}/$1 --strip-components=2 home/${USER}/rust/serverfiles/oxide/" ; break;;
+          Yes ) echo "tar zxvf ${BACKUPDIR}/${PREFIX}-${TODAY}/$1 --strip-components=2 home/${USER}/rust/serverfiles/oxide/" ; break;;
           No ) break;;
         esac
       done
@@ -99,12 +112,12 @@ if [[ $PWD == $HOME ]]
     echo "Extract blueprints?"
       select yn in "Yes" "No"; do
         case $yn in
-          Yes ) echo "tar zxvf ${BASEDIR}/${PREFIX}-${TODAY}/$1 --strip-components=2 home/${USER}/rust/serverfiles/server/rustserver/player.blueprints*" ; break;;
+          Yes ) echo "tar zxvf ${BACKUPDIR}/${PREFIX}-${TODAY}/$1 --strip-components=2 home/${USER}/rust/serverfiles/server/rustserver/player.blueprints*" ; break;;
           No ) break;;
         esac
       done
     else
-      echo "Error: ${BASEDIR}/${PREFIX}-${TODAY}/$1 does not exist.  Did you input the correct date?"
+      echo "Error: ${BACKUPDIR}/${PREFIX}-${TODAY}/$1 does not exist.  Did you input the correct date?"
       exit 1
     fi
   echo
@@ -120,34 +133,34 @@ if [[ $PWD == $HOME ]]
     
     
     
-    if [[ -e ${BASEDIR}/${PREFIX}-${2}/${1} ]]
+    if [[ -e ${BACKUPDIR}/${PREFIX}-${2}/${1} ]]
       then
       echo
-      echo "Extracting from ${BASEDIR}/${PREFIX}-${2}/${1}..."
+      echo "Extracting from ${BACKUPDIR}/${PREFIX}-${2}/${1}..."
       echo
       echo
       echo "Extract maps?"
       select yn in "Yes" "No"; do
         case $yn in
-          Yes ) echo "tar zxvf ${BASEDIR}/${PREFIX}-${2}/${1} --strip-components=2 home/${USER}/rust/serverfiles/server/rustserver/proceduralmap*" ; break;;
+          Yes ) echo "tar zxvf ${BACKUPDIR}/${PREFIX}-${2}/${1} --strip-components=2 home/${USER}/rust/serverfiles/server/rustserver/proceduralmap*" ; break;;
           No ) break;;
         esac
       done
       echo "Extract configs?"
       select yn in "Yes" "No"; do
         case $yn in
-          Yes ) echo "tar zxvf ${BASEDIR}/${PREFIX}-${2}/${1} --strip-components=2 home/${USER}/rust/lgsm/config-lgsm/rustserver/ ; tar zxvf ${BASEDIR}/${PREFIX}-${2}/${1} --strip-components=2 home/${USER}/rust/serverfiles/server/rustserver/cfg*" ; break;;
+          Yes ) echo "tar zxvf ${BACKUPDIR}/${PREFIX}-${2}/${1} --strip-components=2 home/${USER}/rust/lgsm/config-lgsm/rustserver/ ; tar zxvf ${BACKUPDIR}/${PREFIX}-${2}/${1} --strip-components=2 home/${USER}/rust/serverfiles/server/rustserver/cfg*" ; break;;
           No ) break;;
         esac
       done
-    tar -tf ${BASEDIR}/${PREFIX}-${2}/${1} *home/${USER}/rust/serverfiles/oxide/* > /dev/null 2>&1
+    tar -tf ${BACKUPDIR}/${PREFIX}-${2}/${1} *home/${USER}/rust/serverfiles/oxide/* > /dev/null 2>&1
     if [[ ! "$?" == 2 ]]
       # oxide found
       then
       echo "Extract Oxide files?"
       select yn in "Yes" "No"; do
         case $yn in
-          Yes ) echo "tar zxvf ${BASEDIR}/${PREFIX}-${2}/${1} --strip-components=2 home/${USER}/rust/serverfiles/oxide/" ; break;;
+          Yes ) echo "tar zxvf ${BACKUPDIR}/${PREFIX}-${2}/${1} --strip-components=2 home/${USER}/rust/serverfiles/oxide/" ; break;;
           No ) break;;
         esac
       done
@@ -155,7 +168,7 @@ if [[ $PWD == $HOME ]]
       echo "Extract blueprints?"
       select yn in "Yes" "No"; do
         case $yn in
-          Yes ) echo "tar zxvf ${BASEDIR}/${PREFIX}-${2}/${1} --strip-components=2 home/${USER}/rust/serverfiles/server/rustserver/player.blueprints*" ; break;;
+          Yes ) echo "tar zxvf ${BACKUPDIR}/${PREFIX}-${2}/${1} --strip-components=2 home/${USER}/rust/serverfiles/server/rustserver/player.blueprints*" ; break;;
           No ) break;;
         esac
       done
@@ -163,10 +176,10 @@ if [[ $PWD == $HOME ]]
     
       else
       # file doesn't exist.
-      echo "Error: ${BASEDIR}/${PREFIX}-${2}/${1} does not exist.  Did you input the correct date?"
+      echo "Error: ${BACKUPDIR}/${PREFIX}-${2}/${1} does not exist.  Did you input the correct date?"
       exit 1
     fi
-    # echo "Extracting from ${BASEDIR}/${PREFIX}-${2}/${1}..."
+    # echo "Extracting from ${BACKUPDIR}/${PREFIX}-${2}/${1}..."
     echo
     exit
     fi # end date / file check loop

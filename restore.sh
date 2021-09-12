@@ -56,7 +56,7 @@ then
     ls -1 ${BACKUPDIR}/${BACKUPDIRPREFIX}/
     exit
   fi
-  ls -1 ${BACKUPDIR}/${BACKUPDIRPREFIX}/${2}
+  ls -1 ${BACKUPDIR}/${2}
   exit
 fi
 

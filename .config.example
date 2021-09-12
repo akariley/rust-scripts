@@ -4,9 +4,53 @@ LOGDATE=$(date +"%m-%d-%Y-%s")
 LOGFILE=weekly-tasks_${LOGDATE}.log
 FULLLOG=/home/${USER}/rust/log/${LOGFILE}
 
+#LGSMCONFIG=/home/rust-testing/rust/lgsm/config-lgsm/rustserver/rustserver.cfg
 LGSMCONFIG=/path/to/lgsmserver.cfg
 
-WEBRCONCMD=$(which webrcon-cli)
-# if you installed it globally the default should work (usually /usr/bin/webrcon-cli)
+#################
+# GENERAL OPTIONS
+#################
+
+# where did you install your Rust server?  This is relative to your home dir.
+# ie: for an install in /home/foo/rust/, put 'rust'
+# leave empty if you installed the server into the home directory.
+RUSTDIR=rust
+
+# node is used to send commands to a running Rust server.
+# if you installed node globally the default should work (usually /usr/bin/webrcon-cli)
 # otherwise you'll need to know where you installed it.
 # a local npm install usually puts it here: ~/node_modules/webrcon-cli/dist/bin/webrcon-cli.js
+WEBRCONCMD=/usr/bin/webrcon-cli
+
+
+
+################
+# BACKUP OPTIONS
+################
+
+# is your backup location a mount point? and if so, do you have permission to mount
+# it if it's not mounted? 1 = yes, 0 = no
+BACKUPISMOUNT=1
+
+
+# where are your backups stored? we default to ~/backups/
+#BACKUPDIR=/game-backups/${USER}
+BACKUPDIR=${HOME}/backups
+
+# what prefix would you like for the backup files?  We default to ${BACKUPDIR}/<day of month>/
+BACKUPDIRPREFIX=$(date +%m)
+
+# do we issue a 'server.save' command to the rust server when the backup script is run?
+# 1 = yes, 0 = no
+# WARNING: backups won't run if your LGSMCONFIG variable is not correct if this is set.
+SAVEONBACKUP=1
+
+# code follows
+
+if [ ! -z ${RUSTDIR} ]
+then
+  INSTALLDIR=${HOME}/${RUSTDIR}
+else
+  INSTALLDIR=${HOME}
+fi
+

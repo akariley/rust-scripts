@@ -1,3 +1,2 @@
 -- read vars from backup file instead of config?
--- check node exe
-
+-- check if restore.sh works with no server suffix

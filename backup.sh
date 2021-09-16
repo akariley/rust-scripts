@@ -59,5 +59,5 @@ then
 fi
 
 echo "Making ${FULLNAME}"
-${MKNICE} tar zcvf $FULLNAME "${backuplist[@]}"
+${MKNICE} tar zcvf $FULLNAME "${BACKUPLIST[@]}"
 

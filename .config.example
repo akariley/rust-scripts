@@ -74,3 +74,19 @@ then
     ${INSTALLDIR}/serverfiles/oxide
   )
 fi
+
+BACKUPLIST=(
+  ${INSTALLDIR}/lgsm/config-lgsm/rustserver
+  ${INSTALLDIR}/serverfiles/server/rustserver
+  ${INSTALLDIR}/log/console
+)
+
+#excludelist=(
+#)
+
+if [[ -d ${INSTALLDIR}/serverfiles/oxide ]]
+  then
+  BACKUPLIST+=(
+    ${INSTALLDIR}/serverfiles/oxide
+  )
+fi

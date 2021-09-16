@@ -34,12 +34,12 @@ MKNICE='ionice -c 3'
 
 # code follows
 
-if [[ -d ${BACKUPDIR}/${BACKUPDIRPREFIX}/ ]]
+if [[ -d ${BACKUPDIR}/${BACKUPDIRSUFFIX}/ ]]
   then
   echo "Directory ${BACKUPDIR}/${BACKUPDIRSUFFIX}/ exists."
 else
   echo "Directory ${BACKUPDIR}/${BACKUPDIRSUFFIX}/ does not exist... making it."
-  ${MKNICE} mkdir -p --mode=700 ${BACKUPDIR}/${BACKUPDIRPREFIX}/
+  ${MKNICE} mkdir -p --mode=700 ${BACKUPDIR}/${BACKUPDIRSUFFIX}/
 fi
 # Directory made... proceed.
 if [ ${SAVEONBACKUP} -eq 1 ]

@@ -1,2 +1,3 @@
 -- read vars from backup file instead of config?
 -- check if restore.sh works with no server suffix
+-- WIPE: change script to accomodate different wipe schedules

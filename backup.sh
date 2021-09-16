@@ -60,4 +60,4 @@ fi
 
 echo "Making ${FULLNAME}"
 ${MKNICE} tar zcvf $FULLNAME "${BACKUPLIST[@]}"
-
+echo "Done!"

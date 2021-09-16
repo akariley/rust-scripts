@@ -2,23 +2,22 @@
 #set -euo pipefail
 BACKUPDIR=/game-backups
 RUSTDIR=rust
-#BACKUPDIRPREFIX=${USER}-backup
-DIR=${BACKUPDIRPREFIX}/`date +%F`
-#FILENAME=${BACKUPDIRPREFIX}/`date +%H%M`
+#BACKUPDIRSUFFIX=${USER}-backup
+DIR=${BACKUPDIRSUFFIX}/`date +%F`
+#FILENAME=${BACKUPDIRSUFFIX}/`date +%H%M`
 FULLNAME=${BACKUPDIR}/${DIR}/${FILENAME}.tar.gz
 TODAY=`date +%F`
 #TODAY=$(date +%Y-%b-%d-%H%M)
 source ./.config
 
+FILENAME=${USER}-${BACKUPDATE}
 
-FILENAME=${USER}-$(date +%Y-%b-%d-%H%M)
-
-if [ -z ${BACKUPDIRPREFIX} ]
+if [ -z ${BACKUPDIRSUFFIX} ]
 then
   #no prefix so omit the var
   FULLNAME=${BACKUPDIR}/${FILENAME}.tar.gz
 else
-  FULLNAME=${BACKUPDIR}/${BACKUPDIRPREFIX}/${FILENAME}.tar.gz
+  FULLNAME=${BACKUPDIR}/${BACKUPDIRSUFFIX}/${FILENAME}.tar.gz
 fi
 
 #
@@ -53,7 +52,7 @@ then
   # echo 'in list loop'
   if [[ -z $2 ]]
   then
-    ls -1 ${BACKUPDIR}/${BACKUPDIRPREFIX}/
+    ls -1 ${BACKUPDIR}/${BACKUPDIRSUFFIX}/
   else
     ls -1 ${BACKUPDIR}/${2}
   fi
@@ -71,9 +70,9 @@ then
     exit 2
   fi
   # no date, assuming today
-  if [[ -e ${BACKUPDIR}/${BACKUPDIRPREFIX}/$1 ]]
+  if [[ -e ${BACKUPDIR}/${BACKUPDIRSUFFIX}/$1 ]]
   then
-    echo "Extracting from ${BACKUPDIR}/${BACKUPDIRPREFIX}/$1..."
+    echo "Extracting from ${BACKUPDIR}/${BACKUPDIRSUFFIX}/$1..."
     for backuppath in "${BACKUPLIST[@]}"
     do
       backuppath=$(echo "${backuppath}" | cut -d/ -f2-)
@@ -81,14 +80,14 @@ then
       select yn in "Yes" "No"
       do
         case $yn in
-          Yes ) echo "tar zxvf ${BACKUPDIR}/${BACKUPDIRPREFIX}/$1 --strip-components=2 $backuppath -C ${INSTALLDIR}" ; break;;
+          Yes ) tar zxvf ${BACKUPDIR}/${BACKUPDIRSUFFIX}/${1} -C ${INSTALLDIR} --strip-components=3 $backuppath ; break;;
           No ) break;;
         esac
       done
     done
     echo
   else
-    echo "Error: ${BACKUPDIR}/${BACKUPDIRPREFIX}/$1 does not exist.  Did you input the correct date?"
+    echo "Error: ${BACKUPDIR}/${BACKUPDIRSUFFIX}/$1 does not exist.  Did you input the correct date?"
     exit 1
   fi
   echo
@@ -112,7 +111,7 @@ else
       select yn in "Yes" "No"
       do
         case $yn in
-          Yes ) echo "tar zxvf ${BACKUPDIR}/${2}/${1} --strip-components=2 $backuppath -C ${INSTALLDIR}" ; break;;
+          Yes ) tar zxvf ${BACKUPDIR}/${2}/${1} C ${INSTALLDIR} --strip-components=3 $backuppath ; break;;
           No ) break;;
         esac
       done

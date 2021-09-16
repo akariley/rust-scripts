@@ -20,14 +20,14 @@ then
   # end sanity checks.
 fi
 
-FILENAME=${USER}-${BACKUPDATESUFFIX}
+FILENAME=${USER}-${BACKUPDATE}
 
-if [ -z ${BACKUPDIRPREFIX} ]
+if [ -z ${BACKUPDIRSUFFIX} ]
 then
   #no prefix so omit the var
   FULLNAME=${BACKUPDIR}/${FILENAME}.tar.gz
 else
-  FULLNAME=${BACKUPDIR}/${BACKUPDIRPREFIX}/${FILENAME}.tar.gz
+  FULLNAME=${BACKUPDIR}/${BACKUPDIRSUFFIX}/${FILENAME}.tar.gz
 fi
 
 MKNICE='ionice -c 3'
@@ -36,9 +36,9 @@ MKNICE='ionice -c 3'
 
 if [[ -d ${BACKUPDIR}/${BACKUPDIRPREFIX}/ ]]
   then
-  echo "Directory ${BACKUPDIR}/${BACKUPDIRPREFIX}/ exists."
+  echo "Directory ${BACKUPDIR}/${BACKUPDIRSUFFIX}/ exists."
 else
-  echo "Directory ${BACKUPDIR}/${BACKUPDIRPREFIX}/ does not exist... making it."
+  echo "Directory ${BACKUPDIR}/${BACKUPDIRSUFFIX}/ does not exist... making it."
   ${MKNICE} mkdir -p --mode=700 ${BACKUPDIR}/${BACKUPDIRPREFIX}/
 fi
 # Directory made... proceed.
@@ -59,5 +59,5 @@ then
 fi
 
 echo "Making ${FULLNAME}"
-${MKNICE} tar zcvf $FULLNAME "${backuplist[@]}"
-
+${MKNICE} tar zcvf $FULLNAME "${BACKUPLIST[@]}"
+echo "Done!"

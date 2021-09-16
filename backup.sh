@@ -22,7 +22,7 @@ fi
 
 FILENAME=${USER}-${BACKUPDATE}
 
-if [ -z ${BACKUPDIRPREFIX} ]
+if [ -z ${BACKUPDIRSUFFIX} ]
 then
   #no prefix so omit the var
   FULLNAME=${BACKUPDIR}/${FILENAME}.tar.gz

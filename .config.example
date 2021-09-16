@@ -37,8 +37,8 @@ BACKUPISMOUNT=1
 #BACKUPDIR=/game-backups/${USER}
 BACKUPDIR=${HOME}/backups
 
-# what prefix would you like for the backup files?  We default to ${BACKUPDIR}/<day of month>/
-BACKUPDIRPREFIX=$(date +%m)
+# what suffix would you like for the backup directory?  We default to ${BACKUPDIR}/<day of month>/
+BACKUPDIRSUFFIX=$(date +%m)
 
 # do we issue a 'server.save' command to the rust server when the backup script is run?
 # 1 = yes, 0 = no

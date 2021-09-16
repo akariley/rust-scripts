@@ -1,12 +1,12 @@
 #!/bin/bash
 #set -euo pipefail
-BACKUPDIR=/game-backups
-RUSTDIR=rust
+#BACKUPDIR=/game-backups
+#RUSTDIR=rust
 #BACKUPDIRSUFFIX=${USER}-backup
-DIR=${BACKUPDIRSUFFIX}/`date +%F`
+#DIR=${BACKUPDIRSUFFIX}/`date +%F`
 #FILENAME=${BACKUPDIRSUFFIX}/`date +%H%M`
-FULLNAME=${BACKUPDIR}/${DIR}/${FILENAME}.tar.gz
-TODAY=`date +%F`
+#FULLNAME=${BACKUPDIR}/${DIR}/${FILENAME}.tar.gz
+#TODAY=`date +%F`
 #TODAY=$(date +%Y-%b-%d-%H%M)
 source ./.config
 

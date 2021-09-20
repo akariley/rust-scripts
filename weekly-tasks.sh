@@ -34,8 +34,8 @@ done
 # remove lock files
 echo "Shutdown complete, proceeding." 
 find ${INSTALLDIR}/lgsm/lock/ -type f -delete
-${INSTALLDIR}/backup.sh
-${INSTALLDIR}/rust/rustserver update-lgsm
+${SCRIPTDIR}/backup.sh
+${INSTALLDIR}/rustserver update-lgsm
 echo "Checking for Rust update..."
 ${INSTALLDIR}/rustserver check-update | grep -q 'Update available'
 statuscode=$?

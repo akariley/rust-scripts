@@ -45,7 +45,7 @@ then
   # there's a rust update
   echo "Rust update found, updating..."
   ${INSTALLDIR}/rustserver update > /dev/null
-fi
+fi # end rust update check
 echo "No Rust update found, proceeding..."
 
 ${INSTALLDIR}/rustserver mods-update > /dev/null
@@ -82,15 +82,17 @@ then
     then
       find ${INSTALLDIR}/serverfiles/oxide/data/Backpacks -type f -delete
     fi
-  fi
-  rm -vr ${INSTALLDIR}/.disable_monitor
-  echo "Starting server."
-  ${INSTALLDIR}/rustserver start
-  sleep 10
-  echo "Setting affinity..."
-  taskset -cp 1 $(pgrep RustDedicated)
+  fi # end month check
+fi # end main wipe check
 
-  echo "Done!"
-  echo "Restart cycle ended: $(date +"%c")"
-  sed -i -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g" ${FULLLOG}
-fi
+# start the server again
+rm -vr ${INSTALLDIR}/.disable_monitor
+echo "Starting server."
+${INSTALLDIR}/rustserver start
+sleep 10
+echo "Setting affinity..."
+taskset -cp 1 $(pgrep RustDedicated)
+
+echo "Done!"
+echo "Restart cycle ended: $(date +"%c")"
+sed -i -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g" ${FULLLOG}

@@ -42,7 +42,7 @@ USER=$(whoami)
 MONTH=$(date +"%-m")
 LOGDATE=$(date +"%m-%d-%Y-%s")
 LOGFILE=weekly-tasks_${LOGDATE}.log
-FULLLOG=/home/${USER}/rust/log/${LOGFILE}
+FULLLOG=${INSTALLDIR}/log/${LOGFILE}
 SCRIPTDIR=$(pwd)
 
 #LGSMCONFIG=/home/rust-testing/rust/lgsm/config-lgsm/rustserver/rustserver.cfg

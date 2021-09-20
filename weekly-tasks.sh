@@ -26,7 +26,7 @@ exec  >> ${FULLLOG} 2>&1
 echo "Restart cycle start: $(date +"%c")"
 touch ${INSTALLDIR}/.disable_monitor
 echo "Sending restart command to server via rcon..."
-timeout 2 /usr/bin/webrcon-cli ${RCONIP}:${RCONPORT} ${RCONPASSWORD} "restart 3600 'weekly restart'"
+timeout 2 ${WEBRCONCMD} ${RCONIP}:${RCONPORT} ${RCONPASSWORD} "restart 3600 'weekly restart'"
 while pgrep RustDedicated > /dev/null
 do
   sleep 60

@@ -1,6 +1,12 @@
 #!/bin/bash
 #set -euo pipefail
 
+if [ ! -e ./.config ]
+then
+  echo ".config file does not exist.  Please copy .config.example to .config and configure the settings as needed."
+  exit 1
+fi
+
 source ./.config
 
 if [ ${SAVEONBACKUP} -eq 1 ]

@@ -8,6 +8,13 @@
 #FULLNAME=${BACKUPDIR}/${DIR}/${FILENAME}.tar.gz
 #TODAY=`date +%F`
 #TODAY=$(date +%Y-%b-%d-%H%M)
+
+if [ ! -e ./.config ]
+then
+  echo ".config file does not exist.  Please copy .config.example to .config and configure the settings as needed."
+  exit 1
+fi
+
 source ./.config
 
 FILENAME=${USER}-${BACKUPDATE}

@@ -1,14 +1,5 @@
-USER=$(whoami)
-MONTH=$(date +"%-m")
-LOGDATE=$(date +"%m-%d-%Y-%s")
-LOGFILE=weekly-tasks_${LOGDATE}.log
-FULLLOG=/home/${USER}/rust/log/${LOGFILE}
-
-#LGSMCONFIG=/home/rust-testing/rust/lgsm/config-lgsm/rustserver/rustserver.cfg
-LGSMCONFIG=/path/to/lgsmserver.cfg
-
 #################
-# GENERAL OPTIONS
+# MAIN SETTINGS
 #################
 
 # where did you install your Rust server?  This is relative to your home dir.
@@ -22,10 +13,46 @@ RUSTDIR=rust
 # a local npm install usually puts it here: ~/node_modules/webrcon-cli/dist/bin/webrcon-cli.js
 WEBRCONCMD=/usr/bin/webrcon-cli
 
+# Set some variables we need.
+
+if [ ! -z ${RUSTDIR} ]
+then
+  INSTALLDIR=${HOME}/${RUSTDIR}
+else
+  INSTALLDIR=${HOME}
+fi
+
+# an array of files and paths to backup.
+
+BACKUPLIST=(
+  ${INSTALLDIR}/lgsm/config-lgsm/rustserver
+  ${INSTALLDIR}/serverfiles/server/rustserver
+  ${INSTALLDIR}/log/console
+)
+
+if [ -d ${INSTALLDIR}/serverfiles/oxide ]
+then
+  BACKUPLIST+=(
+    ${INSTALLDIR}/serverfiles/oxide
+  )
+fi
+
+#===========================================
+USER=$(whoami)
+MONTH=$(date +"%-m")
+LOGDATE=$(date +"%m-%d-%Y-%s")
+LOGFILE=weekly-tasks_${LOGDATE}.log
+FULLLOG=${INSTALLDIR}/log/${LOGFILE}
+SCRIPTDIR=$(pwd)
+
+#LGSMCONFIG=/home/rust-testing/rust/lgsm/config-lgsm/rustserver/rustserver.cfg
+LGSMCONFIG=/path/to/lgsmserver.cfg
+#===========================================
+
 
 
 ################
-# BACKUP OPTIONS
+# BACKUP SETTINGS
 ################
 
 # is your backup location a mount point? and if so, do you have permission to mount
@@ -52,25 +79,13 @@ SAVEONBACKUP=1
 BACKUPDATE=$(date +%Y-%b-%d-%H%M)
 
 
+######################
+# WEEKLY TASK SETTINGS
+######################
 
-if [ ! -z ${RUSTDIR} ]
-then
-  INSTALLDIR=${HOME}/${RUSTDIR}
-else
-  INSTALLDIR=${HOME}
-fi
+# do we wipe backpacks when the wipe script runs? (if installed)
+WIPECLEARBACKPACKS=1
 
-# an array of files and paths to backup.
+# restart time? TODO
+RESTARTSECONDS=3600
 
-BACKUPLIST=(
-  ${INSTALLDIR}/lgsm/config-lgsm/rustserver
-  ${INSTALLDIR}/serverfiles/server/rustserver
-  ${INSTALLDIR}/log/console
-)
-
-if [ -d ${INSTALLDIR}/serverfiles/oxide ]
-then
-  BACKUPLIST+=(
-    ${INSTALLDIR}/serverfiles/oxide
-  )
-fi

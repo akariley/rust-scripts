@@ -38,7 +38,7 @@ echo "Restart cycle start: $(date +"%c")"
 touch ${INSTALLDIR}/.disable_monitor
 echo "Sending restart command to server via rcon..."
 timeout 2 ${WEBRCONCMD} ${RCONIP}:${RCONPORT} ${RCONPASSWORD} "restart ${RESTARTSECONDS} 'weekly restart'"
-while pgrep RustDedicated > /dev/null
+while pgrep -u $(whoami) RustDedicated > /dev/null
 do
   sleep 60
 done
@@ -102,7 +102,7 @@ echo "Starting server."
 ${INSTALLDIR}/rustserver start
 sleep 10
 echo "Setting affinity..."
-taskset -cp 1 $(pgrep RustDedicated)
+taskset -cp 1 $(pgrep -u $(whoami) RustDedicated)
 
 echo "Done!"
 echo "Restart cycle ended: $(date +"%c")"

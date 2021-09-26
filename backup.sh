@@ -52,7 +52,7 @@ if [ ${SAVEONBACKUP} -eq 1 ]
 then
   # do a server.save first
   # check if the server is running.
-  if pgrep RustDedicated > /dev/null
+  if pgrep -u $(whoami) RustDedicated > /dev/null
   then
     echo "Server is running; sending 'server.save' via rcon."
     RCONIP=$(grep ^ip ${LGSMCONFIG} | awk -F'=' '{print $2}' | tr -d '"')

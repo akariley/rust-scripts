@@ -27,7 +27,12 @@ RCONIP=$(grep ^ip ${LGSMCONFIG} | awk -F'=' '{print $2}' | tr -d '"')
 RCONPORT=$(grep ^rconport ${LGSMCONFIG} | awk -F'=' '{print $2}' | tr -d '"')
 RCONPASSWORD=$(grep ^rconpassword ${LGSMCONFIG} | awk -F'=' '{print $2}' | tr -d '"')
 
-exec  >> ${FULLLOG} 2>&1
+
+if [ ${EXECLOGGING} -eq 1 ]
+then
+  exec  >> ${FULLLOG} 2>&1
+fi
+
 
 echo "Restart cycle start: $(date +"%c")"
 touch ${INSTALLDIR}/.disable_monitor
@@ -101,4 +106,8 @@ taskset -cp 1 $(pgrep RustDedicated)
 
 echo "Done!"
 echo "Restart cycle ended: $(date +"%c")"
-sed -i -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g" ${FULLLOG}
+
+if [ ${EXECLOGGING} -eq 1 ]
+then
+  sed -i -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g" ${FULLLOG}
+fi

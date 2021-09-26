@@ -55,11 +55,6 @@ LGSMCONFIG=/path/to/lgsmserver.cfg
 # BACKUP SETTINGS
 ################
 
-# is your backup location a mount point? and if so, do you have permission to mount
-# it if it's not mounted? 1 = yes, 0 = no
-BACKUPISMOUNT=1
-
-
 # where are your backups stored? we default to ~/backups/
 #BACKUPDIR=/game-backups/${USER}
 BACKUPDIR=${HOME}/backups

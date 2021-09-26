@@ -40,9 +40,6 @@ fi
 #===========================================
 USER=$(whoami)
 MONTH=$(date +"%-m")
-LOGDATE=$(date +"%m-%d-%Y-%s")
-LOGFILE=weekly-tasks_${LOGDATE}.log
-FULLLOG=${INSTALLDIR}/log/${LOGFILE}
 SCRIPTDIR=$(pwd)
 
 #LGSMCONFIG=/home/rust-testing/rust/lgsm/config-lgsm/rustserver/rustserver.cfg
@@ -50,6 +47,16 @@ LGSMCONFIG=/path/to/lgsmserver.cfg
 #===========================================
 
 
+###################
+# LOGGING OPTIONS #
+###################
+
+LOGDATE=$(date +"%m-%d-%Y-%s")
+LOGFILE=weekly-tasks_${LOGDATE}.log
+FULLLOG=${INSTALLDIR}/log/${LOGFILE}
+
+# we default to using exec to pipe the output to a log file.  To disable this, set this to 0.
+EXECLOGGING=1
 
 ################
 # BACKUP SETTINGS

@@ -8,6 +8,20 @@ fi
 
 source ./.config
 
+# ./wipe-script.sh [doforcewipe] [dowipeblueprints] [dorustupdate] [domodsupdate] [dolgsmupdate] [dobackup] [donewseed] [dowipebackpacks]
+
+wipeDoForceWipe=0
+wipeDoWipeBlueprints=0
+wipeDoRustUpdate=0
+wipeDoModsUpdate=0
+wipeDoLGSMUpdate=0
+wipeDoBackup=0
+wipeDoNewSeed=0
+wipeDoWipeBackpacks=0
+
+
+
+
 # read in lgsm vars we need
 # TODO: validate these: https://askubuntu.com/questions/367136/how-do-i-read-a-variable-from-a-file
 
@@ -46,56 +60,81 @@ done
 # remove lock files
 echo "Shutdown complete, proceeding." 
 find ${INSTALLDIR}/lgsm/lock/ -type f -delete
-${SCRIPTDIR}/backup.sh
-${INSTALLDIR}/rustserver update-lgsm
-echo "Checking for Rust update..."
-${INSTALLDIR}/rustserver check-update | grep -q 'Update available'
-statuscode=$?
-echo "Status code for Rust update check was: $statuscode"
-if [[ $statuscode -eq 0 ]];
-then
-  # there's a rust update
-  echo "Rust update found, updating..."
-  ${INSTALLDIR}/rustserver update > /dev/null
-fi # end rust update check
-echo "No Rust update found, proceeding..."
 
-${INSTALLDIR}/rustserver mods-update > /dev/null
+if [ ${wipeDoBackup} -eq 1 ]
+then
+  ${SCRIPTDIR}/backup.sh
+fi
+
+if [ ${wipeDoLGSMUpdate} -eq 1 ]
+then
+  ${INSTALLDIR}/rustserver update-lgsm
+fi
+
+if [ ${wipeDoRustUpdate} -eq 1 ]
+then
+  echo "Checking for Rust update..."
+  ${INSTALLDIR}/rustserver check-update | grep -q 'Update available'
+  statuscode=$?
+  #echo "Status code for Rust update check was: $statuscode"
+  if [[ $statuscode -eq 0 ]];
+  then
+    # there's a rust update
+    echo "Rust update found, updating..."
+    ${INSTALLDIR}/rustserver update > /dev/null
+  else
+    echo "No Rust update found, proceeding..."
+  fi # end rust update check
+fi
+
+if [ ${wipeDoModsUpdate} -eq 1 ]
+then
+  ${INSTALLDIR}/rustserver mods-update > /dev/null
+fi
+
 # we need to see if this is the first Thursday of the month.
 # TODO: https://stackoverflow.com/questions/24777597/value-too-great-for-base-error-token-is-08
-#
-if [ $(date +\%d) -le 07 ]
+
+
+
+if [ ${wipeDoForceWipe} -eq 1 ]
 then
   # check for backpacks.
+
   if [ ! -e ${INSTALLDIR}/serverfiles/oxide/plugins/Backpacks.cs ]
   then
     # no backpack plugin loaded.
-    WIPECLEARBACKPACKS=0
-  fi
-  # we're doing the wipe today.
-  # let's get a new map seed.
-  newseed=$(shuf -i 1-2147483647 -n1)
-  echo "New seed is ${newseed}."
-  sed -i "s/seed=".*"/seed="${newseed}"/g" ${LGSMCONFIG}
-  # are we doing a blueprint wipe?
-  if [[ $MONTH%2 -eq 1 ]];
+    wipeDoWipeBackpacks=0
+  fi # end backpack check
+  
+
+  if [ ${wipeDoNewSeed} -eq 1 ]
   then
-    # odd month so we're doing a BP wipe
+    # let's get a new map seed.
+    newseed=$(shuf -i 1-2147483647 -n1)
+    echo "New seed is ${newseed}."
+    sed -i "s/seed=".*"/seed="${newseed}"/g" ${LGSMCONFIG}
+  else
+    echo "Not changing seed."
+  fi # end seed check
+
+
+  if [ ${wipeDoWipeBlueprints} -eq 1 ];
+  then
     echo 'Starting full wipe...'
     ${INSTALLDIR}/rustserver full-wipe
-    if [ ${WIPECLEARBACKPACKS} -eq 1 ]
+    if [ ${wipeDoWipeBackpacks} -eq 1 ]
     then
       find ${INSTALLDIR}/serverfiles/oxide/data/Backpacks -type f -delete
     fi
   else
     echo 'Starting normal wipe...'
     ${INSTALLDIR}/rustserver wipe
-    if [ ${WIPECLEARBACKPACKS} -eq 1 ]
+    if [ ${wipeDoWipeBackpacks} -eq 1 ]
     then
       find ${INSTALLDIR}/serverfiles/oxide/data/Backpacks -type f -delete
     fi
   fi # end month check
-fi # end main wipe check
 
 # start the server again
 rm -vr ${INSTALLDIR}/.disable_monitor

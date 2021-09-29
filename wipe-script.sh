@@ -18,24 +18,69 @@ wipeDoLGSMUpdate=0
 wipeDoBackup=0
 wipeDoNewSeed=0
 wipeDoWipeBackpacks=0
+wipeDoRestartServer=0
 
 
+# let's parse the arguments 
+# it'll look something like ./$0 --option-1 --option-2 <rust server instance name>
 
+while [ "$#" -gt 0 ]
+do
+  case ${1} in
+    --new-seed)
+      wipeDoNewSeed=1
+      ;;
+    --wipe-blueprints)
+      wipeDoWipeBlueprints=1
+      ;;
+    --update-rust)
+      wipeDoRustUpdate=1
+      ;;
+    --restart-server)
+      wipeDoRestartServer=1
+      ;;
+    --update-mods)
+      wipeDoModsUpdate=1
+      ;;
+    *)
+      # TODO: finish this.
+      # Currently we just empty the rest of the arguments except the instance.
+      break
+      ;;
+  esac
+  echo "End of case loop: ${@}"
+  shift
+done
+
+echo "End of loop: ${@}"
+
+# TODO: remove
+wipeDoForceWipe=1
+
+
+if [ -z ${1} ]
+then
+  # $1 is empty, assuming the default name
+  instanceName=rustserver
+else  
+  instanceName=${1}
+fi
+
+if [ ! -e ${INSTALLDIR}/${instanceName} ]
+then
+  echo "Error: ${INSTALLDIR}/${instanceName} does not exist."
+  exit 1
+else
+  LGSMCONFIG=${INSTALLDIR}/lgsm/config-lgsm/${instanceName}/${instanceName}.cfg
+fi
 
 # read in lgsm vars we need
 # TODO: validate these: https://askubuntu.com/questions/367136/how-do-i-read-a-variable-from-a-file
-
-if [ ! -e ${LGSMCONFIG} ] || [ -z ${LGSMCONFIG} ]
-then
-  echo "LGSMCONFIG is not set in ./.config or file does not exist.  Aborting."
-  exit 1
-fi 
 
 if [ ! -e ${WEBRCONCMD} ]
 then
   echo "Error: WEBRCONCMD is not set and we need it.  Aborting."
   exit 1
-
 fi
 
 RCONIP=$(awk -F'=' '/[Ii][Pp]="?([0-9]{1,3}[\.]){3}[0-9]{1,3}"?/ {print $2}' ${LGSMCONFIG} | tr -d '"')
@@ -49,7 +94,7 @@ then
 fi
 
 
-echo "Restart cycle start: $(date +"%c")"
+echo "Wipe cycle start: $(date +"%c")"
 touch ${INSTALLDIR}/.disable_monitor
 echo "Sending restart command to server via rcon..."
 timeout 2 ${WEBRCONCMD} ${RCONIP}:${RCONPORT} ${RCONPASSWORD} "restart ${RESTARTSECONDS} 'weekly restart'"
@@ -92,11 +137,6 @@ then
   ${INSTALLDIR}/rustserver mods-update > /dev/null
 fi
 
-# we need to see if this is the first Thursday of the month.
-# TODO: https://stackoverflow.com/questions/24777597/value-too-great-for-base-error-token-is-08
-
-
-
 if [ ${wipeDoForceWipe} -eq 1 ]
 then
   # check for backpacks.
@@ -138,14 +178,15 @@ then
 
 # start the server again
 rm -vr ${INSTALLDIR}/.disable_monitor
-echo "Starting server."
-${INSTALLDIR}/rustserver start
-sleep 10
-echo "Setting affinity..."
-taskset -cp 1 $(pgrep -u $(whoami) RustDedicated)
+if [ ${wipeDoRestartServer} -eq 1 ]
+then
+  echo "Starting server."
+  ${INSTALLDIR}/rustserver start
+fi
 
+sleep 2
 echo "Done!"
-echo "Restart cycle ended: $(date +"%c")"
+echo "Wipe cycle ended: $(date +"%c")"
 
 if [ ${EXECLOGGING} -eq 1 ]
 then

@@ -21,6 +21,7 @@ wipeDoWipeBackpacks=0
 wipeDoRestartServer=0
 
 
+
 # let's parse the arguments 
 # it'll look something like ./$0 --option-1 --option-2 <rust server instance name>
 
@@ -41,6 +42,16 @@ do
       ;;
     --update-mods)
       wipeDoModsUpdate=1
+      ;;
+    --wipe-backpacks)
+      if [ ! -e ${INSTALLDIR}/serverfiles/oxide/plugins/Backpacks.cs ]
+      then
+        # no backpack plugin loaded.
+        echo "--wipe-backpacks entered, but no backpack plugin found.  Disabling this option."
+        wipeDoWipeBackpacks=0
+      else
+        wipeDoWipeBackpacks=1
+      fi # end backpack check
       ;;
     *)
       # TODO: finish this.
@@ -96,15 +107,18 @@ fi
 
 echo "Wipe cycle start: $(date +"%c")"
 touch ${INSTALLDIR}/.disable_monitor
-echo "Sending restart command to server via rcon..."
-timeout 2 ${WEBRCONCMD} ${RCONIP}:${RCONPORT} ${RCONPASSWORD} "restart ${RESTARTSECONDS} 'weekly restart'"
-while pgrep -u $(whoami) RustDedicated > /dev/null
-do
-  sleep 60
-done
-# remove lock files
-echo "Shutdown complete, proceeding." 
-find ${INSTALLDIR}/lgsm/lock/ -type f -delete
+if [ ${wipeDoRestartServer} -eq 1 ]
+then
+  echo "Sending restart command to server via rcon..."
+  timeout 2 ${WEBRCONCMD} ${RCONIP}:${RCONPORT} ${RCONPASSWORD} "restart ${RESTARTSECONDS} 'weekly restart'"
+  while pgrep -u $(whoami) RustDedicated > /dev/null
+  do
+    sleep 60
+  done
+  # remove lock files
+  echo "Shutdown complete, proceeding." 
+  find ${INSTALLDIR}/lgsm/lock/ -type f -delete
+fi
 
 if [ ${wipeDoBackup} -eq 1 ]
 then
@@ -113,20 +127,20 @@ fi
 
 if [ ${wipeDoLGSMUpdate} -eq 1 ]
 then
-  ${INSTALLDIR}/rustserver update-lgsm
+  ${INSTALLDIR}/${instanceName} update- lgsm
 fi
 
 if [ ${wipeDoRustUpdate} -eq 1 ]
 then
   echo "Checking for Rust update..."
-  ${INSTALLDIR}/rustserver check-update | grep -q 'Update available'
+  ${INSTALLDIR}/${instanceName} check-update | grep -q 'Update available'
   statuscode=$?
   #echo "Status code for Rust update check was: $statuscode"
   if [[ $statuscode -eq 0 ]];
   then
     # there's a rust update
     echo "Rust update found, updating..."
-    ${INSTALLDIR}/rustserver update > /dev/null
+    ${INSTALLDIR}/${instanceName} update > /dev/null
   else
     echo "No Rust update found, proceeding..."
   fi # end rust update check
@@ -134,7 +148,7 @@ fi
 
 if [ ${wipeDoModsUpdate} -eq 1 ]
 then
-  ${INSTALLDIR}/rustserver mods-update > /dev/null
+  ${INSTALLDIR}/${instanceName} mods-update > /dev/null
 fi
 
 if [ ${wipeDoForceWipe} -eq 1 ]
@@ -162,26 +176,27 @@ then
   if [ ${wipeDoWipeBlueprints} -eq 1 ];
   then
     echo 'Starting full wipe...'
-    ${INSTALLDIR}/rustserver full-wipe
+    ${INSTALLDIR}/${instanceName} full-wipe
     if [ ${wipeDoWipeBackpacks} -eq 1 ]
     then
       find ${INSTALLDIR}/serverfiles/oxide/data/Backpacks -type f -delete
     fi
   else
     echo 'Starting normal wipe...'
-    ${INSTALLDIR}/rustserver wipe
+    ${INSTALLDIR}/${instanceName} wipe
     if [ ${wipeDoWipeBackpacks} -eq 1 ]
     then
       find ${INSTALLDIR}/serverfiles/oxide/data/Backpacks -type f -delete
     fi
   fi # end month check
+fi
 
 # start the server again
 rm -vr ${INSTALLDIR}/.disable_monitor
 if [ ${wipeDoRestartServer} -eq 1 ]
 then
   echo "Starting server."
-  ${INSTALLDIR}/rustserver start
+  ${INSTALLDIR}/${instanceName} start
 fi
 
 sleep 2

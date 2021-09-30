@@ -19,6 +19,8 @@ wipeDoBackup=0
 wipeDoNewSeed=0
 wipeDoWipeBackpacks=0
 wipeDoRestartServer=0
+wipeDoRunDay=
+wipeDay=
 
 
 
@@ -53,6 +55,16 @@ do
         wipeDoWipeBackpacks=1
       fi # end backpack check
       ;;
+    --run)
+      if [ "$2" ]
+      then
+        wipeDoRunDay=$2
+        shift
+      else
+        echo "Error: --run requires a value."
+        exit 1
+      fi
+      ;;
     *)
       # TODO: finish this.
       # Currently we just empty the rest of the arguments except the instance.
@@ -68,6 +80,16 @@ echo "End of loop: ${@}"
 # TODO: remove
 wipeDoForceWipe=1
 
+if [ ${wipeDoRunDay} ]
+then
+  # we have a value for --run
+  # Valid values are: English days of week, or first-Thursday (case insensitive)
+  #wipeDay=$(echo ${wipeDoRunDay} | awk '/(?:sun(?:day)?|mon(?:day)?|tue(?:sday)?|wed(?:nesday)?|thu(?:rsday)?|fri(?:day)?|sat(?:urday)?|first-Thursday|force-wipe)/i')
+  wipeDay=$(echo ${wipeDoRunDay} | grep -Pi '(?:sun(?:day)?|mon(?:day)?|tue(?:sday)?|wed(?:nesday)?|thu(?:rsday)?|fri(?:day)?|sat(?:urday)?|first-Thursday|force-wipe)')
+fi
+
+echo ${wipeDay}
+exit 1
 
 if [ -z ${1} ]
 then

@@ -89,7 +89,7 @@ then
 fi
 
 echo ${wipeDay}
-exit 1
+
 
 if [ -z ${1} ]
 then
@@ -195,7 +195,7 @@ then
   fi # end seed check
 
 
-  if [ ${wipeDoWipeBlueprints} -eq 1 ];
+  if [ ${wipeDoWipeBlueprints} -eq 1 ]
   then
     echo 'Starting full wipe...'
     ${INSTALLDIR}/${instanceName} full-wipe

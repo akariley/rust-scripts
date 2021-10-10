@@ -43,7 +43,7 @@ do
   case ${1} in
     --new-seed)
       wipeDoNewSeed=1
-      echo "${0}: generating new seed."
+      echo "${0}: will generate new seed."
       ;;
     --wipe-blueprints)
       wipeDoWipeBlueprints=1
@@ -86,7 +86,8 @@ do
       wipeCron=1
       ;;
     *)
-      echo "Warning: unknown option: ${1}, disregarding."
+      # end of options with no match, assuming instance name.
+      break
       ;;
   esac
   echo "End of case loop: ${@}"
@@ -152,12 +153,12 @@ touch ${INSTALLDIR}/.disable_monitor
 
 if [ ${wipeDoBackup} -eq 1 ]
 then
-  echo "${SCRIPTDIR}/backup.sh"
+  ${SCRIPTDIR}/backup.sh
 fi
 
 if [ ${wipeDoLGSMUpdate} -eq 1 ]
 then
-  echo "${INSTALLDIR}/${instanceName} update-lgsm"
+  ${INSTALLDIR}/${instanceName} update-lgsm
 fi
 
 if [ ${wipeDoRustUpdate} -eq 1 ]
@@ -170,7 +171,7 @@ then
   then
     # there's a rust update
     echo "Rust update found, updating..."
-    echo "${INSTALLDIR}/${instanceName} update > /dev/null"
+    ${INSTALLDIR}/${instanceName} update > /dev/null
   else
     echo "No Rust update found, proceeding..."
   fi # end rust update check
@@ -178,7 +179,7 @@ fi
 
 if [ ${wipeDoModsUpdate} -eq 1 ]
 then
-  echo "${INSTALLDIR}/${instanceName} mods-update > /dev/null"
+  ${INSTALLDIR}/${instanceName} mods-update > /dev/null
 fi
 
 #################
@@ -187,7 +188,7 @@ fi
 
 if [ ${wipeDoWipeBackpacks} -eq 1 ]
 then
-  echo "find ${INSTALLDIR}/serverfiles/oxide/data/Backpacks -type f -delete"
+  find ${INSTALLDIR}/serverfiles/oxide/data/Backpacks -type f -delete
 fi
 
 
@@ -205,12 +206,9 @@ fi # end seed check
 if [ ${wipeDoWipeBlueprints} -eq 1 ]
 then
   echo 'Removing blueprints...'
-  echo "/bin/rm -v ${INSTALLDIR}/serverfiles/server/${instanceName}/player.blueprints.4.db"
-  echo "/bin/rm -v ${INSTALLDIR}/serverfiles/server/${instanceName}/player.blueprints.4.db-journal"
+  /bin/rm -v ${INSTALLDIR}/serverfiles/server/${instanceName}/player.blueprints.4.db
+  /bin/rm -v ${INSTALLDIR}/serverfiles/server/${instanceName}/player.blueprints.4.db-journal
 fi
-# fi # end force wipe check
-
-
 
 if [ ${wipeDoRestartServer} -eq 1 ]
 then
@@ -231,7 +229,7 @@ rm -vr ${INSTALLDIR}/.disable_monitor
 if [ ${wipeDoRestartServer} -eq 1 ]
 then
   echo "Starting server."
-  echo "${INSTALLDIR}/${instanceName} start"
+  ${INSTALLDIR}/${instanceName} start
 fi
 sleep 2
 echo "Done!"

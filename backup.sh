@@ -9,6 +9,23 @@ fi
 
 source ./.config
 
+if [ -z ${1} ]
+then
+  # $1 is empty, assuming the default name
+  instanceName=rustserver
+else
+  instanceName=${1}
+fi
+
+if [ ! -e ${INSTALLDIR}/${instanceName} ]
+then
+  echo "Error: ${INSTALLDIR}/${instanceName} does not exist."
+  exit 1
+else
+  LGSMCONFIG=${INSTALLDIR}/lgsm/config-lgsm/${instanceName}/${instanceName}.cfg
+fi
+
+
 if [ ${SAVEONBACKUP} -eq 1 ]
 then
   # check if webrcon is valid.

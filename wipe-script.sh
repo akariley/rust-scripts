@@ -10,6 +10,8 @@ source ./.config
 
 # ./wipe-script.sh [doforcewipe] [dowipeblueprints] [dorustupdate] [domodsupdate] [dolgsmupdate] [dobackup] [donewseed] [dowipebackpacks]
 
+today=$(date +"%A")
+todayAbbr=$(date +"%a")
 wipeDoForceWipe=0
 wipeDoWipeBlueprints=0
 wipeDoRustUpdate=0
@@ -80,16 +82,18 @@ echo "End of loop: ${@}"
 # TODO: remove
 wipeDoForceWipe=1
 
-if [ ${wipeDoRunDay} ]
+if [ {$wipeDoRunDay} ]
 then
-  # we have a value for --run
-  # Valid values are: English days of week, or first-Thursday (case insensitive)
-  #wipeDay=$(echo ${wipeDoRunDay} | awk '/(?:sun(?:day)?|mon(?:day)?|tue(?:sday)?|wed(?:nesday)?|thu(?:rsday)?|fri(?:day)?|sat(?:urday)?|first-Thursday|force-wipe)/i')
-  wipeDay=$(echo ${wipeDoRunDay} | grep -Pi '(?:sun(?:day)?|mon(?:day)?|tue(?:sday)?|wed(?:nesday)?|thu(?:rsday)?|fri(?:day)?|sat(?:urday)?|first-Thursday|force-wipe)')
+  # user entered a day to --run; lets see if we're running today.
+  if [ ${wipeDoRunDay} == ${today} ] || [ ${wipeDoRunDay} == ${todayAbbr} ]
+  then
+    echo "DEBUG: wipeDoRunDay is equal to today: ${todayAbbr} or ${today}."
+  else
+    echo "DEBUG: We're not running today."
+  fi
 fi
 
-echo ${wipeDay}
-
+exit 255
 
 if [ -z ${1} ]
 then

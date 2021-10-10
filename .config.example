@@ -85,9 +85,6 @@ BACKUPDATE=$(date +%Y-%b-%d-%H%M)
 # WEEKLY TASK SETTINGS
 ######################
 
-# do we wipe backpacks when the wipe script runs? (if installed)
-WIPECLEARBACKPACKS=1
-
 # restart time? TODO
 RESTARTSECONDS=3600
 

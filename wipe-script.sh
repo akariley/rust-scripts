@@ -18,7 +18,7 @@ source ./.config
 
 today=$(date +"%A")
 todayAbbr=$(date +"%a")
-wipeDoForceWipe=0
+wipeDoWipe=0
 wipeDoWipeBlueprints=0
 wipeDoRustUpdate=0
 wipeDoModsUpdate=0
@@ -89,9 +89,6 @@ done
 
 echo "End of loop: ${@}"
 
-# TODO: remove
-#wipeDoForceWipe=1
-
 if [ ${wipeCron} -eq 1 ]
 then
   if [ {$wipeDoRunDay} ]
@@ -145,18 +142,7 @@ fi
 
 echo "Wipe cycle start: $(date +"%c")"
 touch ${INSTALLDIR}/.disable_monitor
-if [ ${wipeDoRestartServer} -eq 1 ]
-then
-  echo "Sending restart command to server via rcon..."
-  timeout 2 ${WEBRCONCMD} ${RCONIP}:${RCONPORT} ${RCONPASSWORD} "restart ${RESTARTSECONDS} 'weekly restart'"
-  while pgrep -u $(whoami) RustDedicated > /dev/null
-  do
-    sleep 60
-  done
-  # remove lock files
-  echo "Shutdown complete, proceeding." 
-  find ${INSTALLDIR}/lgsm/lock/ -type f -delete
-fi
+
 
 if [ ${wipeDoBackup} -eq 1 ]
 then
@@ -173,7 +159,7 @@ then
   echo "Checking for Rust update..."
   ${INSTALLDIR}/${instanceName} check-update | grep -q 'Update available'
   statuscode=$?
-  #echo "Status code for Rust update check was: $statuscode"
+  # echo "Status code for Rust update check was: $statuscode"
   if [[ $statuscode -eq 0 ]];
   then
     # there's a rust update
@@ -189,44 +175,50 @@ then
   ${INSTALLDIR}/${instanceName} mods-update > /dev/null
 fi
 
-if [ ${wipeDoForceWipe} -eq 1 ]
+#################
+# wipe stuff here
+#################
+
+if [ ${wipeDoWipeBackpacks} -eq 1 ]
 then
-  # check for backpacks.
-
-  if [ ! -e ${INSTALLDIR}/serverfiles/oxide/plugins/Backpacks.cs ]
-  then
-    # no backpack plugin loaded.
-    wipeDoWipeBackpacks=0
-  fi # end backpack check
-
-  if [ ${wipeDoNewSeed} -eq 1 ]
-  then
-    # let's get a new map seed.
-    newseed=$(shuf -i 1-2147483647 -n1)
-    echo "New seed is ${newseed}."
-    sed -i "s/seed=".*"/seed="${newseed}"/g" ${LGSMCONFIG}
-  else
-    echo "Not changing seed."
-  fi # end seed check
-
-
-  if [ ${wipeDoWipeBlueprints} -eq 1 ]
-  then
-    echo 'Starting full wipe...'
-    ${INSTALLDIR}/${instanceName} full-wipe
-    if [ ${wipeDoWipeBackpacks} -eq 1 ]
-    then
-      find ${INSTALLDIR}/serverfiles/oxide/data/Backpacks -type f -delete
-    fi
-  else
-    echo 'Starting normal wipe...'
-    ${INSTALLDIR}/${instanceName} wipe
-    if [ ${wipeDoWipeBackpacks} -eq 1 ]
-    then
-      find ${INSTALLDIR}/serverfiles/oxide/data/Backpacks -type f -delete
-    fi
-  fi # end month check
+  find ${INSTALLDIR}/serverfiles/oxide/data/Backpacks -type f -delete
 fi
+
+
+if [ ${wipeDoNewSeed} -eq 1 ]
+then
+  # let's get a new map seed.
+  newseed=$(shuf -i 1-2147483647 -n1)
+  echo "New seed is ${newseed}."
+  sed -i "s/seed=".*"/seed="${newseed}"/g" ${LGSMCONFIG}
+else
+  echo "Not changing seed."
+fi # end seed check
+
+
+if [ ${wipeDoWipeBlueprints} -eq 1 ]
+then
+  echo 'Removing blueprints...'
+  /bin/rm -v ${INSTALLDIR}/serverfiles/server/${instanceName}/player.blueprints.4.db
+  /bin/rm -v ${INSTALLDIR}/serverfiles/server/${instanceName}/player.blueprints.4.db-journal
+fi
+# fi # end force wipe check
+
+
+
+if [ ${wipeDoRestartServer} -eq 1 ]
+then
+  echo "Sending restart command to server via rcon..."
+  timeout 2 ${WEBRCONCMD} ${RCONIP}:${RCONPORT} ${RCONPASSWORD} "restart ${RESTARTSECONDS} 'weekly restart'"
+  while pgrep -u $(whoami) RustDedicated > /dev/null
+  do
+    sleep 60
+  done
+  # remove lock files
+  echo "Shutdown complete, proceeding." 
+  find ${INSTALLDIR}/lgsm/lock/ -type f -delete
+fi
+
 
 # start the server again
 rm -vr ${INSTALLDIR}/.disable_monitor
@@ -235,7 +227,6 @@ then
   echo "Starting server."
   ${INSTALLDIR}/${instanceName} start
 fi
-
 sleep 2
 echo "Done!"
 echo "Wipe cycle ended: $(date +"%c")"

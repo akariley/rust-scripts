@@ -27,6 +27,7 @@ wipeDoBackup=0
 wipeDoNewSeed=0
 wipeDoWipeBackpacks=0
 wipeDoRestartServer=0
+wipeCron=0
 runStatus=0
 
 wipeDoRunDay=''
@@ -75,9 +76,10 @@ do
         exit 1
       fi
       ;;
+    --cron)
+      wipeCron=1
+      ;;
     *)
-      # TODO: finish this.
-      # Currently we just empty the rest of the arguments except the instance.
       echo "Warning: unknown option: ${1}, disregarding."
       ;;
   esac
@@ -90,18 +92,21 @@ echo "End of loop: ${@}"
 # TODO: remove
 wipeDoForceWipe=1
 
-if [ {$wipeDoRunDay} ]
+if [ ${wipeCron} -eq 1 ]
 then
-  # user entered a day to --run; lets see if we're running today.
-  if [[ ${wipeDoRunDay} == ${today} ]] || [[ ${wipeDoRunDay} == ${todayAbbr} ]]
+  if [ {$wipeDoRunDay} ]
   then
-    # we're running today.
-    runStatus=1
-  else
-    # not running today; exit.
-    exit 2
-  fi
-fi
+    # user entered a day to --run and we're in cron mode; lets see if we're running today.
+    if [[ ${wipeDoRunDay} == ${today} ]] || [[ ${wipeDoRunDay} == ${todayAbbr} ]]
+    then
+      # we're running today.
+      runStatus=1
+    else
+      # not running today; exit.
+      exit 2
+    fi # end date check
+  fi # end --run check
+fi # end --cron check
 
 if [ -z ${1} ]
 then

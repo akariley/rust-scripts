@@ -35,7 +35,7 @@ wipeDay=''
 
 
 
-# let's parse the arguments 
+# let's parse the arguments
 # it'll look something like ./$0 --option-1 --option-2 <rust server instance name>
 
 while [ "$#" -gt 0 ]
@@ -90,7 +90,7 @@ done
 echo "End of loop: ${@}"
 
 # TODO: remove
-wipeDoForceWipe=1
+#wipeDoForceWipe=1
 
 if [ ${wipeCron} -eq 1 ]
 then
@@ -112,7 +112,7 @@ if [ -z ${1} ]
 then
   # $1 is empty, assuming the default name
   instanceName=rustserver
-else  
+else
   instanceName=${1}
 fi
 
@@ -125,7 +125,6 @@ else
 fi
 
 # read in lgsm vars we need
-# TODO: validate these: https://askubuntu.com/questions/367136/how-do-i-read-a-variable-from-a-file
 
 if [ ! -e ${WEBRCONCMD} ]
 then
@@ -199,7 +198,6 @@ then
     # no backpack plugin loaded.
     wipeDoWipeBackpacks=0
   fi # end backpack check
-  
 
   if [ ${wipeDoNewSeed} -eq 1 ]
   then

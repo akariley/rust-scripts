@@ -198,8 +198,6 @@ then
   newseed=$(shuf -i 1-2147483647 -n1)
   echo "New seed is ${newseed}."
   sed -i "s/seed=".*"/seed="${newseed}"/g" ${LGSMCONFIG}
-else
-  echo "Not changing seed."
 fi # end seed check
 
 

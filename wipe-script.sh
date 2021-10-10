@@ -10,6 +10,12 @@ source ./.config
 
 # ./wipe-script.sh [doforcewipe] [dowipeblueprints] [dorustupdate] [domodsupdate] [dolgsmupdate] [dobackup] [donewseed] [dowipebackpacks]
 
+# return codes
+#
+# 0 = no errors
+# 1 = syntax error
+# 2 = not running today
+
 today=$(date +"%A")
 todayAbbr=$(date +"%a")
 wipeDoForceWipe=0
@@ -21,8 +27,10 @@ wipeDoBackup=0
 wipeDoNewSeed=0
 wipeDoWipeBackpacks=0
 wipeDoRestartServer=0
-wipeDoRunDay=
-wipeDay=
+runStatus=0
+
+wipeDoRunDay=''
+wipeDay=''
 
 
 
@@ -70,7 +78,7 @@ do
     *)
       # TODO: finish this.
       # Currently we just empty the rest of the arguments except the instance.
-      break
+      echo "Warning: unknown option: ${1}, disregarding."
       ;;
   esac
   echo "End of case loop: ${@}"
@@ -85,15 +93,15 @@ wipeDoForceWipe=1
 if [ {$wipeDoRunDay} ]
 then
   # user entered a day to --run; lets see if we're running today.
-  if [ ${wipeDoRunDay} == ${today} ] || [ ${wipeDoRunDay} == ${todayAbbr} ]
+  if [[ ${wipeDoRunDay} == ${today} ]] || [[ ${wipeDoRunDay} == ${todayAbbr} ]]
   then
-    echo "DEBUG: wipeDoRunDay is equal to today: ${todayAbbr} or ${today}."
+    # we're running today.
+    runStatus=1
   else
-    echo "DEBUG: We're not running today."
+    # not running today; exit.
+    exit 2
   fi
 fi
-
-exit 255
 
 if [ -z ${1} ]
 then
@@ -153,7 +161,7 @@ fi
 
 if [ ${wipeDoLGSMUpdate} -eq 1 ]
 then
-  ${INSTALLDIR}/${instanceName} update- lgsm
+  ${INSTALLDIR}/${instanceName} update-lgsm
 fi
 
 if [ ${wipeDoRustUpdate} -eq 1 ]

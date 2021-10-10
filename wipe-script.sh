@@ -43,18 +43,23 @@ do
   case ${1} in
     --new-seed)
       wipeDoNewSeed=1
+      echo "${0}: generating new seed."
       ;;
     --wipe-blueprints)
       wipeDoWipeBlueprints=1
+      echo "${0}: will wipe blueprints."
       ;;
     --update-rust)
       wipeDoRustUpdate=1
+      echo "${0}: will update Rust."
       ;;
     --restart-server)
       wipeDoRestartServer=1
+      echo "${0}: will restart server."
       ;;
     --update-mods)
       wipeDoModsUpdate=1
+      echo "${0}: will update mods."
       ;;
     --wipe-backpacks)
       if [ ! -e ${INSTALLDIR}/serverfiles/oxide/plugins/Backpacks.cs ]
@@ -64,6 +69,7 @@ do
         wipeDoWipeBackpacks=0
       else
         wipeDoWipeBackpacks=1
+        echo "${0}: will wipe backpacks."
       fi # end backpack check
       ;;
     --run)
@@ -146,12 +152,12 @@ touch ${INSTALLDIR}/.disable_monitor
 
 if [ ${wipeDoBackup} -eq 1 ]
 then
-  ${SCRIPTDIR}/backup.sh
+  echo "${SCRIPTDIR}/backup.sh"
 fi
 
 if [ ${wipeDoLGSMUpdate} -eq 1 ]
 then
-  ${INSTALLDIR}/${instanceName} update-lgsm
+  echo "${INSTALLDIR}/${instanceName} update-lgsm"
 fi
 
 if [ ${wipeDoRustUpdate} -eq 1 ]
@@ -164,7 +170,7 @@ then
   then
     # there's a rust update
     echo "Rust update found, updating..."
-    ${INSTALLDIR}/${instanceName} update > /dev/null
+    echo "${INSTALLDIR}/${instanceName} update > /dev/null"
   else
     echo "No Rust update found, proceeding..."
   fi # end rust update check
@@ -172,7 +178,7 @@ fi
 
 if [ ${wipeDoModsUpdate} -eq 1 ]
 then
-  ${INSTALLDIR}/${instanceName} mods-update > /dev/null
+  echo "${INSTALLDIR}/${instanceName} mods-update > /dev/null"
 fi
 
 #################
@@ -181,7 +187,7 @@ fi
 
 if [ ${wipeDoWipeBackpacks} -eq 1 ]
 then
-  find ${INSTALLDIR}/serverfiles/oxide/data/Backpacks -type f -delete
+  echo "find ${INSTALLDIR}/serverfiles/oxide/data/Backpacks -type f -delete"
 fi
 
 
@@ -199,8 +205,8 @@ fi # end seed check
 if [ ${wipeDoWipeBlueprints} -eq 1 ]
 then
   echo 'Removing blueprints...'
-  /bin/rm -v ${INSTALLDIR}/serverfiles/server/${instanceName}/player.blueprints.4.db
-  /bin/rm -v ${INSTALLDIR}/serverfiles/server/${instanceName}/player.blueprints.4.db-journal
+  echo "/bin/rm -v ${INSTALLDIR}/serverfiles/server/${instanceName}/player.blueprints.4.db"
+  echo "/bin/rm -v ${INSTALLDIR}/serverfiles/server/${instanceName}/player.blueprints.4.db-journal"
 fi
 # fi # end force wipe check
 
@@ -225,7 +231,7 @@ rm -vr ${INSTALLDIR}/.disable_monitor
 if [ ${wipeDoRestartServer} -eq 1 ]
 then
   echo "Starting server."
-  ${INSTALLDIR}/${instanceName} start
+  echo "${INSTALLDIR}/${instanceName} start"
 fi
 sleep 2
 echo "Done!"

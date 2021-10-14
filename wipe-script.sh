@@ -28,12 +28,14 @@ wipeDoNewSeed=0
 wipeDoWipeBackpacks=0
 wipeDoRestartServer=0
 wipeCron=0
+wipeRestartReason=''
+
 runStatus=0
 
 wipeDoRunDay=''
 wipeDay=''
 
-
+numRegex='^[0-9]+$'
 
 # let's parse the arguments
 # it'll look something like ./$0 --option-1 --option-2 <rust server instance name>
@@ -54,6 +56,29 @@ do
       echo "${0}: will update Rust."
       ;;
     --restart-server)
+      # TODO: currently broken for a multi-word restart message
+      if [[ ! ${2} =~ $numRegex ]] 2>/dev/null 
+      then
+        echo "Error: --restart-server expects two parameters, <time in seconds> <restart message>"
+        exit 1
+      else
+        if [ ! ${2} -gt 0 ] 2>/dev/null 
+        then
+          echo "Error: seconds needs to be greater than 0."
+          exit 1
+        else
+          # $1 = --restart-server, $2 = seconds, $3- reason
+          # got a valid restart time
+          wipeRestartSeconds=${2}
+          # grab the restart reason
+          while [ ! ${3} == "@@" ]
+          do
+            wipeRestartReason+="${3} "
+            shift
+          done # end reason globbing
+        fi # end greater than 0 check
+      fi # end int check
+      shift 2
       wipeDoRestartServer=1
       echo "${0}: will restart server."
       ;;
@@ -90,27 +115,13 @@ do
       break
       ;;
   esac
-  echo "End of case loop: ${@}"
+  # echo "End of case loop: ${@}"
   shift
 done
 
-echo "End of loop: ${@}"
+# echo "End of loop: ${@}"
 
-if [ ${wipeCron} -eq 1 ]
-then
-  if [ {$wipeDoRunDay} ]
-  then
-    # user entered a day to --run and we're in cron mode; lets see if we're running today.
-    if [[ ${wipeDoRunDay} == ${today} ]] || [[ ${wipeDoRunDay} == ${todayAbbr} ]]
-    then
-      # we're running today.
-      runStatus=1
-    else
-      # not running today; exit.
-      exit 2
-    fi # end date check
-  fi # end --run check
-fi # end --cron check
+# echo $wipeRestartReason
 
 if [ -z ${1} ]
 then
@@ -127,6 +138,23 @@ then
 else
   LGSMCONFIG=${INSTALLDIR}/lgsm/config-lgsm/${instanceName}/${instanceName}.cfg
 fi
+
+
+if [ ${wipeCron} -eq 1 ]
+then
+  if [ {$wipeDoRunDay} ]
+  then
+    # user entered a day to --run and we're in cron mode; lets see if we're running today.
+    if [[ ${wipeDoRunDay} == ${today} ]] || [[ ${wipeDoRunDay} == ${todayAbbr} ]]
+    then
+      # we're running today.
+      runStatus=1
+    else
+      # not running today; exit.
+      exit 2
+    fi # end date check
+  fi # end --run check
+fi # end --cron check
 
 # read in lgsm vars we need
 
@@ -211,7 +239,7 @@ fi
 if [ ${wipeDoRestartServer} -eq 1 ]
 then
   echo "Sending restart command to server via rcon..."
-  timeout 2 ${WEBRCONCMD} ${RCONIP}:${RCONPORT} ${RCONPASSWORD} "restart ${RESTARTSECONDS} 'weekly restart'"
+  timeout 2 ${WEBRCONCMD} ${RCONIP}:${RCONPORT} ${RCONPASSWORD} "restart ${wipeRestartSeconds} '${wipeRestartReason}'"
   while pgrep -u $(whoami) RustDedicated > /dev/null
   do
     sleep 60

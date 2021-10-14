@@ -54,6 +54,23 @@ do
       echo "${0}: will update Rust."
       ;;
     --restart-server)
+      # TODO: currently broken for a multi-word restart message
+      if [ ! ${2} -eq ${2} ]
+      then
+        echo "Error: --restart-server expects two parameters, <time in seconds> <restart message>"
+        exit 1
+      else
+        if [ ! ${2} -gt 0 ]
+        then
+          echo "Error: seconds needs to be greater than 0."
+          exit 1
+        else
+          # got a valid restart time
+          # grab the restart reason
+          test=1
+        fi # end greater than 0 check
+      fi # end int check
+      shift 2
       wipeDoRestartServer=1
       echo "${0}: will restart server."
       ;;
@@ -96,6 +113,23 @@ done
 
 echo "End of loop: ${@}"
 
+f [ -z ${1} ]
+then
+  # $1 is empty, assuming the default name
+  instanceName=rustserver
+else
+  instanceName=${1}
+fi
+
+if [ ! -e ${INSTALLDIR}/${instanceName} ]
+then
+  echo "Error: ${INSTALLDIR}/${instanceName} does not exist."
+  exit 1
+else
+  LGSMCONFIG=${INSTALLDIR}/lgsm/config-lgsm/${instanceName}/${instanceName}.cfg
+fi
+
+
 if [ ${wipeCron} -eq 1 ]
 then
   if [ {$wipeDoRunDay} ]
@@ -112,21 +146,7 @@ then
   fi # end --run check
 fi # end --cron check
 
-if [ -z ${1} ]
-then
-  # $1 is empty, assuming the default name
-  instanceName=rustserver
-else
-  instanceName=${1}
-fi
-
-if [ ! -e ${INSTALLDIR}/${instanceName} ]
-then
-  echo "Error: ${INSTALLDIR}/${instanceName} does not exist."
-  exit 1
-else
-  LGSMCONFIG=${INSTALLDIR}/lgsm/config-lgsm/${instanceName}/${instanceName}.cfg
-fi
+i
 
 # read in lgsm vars we need
 

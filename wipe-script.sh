@@ -185,7 +185,8 @@ touch ${installDir}/.disable_monitor
 
 if [ ${wipeDoBackup} -eq 1 ]
 then
-  ${scriptDir}/{backupScript} {instanceName}
+  ${backupScript} ${instanceName} >/dev/null
+  echo "Backup complete, continuing..."
 fi
 
 if [ ${wipeDoLGSMUpdate} -eq 1 ]

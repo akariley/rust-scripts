@@ -28,6 +28,8 @@ wipeDoNewSeed=0
 wipeDoWipeBackpacks=0
 wipeDoRestartServer=0
 wipeCron=0
+wipeRestartReason=''
+
 runStatus=0
 
 wipeDoRunDay=''
@@ -65,9 +67,15 @@ do
           echo "Error: seconds needs to be greater than 0."
           exit 1
         else
+          # $1 = --restart-server, $2 = seconds, $3- reason
           # got a valid restart time
+          wipeRestartSeconds=${2}
           # grab the restart reason
-          test=1
+          while [ ! ${3} == "@@" ]
+          do
+            wipeRestartReason+="${3} "
+            shift
+          done # end reason globbing
         fi # end greater than 0 check
       fi # end int check
       shift 2
@@ -107,11 +115,13 @@ do
       break
       ;;
   esac
-  echo "End of case loop: ${@}"
+  # echo "End of case loop: ${@}"
   shift
 done
 
-echo "End of loop: ${@}"
+# echo "End of loop: ${@}"
+
+# echo $wipeRestartReason
 
 if [ -z ${1} ]
 then
@@ -229,7 +239,7 @@ fi
 if [ ${wipeDoRestartServer} -eq 1 ]
 then
   echo "Sending restart command to server via rcon..."
-  timeout 2 ${WEBRCONCMD} ${RCONIP}:${RCONPORT} ${RCONPASSWORD} "restart ${RESTARTSECONDS} 'weekly restart'"
+  timeout 2 ${WEBRCONCMD} ${RCONIP}:${RCONPORT} ${RCONPASSWORD} "restart ${wipeRestartSeconds} '${wipeRestartReason}'"
   while pgrep -u $(whoami) RustDedicated > /dev/null
   do
     sleep 60

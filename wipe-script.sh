@@ -80,7 +80,7 @@ do
       fi # end int check
       shift 2
       wipeDoRestartServer=1
-      echo "${0}: will restart server."
+      echo "${0}: will restart server in (${wipeRestartSeconds}) seconds with reason: ${wipeRestartReason}."
       ;;
     --update-mods)
       wipeDoModsUpdate=1

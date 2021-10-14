@@ -43,7 +43,11 @@ numRegex='^[0-9]+$'
 while [ "$#" -gt 0 ]
 do
   case ${1} in
-    --new-seed)
+    --do-backup)
+      wipeDoBackup=1
+      echo "${0}: will take a backup."
+      ;;
+      --new-seed)
       wipeDoNewSeed=1
       echo "${0}: will generate new seed."
       ;;
@@ -181,7 +185,7 @@ touch ${installDir}/.disable_monitor
 
 if [ ${wipeDoBackup} -eq 1 ]
 then
-  ${scriptDir}/backup.sh
+  ${scriptDir}/{backupScript} {instanceName}
 fi
 
 if [ ${wipeDoLGSMUpdate} -eq 1 ]

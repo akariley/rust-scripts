@@ -13,6 +13,8 @@ rustDir=rust
 # a local npm install usually puts it here: ~/node_modules/webrcon-cli/dist/bin/webrcon-cli.js
 webRconCmd=/usr/bin/webrcon-cli
 
+
+
 # Set some variables we need.
 
 home=${HOME}
@@ -38,6 +40,16 @@ then
     ${installDir}/serverfiles/oxide
   )
 fi
+
+
+# where did you place the scripts?  We default to ~/rust-scripts/
+scriptDir=${installDir}/rust-scripts/
+
+# And what are they named?  Uncomment those you use.
+#backupScript=${scriptDir]}/backup.sh
+#restoreScript=${scriptDir}/restore.sh
+#wipeScript=${scriptDir}/wipe-script.sh
+
 
 #===========================================
 user=$(whoami)
@@ -82,11 +94,4 @@ saveOnBackup=1
 # The username will be prefixed (username-2021-Sep-12-0826)
 backupDate=$(date +%Y-%b-%d-%H%M)
 
-
-######################
-# WEEKLY TASK SETTINGS
-######################
-
-# restart time? TODO
-RESTARTSECONDS=3600
 

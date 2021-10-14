@@ -242,7 +242,7 @@ then
   timeout 2 ${webRconCmd} ${rconIp}:${rconPort} ${rconPassword} "restart ${wipeRestartSeconds} '${wipeRestartReason}'"
   while pgrep -u $(whoami) RustDedicated > /dev/null
   do
-    sleep 60
+    sleep 5
   done
   # remove lock files
   echo "Shutdown complete, proceeding." 

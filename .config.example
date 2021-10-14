@@ -5,45 +5,47 @@
 # where did you install your Rust server?  This is relative to your home dir.
 # ie: for an install in /home/foo/rust/, put 'rust'
 # leave empty if you installed the server into the home directory.
-RUSTDIR=rust
+rustDir=rust
 
 # node is used to send commands to a running Rust server.
 # if you installed node globally the default should work (usually /usr/bin/webrcon-cli)
 # otherwise you'll need to know where you installed it.
 # a local npm install usually puts it here: ~/node_modules/webrcon-cli/dist/bin/webrcon-cli.js
-WEBRCONCMD=/usr/bin/webrcon-cli
+webRconCmd=/usr/bin/webrcon-cli
 
 # Set some variables we need.
 
-if [ ! -z ${RUSTDIR} ]
+home=${HOME}
+
+if [ ! -z ${rustDir} ]
 then
-  INSTALLDIR=${HOME}/${RUSTDIR}
+  installDir=${home}/${rustDir}
 else
-  INSTALLDIR=${HOME}
+  installDir=${home}
 fi
 
 # an array of files and paths to backup.
 
-BACKUPLIST=(
-  ${INSTALLDIR}/lgsm/config-lgsm/rustserver
-  ${INSTALLDIR}/serverfiles/server/rustserver
-  ${INSTALLDIR}/log/console
+backupList=(
+  ${installDir}/lgsm/config-lgsm/rustserver
+  ${installDir}/serverfiles/server/rustserver
+  ${installDir}/log/console
 )
 
-if [ -d ${INSTALLDIR}/serverfiles/oxide ]
+if [ -d ${installDir}/serverfiles/oxide ]
 then
-  BACKUPLIST+=(
-    ${INSTALLDIR}/serverfiles/oxide
+  backupList+=(
+    ${installDir}/serverfiles/oxide
   )
 fi
 
 #===========================================
-USER=$(whoami)
-MONTH=$(date +"%-m")
-SCRIPTDIR=$(pwd)
+user=$(whoami)
+month=$(date +"%-m")
+scriptDir=$(pwd)
 
-#LGSMCONFIG=/home/rust-testing/rust/lgsm/config-lgsm/rustserver/rustserver.cfg
-LGSMCONFIG=/path/to/lgsmserver.cfg
+#lgsmConfig=/home/rust-testing/rust/lgsm/config-lgsm/rustserver/rustserver.cfg
+lgsmConfig=/path/to/lgsmserver.cfg
 #===========================================
 
 
@@ -51,34 +53,34 @@ LGSMCONFIG=/path/to/lgsmserver.cfg
 # LOGGING OPTIONS #
 ###################
 
-LOGDATE=$(date +"%m-%d-%Y-%s")
-LOGFILE=weekly-tasks_${LOGDATE}.log
-FULLLOG=${INSTALLDIR}/log/${LOGFILE}
+logDate=$(date +"%m-%d-%Y-%s")
+logFile=weekly-tasks_${logDate}.log
+fullLog=${installDir}/log/${logFile}
 
 # we default to using exec to pipe the output to a log file.  To disable this, set this to 0.
-EXECLOGGING=1
+execLogging=1
 
 ################
 # BACKUP SETTINGS
 ################
 
 # where are your backups stored? we default to ~/backups/
-#BACKUPDIR=/game-backups/${USER}
-BACKUPDIR=${HOME}/backups
+#backupDir=/game-backups/${user}
+backupDir=${home}/backups
 
-# what suffix would you like for the backup directory?  We default to ${BACKUPDIR}/<day of month>/
-BACKUPDIRSUFFIX=$(date +%m)
+# what suffix would you like for the backup directory?  We default to ${backupDir}/<day of month>/
+backupDirSuffix=$(date +%m)
 
 # do we issue a 'server.save' command to the rust server when the backup script is run?
 # 1 = yes, 0 = no
-# WARNING: backups won't run if your LGSMCONFIG variable is not correct if this is set.
-SAVEONBACKUP=1
+# WARNING: backups won't run if your lgsmConfig variable is not correct if this is set.
+saveOnBackup=1
 
 # date suffix for backups.  we default to YYYY-Month-Numerical_date-24HR_time
 # ex: 2021-Sep-12-0826 is September 12th, 2021 at 8:26am.
 # (this is 'date +%Y-%b-%d-%H%M') if curious.
 # The username will be prefixed (username-2021-Sep-12-0826)
-BACKUPDATE=$(date +%Y-%b-%d-%H%M)
+backupDate=$(date +%Y-%b-%d-%H%M)
 
 
 ######################

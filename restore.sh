@@ -1,11 +1,11 @@
 #!/bin/bash
 #set -euo pipefail
-#BACKUPDIR=/game-backups
-#RUSTDIR=rust
-#BACKUPDIRSUFFIX=${USER}-backup
-#DIR=${BACKUPDIRSUFFIX}/`date +%F`
-#FILENAME=${BACKUPDIRSUFFIX}/`date +%H%M`
-#FULLNAME=${BACKUPDIR}/${DIR}/${FILENAME}.tar.gz
+#backupDir=/game-backups
+#rustDir=rust
+#backupDirSuffix=${user}-backup
+#DIR=${backupDirSuffix}/`date +%F`
+#fileName=${backupDirSuffix}/`date +%H%M`
+#fullName=${backupDir}/${DIR}/${fileName}.tar.gz
 #TODAY=`date +%F`
 #TODAY=$(date +%Y-%b-%d-%H%M)
 
@@ -17,14 +17,14 @@ fi
 
 source ./.config
 
-FILENAME=${USER}-${BACKUPDATE}
+fileName=${user}-${backupDate}
 
-if [ -z ${BACKUPDIRSUFFIX} ]
+if [ -z ${backupDirSuffix} ]
 then
   #no prefix so omit the var
-  FULLNAME=${BACKUPDIR}/${FILENAME}.tar.gz
+  fullName=${backupDir}/${fileName}.tar.gz
 else
-  FULLNAME=${BACKUPDIR}/${BACKUPDIRSUFFIX}/${FILENAME}.tar.gz
+  fullName=${backupDir}/${backupDirSuffix}/${fileName}.tar.gz
 fi
 
 #
@@ -33,7 +33,7 @@ fi
 
 
 # if modded
-# home/${USER}/rust/serverfiles/oxide/
+# home/${user}/rust/serverfiles/oxide/
 
 
 # return codes
@@ -59,9 +59,9 @@ then
   # echo 'in list loop'
   if [[ -z $2 ]]
   then
-    ls -1 ${BACKUPDIR}/${BACKUPDIRSUFFIX}/
+    ls -1 ${backupDir}/${backupDirSuffix}/
   else
-    ls -1 ${BACKUPDIR}/${2}
+    ls -1 ${backupDir}/${2}
   fi
   exit
 fi
@@ -71,61 +71,61 @@ fi
 if [[ -z $2 ]]
 then
 # check for lock files.
-  if [[ -e ${INSTALLDIR}/lgsm/lock/rustserver.lock ]]
+  if [[ -e ${installDir}/lgsm/lock/rustserver.lock ]]
   then
     echo "Error: Server is running.  Stop it first. (and make a backup!)"
     exit 2
   fi
   # no date, assuming today
-  if [[ -e ${BACKUPDIR}/${BACKUPDIRSUFFIX}/$1 ]]
+  if [[ -e ${backupDir}/${backupDirSuffix}/$1 ]]
   then
-    echo "Extracting from ${BACKUPDIR}/${BACKUPDIRSUFFIX}/$1..."
-    for backuppath in "${BACKUPLIST[@]}"
+    echo "Extracting from ${backupDir}/${backupDirSuffix}/$1..."
+    for backupPath in "${backupList[@]}"
     do
-      backuppath=$(echo "${backuppath}" | cut -d/ -f2-)
-      echo "Extract $backuppath?"
+      backupPath=$(echo "${backupPath}" | cut -d/ -f2-)
+      echo "Extract $backupPath?"
       select yn in "Yes" "No"
       do
         case $yn in
-          Yes ) tar zxvf ${BACKUPDIR}/${BACKUPDIRSUFFIX}/${1} -C ${INSTALLDIR} --strip-components=3 $backuppath ; break;;
+          Yes ) tar zxvf ${backupDir}/${backupDirSuffix}/${1} -C ${installDir} --strip-components=3 $backupPath ; break;;
           No ) break;;
         esac
       done
     done
     echo
   else
-    echo "Error: ${BACKUPDIR}/${BACKUPDIRSUFFIX}/$1 does not exist.  Did you input the correct date?"
+    echo "Error: ${backupDir}/${backupDirSuffix}/$1 does not exist.  Did you input the correct date?"
     exit 1
   fi
   echo
 else
   # they put a file and a date, extract from it instead of $today    
   # check for lock files.
-  if [[ -e ${INSTALLDIR}/lgsm/lock/rustserver.lock ]]
+  if [[ -e ${installDir}/lgsm/lock/rustserver.lock ]]
   then
     echo "Error: Server is running.  Stop it first. (and make a backup!)"
     exit 2
   fi
-  if [[ -e ${BACKUPDIR}/${2}/${1} ]]
+  if [[ -e ${backupDir}/${2}/${1} ]]
   then
     echo
-    echo "Extracting from ${BACKUPDIR}/${2}/${1}..."
+    echo "Extracting from ${backupDir}/${2}/${1}..."
     echo
-    for backuppath in "${BACKUPLIST[@]}"
+    for backupPath in "${backupList[@]}"
     do
-      backuppath=$(echo ${backuppath} | cut -d/ -f2-)
-      echo "Extract $backuppath?"
+      backupPath=$(echo ${backupPath} | cut -d/ -f2-)
+      echo "Extract $backupPath?"
       select yn in "Yes" "No"
       do
         case $yn in
-          Yes ) tar zxvf ${BACKUPDIR}/${2}/${1} C ${INSTALLDIR} --strip-components=3 $backuppath ; break;;
+          Yes ) tar zxvf ${backupDir}/${2}/${1} C ${installDir} --strip-components=3 $backupPath ; break;;
           No ) break;;
         esac
       done
     done
     echo
   else
-    echo "Error: ${BACKUPDIR}/${2}/${1} does not exist.  Did you input the correct date?"
+    echo "Error: ${backupDir}/${2}/${1} does not exist.  Did you input the correct date?"
     exit 1
   fi
   echo

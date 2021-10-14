@@ -33,7 +33,7 @@ runStatus=0
 wipeDoRunDay=''
 wipeDay=''
 
-
+numRegex='^[0-9]+$'
 
 # let's parse the arguments
 # it'll look something like ./$0 --option-1 --option-2 <rust server instance name>
@@ -55,12 +55,12 @@ do
       ;;
     --restart-server)
       # TODO: currently broken for a multi-word restart message
-      if [ ! ${2} -eq ${2} ]
+      if [[ ! ${2} =~ $numRegex ]] 2>/dev/null 
       then
         echo "Error: --restart-server expects two parameters, <time in seconds> <restart message>"
         exit 1
       else
-        if [ ! ${2} -gt 0 ]
+        if [ ! ${2} -gt 0 ] 2>/dev/null 
         then
           echo "Error: seconds needs to be greater than 0."
           exit 1

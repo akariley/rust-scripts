@@ -113,7 +113,7 @@ done
 
 echo "End of loop: ${@}"
 
-f [ -z ${1} ]
+if [ -z ${1} ]
 then
   # $1 is empty, assuming the default name
   instanceName=rustserver
@@ -145,8 +145,6 @@ then
     fi # end date check
   fi # end --run check
 fi # end --cron check
-
-i
 
 # read in lgsm vars we need
 

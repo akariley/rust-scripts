@@ -82,5 +82,5 @@ then
 fi
 
 echo "Making ${fullName}"
-${mkNice} tar zcvf $fullName "${backupList[@]}"
+${mkNice} tar zcvf $fullName -C ${installDir} "${backupList[@]}"
 echo "Done!"

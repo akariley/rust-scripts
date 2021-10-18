@@ -43,7 +43,7 @@ then
   # end sanity checks.
 fi
 
-fileName=${user}-${backupDate}
+fileName=${user}_${instanceName}_${backupDate}
 
 if [ -z ${backupDirSuffix} ]
 then

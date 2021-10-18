@@ -23,21 +23,21 @@ if [ ! -z ${rustDir} ]
 then
   installDir=${home}/${rustDir}
 else
-  installDir=${home}
+  installDir=${HOME}
 fi
 
 # an array of files and paths to backup.
 
 backupList=(
-  ${installDir}/lgsm/config-lgsm/rustserver
-  ${installDir}/serverfiles/server/rustserver
-  ${installDir}/log/console
+  lgsm/config-lgsm/rustserver
+  serverfiles/server/rustserver
+  log/console
 )
 
 if [ -d ${installDir}/serverfiles/oxide ]
 then
   backupList+=(
-    ${installDir}/serverfiles/oxide
+    serverfiles/oxide
   )
 fi
 

@@ -82,12 +82,11 @@ then
     echo "Extracting from ${backupDir}/${backupDirSuffix}/$1..."
     for backupPath in "${backupList[@]}"
     do
-      backupPath=$(echo "${backupPath}" | cut -d/ -f2-)
       echo "Extract $backupPath?"
       select yn in "Yes" "No"
       do
         case $yn in
-          Yes ) tar zxvf ${backupDir}/${backupDirSuffix}/${1} -C ${installDir} --strip-components=3 $backupPath ; break;;
+          Yes ) tar zxvf ${backupDir}/${backupDirSuffix}/${1} -C ${installDir} $backupPath ; break;;
           No ) break;;
         esac
       done
@@ -113,12 +112,11 @@ else
     echo
     for backupPath in "${backupList[@]}"
     do
-      backupPath=$(echo ${backupPath} | cut -d/ -f2-)
       echo "Extract $backupPath?"
       select yn in "Yes" "No"
       do
         case $yn in
-          Yes ) tar zxvf ${backupDir}/${2}/${1} C ${installDir} --strip-components=3 $backupPath ; break;;
+          Yes ) tar zxvf ${backupDir}/${2}/${1} -C ${installDir} $backupPath ; break;;
           No ) break;;
         esac
       done

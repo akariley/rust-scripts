@@ -140,7 +140,7 @@ then
   echo "Error: ${installDir}/${instanceName} does not exist."
   exit 1
 else
-  lgsmConfig=${installDir}/lgsm/config-lgsm/${instanceName}/${instanceName}.cfg
+  lgsmConfig=${installDir}/lgsm/config-lgsm/rustserver/${instanceName}.cfg
 fi
 
 

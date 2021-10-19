@@ -4,83 +4,84 @@
 if [ ! -e ./.config ]
 then
   echo ".config file does not exist.  Please copy .config.example to .config and configure the settings as needed."
-  exit 1
+  #exit 1
 fi
 
 source ./.config
 
-if [ -z ${1} ]
+if [[ "$#" -eq 1 ]] || [[ "$#" -eq 0 ]]
 then
-  # $1 is empty, assuming the default name
-  instanceName=rustserver
-else
-  instanceName=${1}
-fi
-
-if [ ! -e ${installDir}/${instanceName} ]
-then
-  echo "Error: ${installDir}/${instanceName} does not exist."
-  exit 1
-else
-  lgsmConfig=${installDir}/lgsm/config-lgsm/${instanceName}/${instanceName}.cfg
-fi
-
-
-if [ ${saveOnBackup} -eq 1 ]
-then
-  # check if webrcon is valid.
-  if [ ! -e ${webRconCmd} ]
+  # zero or one option entered -- lets see if it's help.
+  if [[ ${1} == '--help' ]] || [[ ${1} == '-h' ]]
   then
-    echo "Warning: saveOnBackup is true, but webRconCmd isn't a valid path.  Disabling saveOnBackup for this run."
-    saveOnBackup=0
+    echo "One input: help goes here."
+    exit 3
+  else
+    if [[ -z ${1} ]]
+    then
+      echo "Zero input given: help goes here."
+      exit 3
+    fi
   fi
-  # check if lgsmConfig is filled out.
-  if [ ! -e ${lgsmConfig} ]
-  then
-    echo "Warning: saveOnBackup is true, but lgsmConfig isn't a valid path.  Disabling saveOnBackup for this run."
-    saveOnBackup=0
-  fi
-  # end sanity checks.
 fi
 
-fileName=${user}_${instanceName}_${backupDate}
 
-if [ -z ${backupDirSuffix} ]
-then
-  #no prefix so omit the var
-  fullName=${backupDir}/${fileName}.tar.gz
-else
-  fullName=${backupDir}/${backupDirSuffix}/${fileName}.tar.gz
-fi
+while [ "$#" -gt 0 ]
+do
+  case ${1} in
+    --all-instances)
+      # do a global backup so exit the loop
+      break
+      ;;
+    *)
+      # unknown input, we need to check if it's asking for help or an instance name
+      if [[ ${1} == '--help' ]] || [[ ${1} == '-h' ]]
+      then
+        # display help.
+        echo "Help goes here."
+        exit 3
+      else
+        # it's not help or --all, so it's an instance name.  let's check if it's valid.
+        if [ ! -e ${installDir}/${1} ]
+        then
+          echo "Error: ${installDir}/${1} does not exist."
+        else
+          lgsmConfig=${installDir}/lgsm/config-lgsm/rustserver/${1}.cfg
 
-mkNice='ionice -c 3'
+          # let's snag the rcon stuff.
 
-# code follows
+          rconIp=$(awk -F'=' '/[Ii][Pp]="?([0-9]{1,3}[\.]){3}[0-9]{1,3}"?/ {print $2}' ${lgsmConfig} | tr -d '"')
+          rconPort=$(awk -F'=' '/^[Rr][Cc][Oo][Nn][Pp][Oo][Rr][Tt]="?\d{0,5}"?/ {print $2}' ${lgsmConfig} | tr -d '"')
+          rconPassword=$(awk -F'=' '/^[Rr][Cc][Oo][Nn][Pp][Aa][Ss]{2}[Ww][Oo][Rr][Dd]="?[[:alnum:]]{0,63}"?/ {print $2}' ${lgsmConfig} | tr -d '"')
 
-if [[ -d ${backupDir}/${backupDirSuffix}/ ]]
-  then
-  echo "Directory ${backupDir}/${backupDirSuffix}/ exists."
-else
-  echo "Directory ${backupDir}/${backupDirSuffix}/ does not exist... making it."
-  ${mkNice} mkdir -p --mode=700 ${backupDir}/${backupDirSuffix}/
-fi
-# Directory made... proceed.
-if [ ${saveOnBackup} -eq 1 ]
-then
-  # do a server.save first
-  # check if the server is running.
-  if pgrep -u $(whoami) RustDedicated > /dev/null
-  then
-    echo "Server is running; sending 'server.save' via rcon."
-    rconIp=$(awk -F'=' '/[Ii][Pp]="?([0-9]{1,3}[\.]){3}[0-9]{1,3}"?/ {print $2}' ${lgsmConfig} | tr -d '"')
-    rconPort=$(awk -F'=' '/^[Rr][Cc][Oo][Nn][Pp][Oo][Rr][Tt]="?\d{0,5}"?/ {print $2}' ${lgsmConfig} | tr -d '"')
-    rconPassword=$(awk -F'=' '/^[Rr][Cc][Oo][Nn][Pp][Aa][Ss]{2}[Ww][Oo][Rr][Dd]="?[[:alnum:]]{0,63}"?/ {print $2}' ${lgsmConfig} | tr -d '"')
-    timeout 5 ${webRconCmd} ${rconIp}:${rconPort} ${rconPassword} "server.save"
-    #end server run check
-  fi
-  # end save check
-fi
+          instanceBackupList=(
+            lgsm/config-lgsm/rustserver/${1}.cfg
+            lgsm/config-lgsm/rustserver/secrets-${1}.cfg
+            serverfiles/server/${1}
+          )
 
-echo "Making ${fullName}"
-${mkNice} tar zcvf $fullName -C ${installDir} "${backupList[@]}"
-echo "Done!"
+          fileName=${user}_${1}_${backupDate}
+
+          if [ -z ${backupDirSuffix} ]
+          then
+            #no prefix so omit the var
+            fullName=${backupDir}/${fileName}.tar.gz
+          else
+            fullName=${backupDir}/${backupDirSuffix}/${fileName}.tar.gz
+          fi
+
+          # do we need to save the server?
+          if [[ -e ${installDir}/lgsm/lock/${1}.lock ]]
+          then
+            timeout 5 ${webRconCmd} ${rconIp}:${rconPort} ${rconPassword} "server.save"
+          fi
+          echo tar zcvf $fullName -C ${installDir} "${instanceBackupList[@]}"
+          # let's sleep for a bit to avoid save churning.
+          sleep 5
+        fi
+      fi
+      ;;
+  esac
+  shift
+done
+

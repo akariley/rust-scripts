@@ -5,14 +5,12 @@
 # where did you install your Rust server?  This is relative to your home dir.
 # ie: for an install in /home/foo/rust/, put 'rust'
 # leave empty if you installed the server into the home directory.
-
 rustDir=rust
 
 # node is used to send commands to a running Rust server.
 # if you installed node globally the default should work (usually /usr/bin/webrcon-cli)
 # otherwise you'll need to know where you installed it.
 # a local npm install usually puts it here: ~/node_modules/webrcon-cli/dist/bin/webrcon-cli.js
-
 webRconCmd=/usr/bin/webrcon-cli
 
 
@@ -46,12 +44,10 @@ fi
 
 
 # where did you place the scripts?  We default to ~/rust-scripts/
-
 scriptDir=${installDir}/rust-scripts/
 
 
 # And what are they named?  Uncomment those you use.
-
 #backupScript=${scriptDir}/backup.sh
 #restoreScript=${scriptDir}/restore.sh
 #wipeScript=${scriptDir}/wipe-script.sh
@@ -84,7 +80,7 @@ execLogging=0
 
 # where are your backups stored? we default to ~/backups/
 #backupDir=/game-backups/${user}
-backupDir=${home}/backups
+backupDir=${home}/game-backups
 
 # what suffix would you like for the backup directory?  We default to ${backupDir}/<day of month>/
 backupDirSuffix=$(date +%m)

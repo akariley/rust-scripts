@@ -123,21 +123,45 @@ else
   fi
   if [[ -e ${backupDir}/${2}/${1} ]]
   then
-    echo
-    echo "Extracting from ${backupDir}/${2}/${1}..."
-    echo
+       # snag the instance name
+    instanceName=$(tar --wildcards --list -f ${backupDir}/${backupDirSuffix}/$1 *serverfiles/server/* | head -n 1 | awk -F/ '{print $3}')
+
+  instanceBackupList=(
+    lgsm/config-lgsm/rustserver/${instanceName}.cfg
+    lgsm/config-lgsm/rustserver/secrets-${instanceName}.cfg
+    lgsm/config-lgsm/rustserver/common.cfg
+    serverfiles/server/${instanceName}
+  )
+
+  echo "Extracting from ${backupDir}/${backupDirSuffix}/$1..."
+  if [[ fullRestore -eq 1 ]]
+  then
     for backupPath in "${backupList[@]}"
     do
       echo "Extract $backupPath?"
       select yn in "Yes" "No"
       do
         case $yn in
-          Yes ) tar zxvf ${backupDir}/${2}/${1} -C ${installDir} $backupPath ; break;;
+          Yes ) tar zxvf ${backupDir}/${backupDirSuffix}/${1} -C ${installDir} $backupPath ; break;;
           No ) break;;
         esac
       done
     done
     echo
+  else
+    for backupPath in "${instanceBackupList[@]}"
+    do
+      echo "Extract $backupPath?"
+      select yn in "Yes" "No"
+      do
+        case $yn in
+          Yes ) tar zxvf ${backupDir}/${backupDirSuffix}/${1} -C ${installDir} $backupPath ; break;;
+          No ) break;;
+        esac
+      done
+    done
+    echo
+  fi
   else
     echo "Error: ${backupDir}/${2}/${1} does not exist.  Did you input the correct date?"
     exit 1

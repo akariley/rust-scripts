@@ -17,42 +17,26 @@ fi
 
 source ./.config
 
-fileName=${user}-${backupDate}
-
-if [ -z ${backupDirSuffix} ]
-then
-  #no prefix so omit the var
-  fullName=${backupDir}/${fileName}.tar.gz
-else
-  fullName=${backupDir}/${backupDirSuffix}/${fileName}.tar.gz
-fi
-
-#
-# /game-backups/rust-testing/09/rust-testing-2021-Sep-12-0826.tar.gz
-#
-
-
-# if modded
-# home/${user}/rust/serverfiles/oxide/
-
+fullRestore=0
 
 # return codes
 #
 # 1 = syntax error
 # 2 = server running
 
-if [[ -z $1 ]]
+if [[ -z $1 ]] || [[ ${1} == '--help' ]] || [[ ${1} == '-h' ]]
 then
   # no params -- display help
   echo
-  echo "Syntax: $0 [backupfile] <date (XX); pad single digits with a prededing 0 (ie, March is '03')>"
+  echo "Syntax: $0 [--full] backupFile [<date>]"
   echo "or"
-  echo "Syntax: $0 [list] <date (XX); pad single digits with a prededing 0 (ie, March is '03')>"
+  echo "Syntax: $0 list [<date>]"
+  echo "Note: In all cases, <date> is a zero-padded numerical month value."
   echo 
   exit
 fi
 
-echo "$@"
+
 
 if [[ $1 == "list" ]]
 then
@@ -66,8 +50,14 @@ then
   exit
 fi
 
+if [[ ${1} == '--full' ]]
+then
+  fullRestore=1
+  shift
+fi
+
+
 # got a backup file, check if it's another day's
-# TODO: proper regex for format.
 if [[ -z $2 ]]
 then
 # check for lock files.
@@ -79,7 +69,19 @@ then
   # no date, assuming today
   if [[ -e ${backupDir}/${backupDirSuffix}/$1 ]]
   then
-    echo "Extracting from ${backupDir}/${backupDirSuffix}/$1..."
+    # snag the instance name
+    instanceName=$(tar --wildcards --list -f ${backupDir}/${backupDirSuffix}/$1 *serverfiles/server/* | head -n 1 | awk -F/ '{print $3}')
+
+  instanceBackupList=(
+    lgsm/config-lgsm/rustserver/${instanceName}.cfg
+    lgsm/config-lgsm/rustserver/secrets-${instanceName}.cfg
+    lgsm/config-lgsm/rustserver/common.cfg
+    serverfiles/server/${instanceName}
+  )
+
+  echo "Extracting from ${backupDir}/${backupDirSuffix}/$1..."
+  if [[ fullRestore -eq 1 ]]
+  then
     for backupPath in "${backupList[@]}"
     do
       echo "Extract $backupPath?"
@@ -92,6 +94,20 @@ then
       done
     done
     echo
+  else
+    for backupPath in "${instanceBackupList[@]}"
+    do
+      echo "Extract $backupPath?"
+      select yn in "Yes" "No"
+      do
+        case $yn in
+          Yes ) tar zxvf ${backupDir}/${backupDirSuffix}/${1} -C ${installDir} $backupPath ; break;;
+          No ) break;;
+        esac
+      done
+    done
+    echo
+  fi
   else
     echo "Error: ${backupDir}/${backupDirSuffix}/$1 does not exist.  Did you input the correct date?"
     exit 1

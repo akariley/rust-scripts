@@ -9,6 +9,8 @@ fi
 
 source ./.config
 
+fullBackup=0
+
 if [[ "$#" -eq 1 ]] || [[ "$#" -eq 0 ]]
 then
   # zero or one option entered -- lets see if it's help.
@@ -29,8 +31,9 @@ fi
 while [ "$#" -gt 0 ]
 do
   case ${1} in
-    --all-instances)
+    --all-instances|--full)
       # do a global backup so exit the loop
+      fullBackup=1
       break
       ;;
     *)

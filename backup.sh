@@ -57,6 +57,7 @@ do
           instanceBackupList=(
             lgsm/config-lgsm/rustserver/${1}.cfg
             lgsm/config-lgsm/rustserver/secrets-${1}.cfg
+            lgsm/config-lgsm/rustserver/common.cfg
             serverfiles/server/${1}
           )
 

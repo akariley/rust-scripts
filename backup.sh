@@ -9,6 +9,8 @@ fi
 
 source ./.config
 
+fullBackup=0
+
 if [[ "$#" -eq 1 ]] || [[ "$#" -eq 0 ]]
 then
   # zero or one option entered -- lets see if it's help.
@@ -29,13 +31,14 @@ fi
 while [ "$#" -gt 0 ]
 do
   case ${1} in
-    --all-instances)
+    --all-instances|--full)
       # do a global backup so exit the loop
+      fullBackup=1
       break
       ;;
     *)
       # unknown input, we need to check if it's asking for help or an instance name
-      if [[ ${1} == '--help' ]] || [[ ${1} == '-h' ]]
+      if [[ ${1} == "--help" ]] || [[ ${1} == '-h' ]]
       then
         # display help.
         echo "Help goes here."
@@ -63,12 +66,22 @@ do
 
           fileName=${user}_${1}_${backupDate}
 
-          if [ -z ${backupDirSuffix} ]
+          if [[ -z ${backupDirSuffix} ]]
           then
-            #no prefix so omit the var
+            # no prefix so omit the var
             fullName=${backupDir}/${fileName}.tar.gz
+            trueBackupDir=${backupDir}
           else
             fullName=${backupDir}/${backupDirSuffix}/${fileName}.tar.gz
+            trueBackupDir=${backupDir}/${backupDirSuffix}
+          fi
+
+          if [[ -d ${trueBackupDir}/ ]]
+            then
+            echo "Directory ${trueBackupDir}/ exists."
+          else
+            echo "Directory ${trueBackupDir}/ does not exist... making it."
+            ${mkNice} mkdir -p --mode=700 ${trueBackupDir}/
           fi
 
           # do we need to save the server?
@@ -78,7 +91,7 @@ do
           fi
           echo tar zcvf $fullName -C ${installDir} "${instanceBackupList[@]}"
           # let's sleep for a bit to avoid save churning.
-          sleep 5
+          sleep 1
         fi
       fi
       ;;

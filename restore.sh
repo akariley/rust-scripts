@@ -31,7 +31,7 @@ then
   echo "Syntax: $0 [--full] backupFile [<date>]"
   echo "or"
   echo "Syntax: $0 list [<date>]"
-  echo "Note: In all cases, <date> is a zero-padded numerical month value."
+  echo "Note: <date> is defined by backupDirSuffix in the .config file.  Currently it is ${backupDirSuffix}"
   echo 
   exit
 fi

@@ -9,22 +9,16 @@ then
 else
   source ${rs_rootDir}/.config
 fi
-cd ${scriptDir}
-$tmpFile=$(mktemp -u --tmpdir=${scriptDir}/tmp tmp.${0}.XXXXXX)
-echo $tmpFile
-exit
+
 function script_exit {
-  temp=1
-
-
-
+  rm -v $tmpFile
 }
 
+trap script_exit exit
 
+tmpFile=$(mktemp --tmpdir=${scriptDir}/tmp instancelist.${rs_selfName}.XXXXXX)
+cd ${scriptDir}
 
-
-$tmpFile=$(mktemp -u --tmpdir=${scriptDir}/tmp tmp.${0}.XXXXXX)
-echo $tmpFile
 
 fullBackup=0
 mkNice='ionice -c 3'

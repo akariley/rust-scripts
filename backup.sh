@@ -4,12 +4,13 @@
 if [ ! -e ./.config ]
 then
   echo ".config file does not exist.  Please copy .config.example to .config and configure the settings as needed."
-  #exit 1
+  exit 1
 fi
 
 source ./.config
 
 fullBackup=0
+mkNice='ionice -c 3'
 
 if [[ "$#" -eq 1 ]] || [[ "$#" -eq 0 ]]
 then
@@ -45,7 +46,7 @@ do
         exit 3
       else
         # it's not help or --all, so it's an instance name.  let's check if it's valid.
-        if [ ! -e ${installDir}/${1} ]
+        if [[ ! -e ${installDir}/${1} ]]
         then
           echo "Error: ${installDir}/${1} does not exist."
         else
@@ -92,10 +93,31 @@ do
           echo tar zcvf $fullName -C ${installDir} "${instanceBackupList[@]}"
           # let's sleep for a bit to avoid save churning.
           sleep 1
-        fi
-      fi
+        fi # end install dir check
+      fi # end $1 check
       ;;
   esac
   shift
 done
 
+if [[ ${fullBackup} -eq 1 ]]
+then
+  fileName=${user}-${backupDate}
+  if [[ -z ${backupDirSuffix} ]]
+  then
+    # no prefix so omit the var
+    fullName=${backupDir}/${fileName}.tar.gz
+    trueBackupDir=${backupDir}
+  else
+    fullName=${backupDir}/${backupDirSuffix}/${fileName}.tar.gz
+    trueBackupDir=${backupDir}/${backupDirSuffix}
+  fi
+
+  echo "Making ${fullName}"
+  echo ${mkNice} tar zcvf $fullName "${backupList[@]}"
+
+
+
+
+
+fi

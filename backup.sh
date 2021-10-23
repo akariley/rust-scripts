@@ -114,7 +114,7 @@ then
   fi
 
   echo "Making ${fullName}"
-  echo ${mkNice} tar zcvf $fullName "${backupList[@]}"
+  echo ${mkNice} tar zcvf $fullName -C ${installDir} "${backupList[@]}"
 
 
 

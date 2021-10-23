@@ -58,6 +58,13 @@ do
           rconPort=$(awk -F'=' '/^[Rr][Cc][Oo][Nn][Pp][Oo][Rr][Tt]="?\d{0,5}"?/ {print $2}' ${lgsmConfig} | tr -d '"')
           rconPassword=$(awk -F'=' '/^[Rr][Cc][Oo][Nn][Pp][Aa][Ss]{2}[Ww][Oo][Rr][Dd]="?[[:alnum:]]{0,63}"?/ {print $2}' ${lgsmConfig} | tr -d '"')
 
+          instanceBackupList=(
+            lgsm/config-lgsm/rustserver/${1}.cfg
+            lgsm/config-lgsm/rustserver/secrets-${1}.cfg
+            lgsm/config-lgsm/rustserver/common.cfg
+            serverfiles/server/${1}
+          )
+
           fileName=${user}_${1}_${backupDate}
 
           if [[ -z ${backupDirSuffix} ]]

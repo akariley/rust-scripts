@@ -42,14 +42,7 @@ then
   )
 fi
 
-instanceBackupList=(
-  lgsm/config-lgsm/rustserver/${1}.cfg
-  lgsm/config-lgsm/rustserver/secrets-${1}.cfg
-  lgsm/config-lgsm/rustserver/common.cfg
-  serverfiles/server/${1}
-)
 
-          
 # where did you place the scripts?  We default to ~/rust-scripts/
 scriptDir=${installDir}/rust-scripts/
 

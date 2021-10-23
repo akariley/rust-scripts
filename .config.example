@@ -5,7 +5,7 @@
 # where did you install your Rust server?  This is relative to your home dir.
 # ie: for an install in /home/foo/rust/, put 'rust'
 # leave empty if you installed the server into the home directory.
-rustDir=rust
+rustDir=
 
 # node is used to send commands to a running Rust server.
 # if you installed node globally the default should work (usually /usr/bin/webrcon-cli)

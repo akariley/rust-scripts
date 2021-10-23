@@ -90,7 +90,7 @@ do
           then
             timeout 5 ${webRconCmd} ${rconIp}:${rconPort} ${rconPassword} "server.save"
           fi
-          echo tar zcvf $fullName -C ${installDir} "${instanceBackupList[@]}"
+          tar zcvf $fullName -C ${installDir} "${instanceBackupList[@]}"
           # let's sleep for a bit to avoid save churning.
           sleep 1
         fi # end install dir check
@@ -114,7 +114,7 @@ then
   fi
 
   echo "Making ${fullName}"
-  echo ${mkNice} tar zcvf $fullName -C ${installDir} "${backupList[@]}"
+  ${mkNice} tar zcvf $fullName -C ${installDir} "${backupList[@]}"
 
 
 

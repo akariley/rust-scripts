@@ -10,14 +10,30 @@ else
 fi
 
 function show_Help {
+  echo "${rs_selfName} [option-name] [option-name...] instanceName"
   echo
-  echo "${rs_selfName} accepts multiple options, listed below:"
+  #echo "${rs_selfName} accepts multiple options, listed below:"
   echo "  --new-seed"
   echo "    Will generate a new map seed and update the specified LGSM config."
   echo "  --update-rust"
   echo "    Will update Rust."
   echo "  --update-mods"
   echo "    Will update uMod."
+  echo "  --wipe-blueprints [odd|even|now]"
+  echo "    Will remove the blueprint files, based on the required option."
+  echo "    (eg: if the month is divisible by two and 'even' is passed, blueprints would be wiped)."
+  echo "  --restart-server <restart time in seconds> <restart reason>"
+  echo "    Will restart the server when done."
+  echo "    Restart reason can be multiple words; string must be terminated with '@@'"
+  echo "    (requires valid webRconCmd setting in .config)."
+  echo "  --update-lgsm"
+  echo "    Will update LGSM."
+  echo "  --do-backup"
+  echo "    Will take a backup."
+  echo "  --cron"
+  echo "    Enables cronjob mode.  Useful if you want to run a command at a specific time."
+  echo "    Requires '--run'."
+
 
 
 
@@ -72,22 +88,46 @@ do
   case ${1} in
     --do-backup)
       wipeDoBackup=1
-      echo "${0}: will take a backup."
+      echo "${rs_selfName}: will take a backup."
       ;;
       --new-seed)
       wipeDoNewSeed=1
-      echo "${0}: will generate new seed."
+      echo "${rs_selfName}: will generate new seed."
       ;;
     --wipe-blueprints)
-      wipeDoWipeBlueprints=1
-      echo "${0}: will wipe blueprints."
+      # possible options: odd, even, or now.
+      if [[ ${2} == 'odd' ]] && [[ ${month}%2 -eq 1 ]] || [[ ${2} == 'now' ]]
+      then
+        # param is 'odd' and it's an odd month, run.
+        wipeDoWipeBlueprints=1
+        echo "${rs_selfName}: will wipe blueprints."
+      else
+        if [[ ${2} == 'even' ]] && [[ ${month}%2 -eq 0 ]] || [[ ${2} == 'now' ]]
+        then
+          # param is 'even' and it's an even month, run.
+          wipeDoWipeBlueprints=1
+          echo "${rs_selfName}: will wipe blueprints."
+        fi # end even check
+      fi # end odd check
+      shift
       ;;
-    --update-rust)
+    --force-wipe)
+      wipeDoNewSeed=1
+      wipeDoModsUpdate=1
       wipeDoRustUpdate=1
-      echo "${0}: will update Rust."
+      ;;
+    --wipe-backpacks)
+      if [[ ! -e ${installDir}/serverfiles/oxide/plugins/Backpacks.cs ]]
+      then
+        # no backpack plugin loaded.
+        echo "--wipe-backpacks entered, but no backpack plugin found.  Disabling this option."
+        wipeDoWipeBackpacks=0
+      else
+        wipeDoWipeBackpacks=1
+        echo "${rs_selfName}: will wipe backpacks."
+      fi # end backpack check
       ;;
     --restart-server)
-      # TODO: currently broken for a multi-word restart message
       if [[ ! ${2} =~ $numRegex ]] 2>/dev/null 
       then
         echo "Error: --restart-server expects two parameters, <time in seconds> <restart message>"
@@ -111,25 +151,22 @@ do
       fi # end int check
       shift 2
       wipeDoRestartServer=1
-      echo "${0}: will restart server in (${wipeRestartSeconds}) seconds with reason: ${wipeRestartReason}."
+      echo "${rs_selfName}: will restart server in (${wipeRestartSeconds}) seconds with reason: ${wipeRestartReason}."
       ;;
     --update-mods)
       wipeDoModsUpdate=1
-      echo "${0}: will update mods."
+      echo "${rs_selfName}: will update mods."
       ;;
-    --wipe-backpacks)
-      if [ ! -e ${installDir}/serverfiles/oxide/plugins/Backpacks.cs ]
-      then
-        # no backpack plugin loaded.
-        echo "--wipe-backpacks entered, but no backpack plugin found.  Disabling this option."
-        wipeDoWipeBackpacks=0
-      else
-        wipeDoWipeBackpacks=1
-        echo "${0}: will wipe backpacks."
-      fi # end backpack check
+    --update-rust)
+      wipeDoRustUpdate=1
+      echo "${rs_selfName}: will update Rust."
+      ;;
+    --update-lgsm)
+      wipeDoLGSMUpdate=1
+      echo "${rs_selfName}: will update LGSM."
       ;;
     --run)
-      if [ "$2" ]
+      if [[ ! -z "${2}" ]]
       then
         wipeDoRunDay=$2
         shift
@@ -162,21 +199,26 @@ done
 #   instanceName=${1}
 # fi
 
+if [[ -z ${1} ]]
+then
+  # we're out of the loop and we processed some options; there should be a parameter.
+  echo "Error: you must specify an instance name."
+  show_Help
+fi
 
 if [[ ! -e ${installDir}/${1} ]]
 then
-  #echo "Error: ${installDir}/${instanceName} does not exist."
-  # parameter isn't a valid instance name, let's show the help
+  echo "Error: ${1} is not a valid instance name."
   show_Help
   exit 1
 else
-  lgsmConfig=${installDir}/lgsm/config-lgsm/rustserver/${instanceName}.cfg
+  lgsmConfig=${installDir}/lgsm/config-lgsm/rustserver/${1}.cfg
 fi
 
 
-if [ ${wipeCron} -eq 1 ]
+if [[ ${wipeCron} -eq 1 ]]
 then
-  if [ {$wipeDoRunDay} ]
+  if [[ {$wipeDoRunDay} ]]
   then
     # user entered a day to --run and we're in cron mode; lets see if we're running today.
     if [[ ${wipeDoRunDay} == ${today} ]] || [[ ${wipeDoRunDay} == ${todayAbbr} ]]
@@ -192,7 +234,7 @@ fi # end --cron check
 
 # read in lgsm vars we need
 
-if [ ! -e ${webRconCmd} ]
+if [[ ! -e ${webRconCmd} ]]
 then
   echo "Error: webRconCmd is not set and we need it.  Aborting."
   exit 1
@@ -210,12 +252,12 @@ fi
 
 
 echo "Wipe cycle start: $(date +"%c")"
-touch ${installDir}/.disable_monitor
+#touch ${installDir}/.disable_monitor
 
 
 if [ ${wipeDoBackup} -eq 1 ]
 then
-  ${backupScript} ${instanceName} >/dev/null
+  ${backupScript} ${instanceName}
   echo "Backup complete, continuing..."
 fi
 
@@ -286,7 +328,7 @@ fi
 
 
 # start the server again
-rm -vr ${installDir}/.disable_monitor
+#rm -vr ${installDir}/.disable_monitor
 if [ ${wipeDoRestartServer} -eq 1 ]
 then
   echo "Starting server."

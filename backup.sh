@@ -62,6 +62,14 @@ then
     fullName=${backupDir}/${backupDirSuffix}/${fileName}.tar.gz
     trueBackupDir=${backupDir}/${backupDirSuffix}
   fi
+
+  if [[ -d ${trueBackupDir}/ ]]
+  then
+    echo "Directory ${trueBackupDir}/ exists."
+  else
+    echo "Directory ${trueBackupDir}/ does not exist... making it."
+    ${mkNice} mkdir -p --mode=700 ${trueBackupDir}/
+  fi
   echo "Making ${fullName}"
   ${mkNice} tar zcvf $fullName -C ${installDir} "${backupList[@]}"
   exit

@@ -1,5 +1,4 @@
 #!/bin/bash
-#set -euo pipefail
 rs_selfName=$(basename "$(readlink -f ${BASH_SOURCE[0]})")
 rs_rootDir=$(dirname "$(readlink -f ${BASH_SOURCE[0]})")
 if [[ ! -e ${rs_rootDir}/.config ]]

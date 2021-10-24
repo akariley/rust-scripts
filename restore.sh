@@ -52,12 +52,6 @@ fi
 # got a backup file, check if it's another day's
 if [[ -z $2 ]]
 then
-# check for lock files.
-  if [[ -e ${installDir}/lgsm/lock/rustserver.lock ]]
-  then
-    echo "Error: Server is running.  Stop it first. (and make a backup!)"
-    exit 2
-  fi
   # no date, assuming today
   if [[ -e ${backupDir}/${backupDirSuffix}/$1 ]]
   then
@@ -106,12 +100,6 @@ then
   echo
 else
   # they put a file and a date, extract from it instead of $today    
-  # check for lock files.
-  if [[ -e ${installDir}/lgsm/lock/rustserver.lock ]]
-  then
-    echo "Error: Server is running.  Stop it first. (and make a backup!)"
-    exit 2
-  fi
   if [[ -e ${backupDir}/${2}/${1} ]]
   then
     # snag the instance name

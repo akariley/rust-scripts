@@ -23,7 +23,7 @@ mkNice='ionice -c 3'
 while [ "$#" -gt 0 ]
 do
   case ${1} in
-    --all-instances|--full)
+    --full)
       # do a global backup so exit the loop
       fullBackup=1
       break

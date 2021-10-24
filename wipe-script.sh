@@ -9,6 +9,27 @@ else
   source ${rs_rootDir}/.config
 fi
 
+function show_Help {
+  echo
+  echo "${rs_selfName} accepts multiple options, listed below:"
+  echo "  --new-seed"
+  echo "    Will generate a new map seed and update the specified LGSM config."
+  echo "  --update-rust"
+  echo "    Will update Rust."
+  echo "  --update-mods"
+  echo "    Will update uMod."
+
+
+
+  exit
+
+
+
+
+
+}
+
+
 # ./wipe-script.sh [doforcewipe] [dowipeblueprints] [dorustupdate] [domodsupdate] [dolgsmupdate] [dobackup] [donewSeed] [dowipebackpacks]
 
 # return codes
@@ -116,7 +137,7 @@ do
       wipeCron=1
       ;;
     *)
-      # end of options with no match, assuming instance name.
+      # end of options with no match, move out of loop.
       break
       ;;
   esac
@@ -128,17 +149,19 @@ done
 
 # echo $wipeRestartReason
 
-if [ -z ${1} ]
-then
-  # $1 is empty, assuming the default name
-  instanceName=rustserver
-else
-  instanceName=${1}
-fi
+# if [[ -z ${1} ]]
+# then
+#   # $1 is empty, assuming the default name
+#   instanceName=rustserver
+# else
+#   instanceName=${1}
+# fi
 
-if [ ! -e ${installDir}/${instanceName} ]
+if [[ ! -e ${installDir}/${1} ]]
 then
-  echo "Error: ${installDir}/${instanceName} does not exist."
+  #echo "Error: ${installDir}/${instanceName} does not exist."
+  # parameter isn't a valid instance name, let's show the help
+  show_Help
   exit 1
 else
   lgsmConfig=${installDir}/lgsm/config-lgsm/rustserver/${instanceName}.cfg

@@ -71,7 +71,7 @@ then
     ${mkNice} mkdir -p --mode=700 ${trueBackupDir}/
   fi
   echo "Making ${fullName}"
-  ${mkNice} tar zcvf $fullName -C ${installDir} "${backupList[@]}"
+  ${mkNice} tar zcf $fullName -C ${installDir} "${backupList[@]}" 
   exit
 else
   while read instanceName
@@ -115,7 +115,7 @@ else
     then
       timeout 5 ${webRconCmd} ${rconIp}:${rconPort} ${rconPassword} "server.save"
     fi
-    tar zcvf $fullName -C ${installDir} "${instanceBackupList[@]}"
+    tar zcf $fullName -C ${installDir} "${instanceBackupList[@]}"
     # let's sleep for a bit to avoid save churning.
     sleep 1
   done < $tmpFile

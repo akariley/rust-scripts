@@ -87,6 +87,17 @@ while [[ "$#" -gt 0 ]]
 do
   case ${1} in
     --do-backup)
+      if [[ -z ${backupScript} ]]
+      then
+        echo "Error: backupScript not set in .config."
+        exit 1
+      else
+        if [[ ! -e ${backupScript} ]]
+        then
+          echo "Error: backupScript not a valid path."
+          exit 1
+        fi
+      fi
       wipeDoBackup=1
       echo "${rs_selfName}: will take a backup."
       ;;

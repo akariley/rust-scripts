@@ -1,13 +1,4 @@
 #!/bin/bash
-#set -euo pipefail
-#backupDir=/game-backups
-#rustDir=rust
-#backupDirSuffix=${user}-backup
-#DIR=${backupDirSuffix}/`date +%F`
-#fileName=${backupDirSuffix}/`date +%H%M`
-#fullName=${backupDir}/${DIR}/${fileName}.tar.gz
-#TODAY=`date +%F`
-#TODAY=$(date +%Y-%b-%d-%H%M)
 rs_selfName=$(basename "$(readlink -f ${BASH_SOURCE[0]})")
 rs_rootDir=$(dirname "$(readlink -f ${BASH_SOURCE[0]})")
 if [[ ! -e ${rs_rootDir}/.config ]]

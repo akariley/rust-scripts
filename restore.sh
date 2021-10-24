@@ -8,14 +8,15 @@
 #fullName=${backupDir}/${DIR}/${fileName}.tar.gz
 #TODAY=`date +%F`
 #TODAY=$(date +%Y-%b-%d-%H%M)
-
-if [ ! -e ./.config ]
+rs_selfName=$(basename "$(readlink -f ${BASH_SOURCE[0]})")
+rs_rootDir=$(dirname "$(readlink -f ${BASH_SOURCE[0]})")
+if [[ ! -e ${rs_rootDir}/.config ]]
 then
-  echo ".config file does not exist.  Please copy .config.example to .config and configure the settings as needed."
+  echo ".config file does not exist.  Please copy ${rs_rootDir}/.config.example to ${rs_rootDir}/.config and configure the settings as needed."
   exit 1
+else
+  source ${rs_rootDir}/.config
 fi
-
-source ./.config
 
 fullRestore=0
 

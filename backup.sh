@@ -10,15 +10,13 @@ else
   source ${rs_rootDir}/.config
 fi
 
+temp_Files
+
 function script_exit {
-  rm -v $tmpFile
+    rm -v $tmpFile
 }
 
 trap script_exit exit
-
-tmpFile=$(mktemp --tmpdir=${scriptDir}/tmp instancelist.${rs_selfName}.XXXXXXXX)
-cd ${scriptDir}
-
 
 fullBackup=0
 mkNice='ionice -c 3'

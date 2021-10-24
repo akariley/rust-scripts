@@ -44,7 +44,7 @@ fi
 
 
 # where did you place the scripts?  We default to ~/rust-scripts/
-scriptDir=${installDir}/rust-scripts/
+#scriptDir=${installDir}/rust-scripts/
 
 
 # And what are they named?  Uncomment those you use.
@@ -95,3 +95,19 @@ backupDirSuffix=$(date +%m)
 # (this is 'date +%Y-%b-%d-%H%M') if curious.
 # The username and instance name will be prefixed (username_instanceName_2021-Sep-12-0826)
 backupDate=$(date +%Y-%b-%d-%H%M)
+
+function temp_Files {
+  tmpFile=$(mktemp --tmpdir=${rs_rootDir}/tmp instancelist.${rs_selfName}.XXXXXXXX)
+  if [[ ! -e $tmpFile ]]
+  then
+    # couldn't make temp file in our working directory, trying /tmp.
+    tmpFile=$(mktemp --tmpdir=/tmp instancelist.${rs_selfName}.XXXXXXXX)
+    if [[ ! -e $tmpFile ]]
+    then
+      # we can't make a temp file in our working dir or in /tmp, exit.
+      echo "Error: failed making temporary file in working directory and in /tmp, exiting."
+      exit 255
+    fi
+  fi
+}
+

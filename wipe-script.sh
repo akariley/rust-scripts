@@ -194,21 +194,8 @@ do
       break
       ;;
   esac
-  # echo "End of case loop: ${@}"
   shift
 done
-
-# echo "End of loop: ${@}"
-
-# echo $wipeRestartReason
-
-# if [[ -z ${1} ]]
-# then
-#   # $1 is empty, assuming the default name
-#   instanceName=rustserver
-# else
-#   instanceName=${1}
-# fi
 
 if [[ -z ${1} ]]
 then
@@ -264,7 +251,6 @@ fi
 
 
 echo "Wipe cycle start: $(date +"%c")"
-#touch ${installDir}/.disable_monitor
 
 
 if [[ ${wipeDoBackup} -eq 1 ]]
@@ -283,7 +269,6 @@ then
   echo "Checking for Rust update..."
   ${installDir}/${instanceName} check-update | grep -q 'Update available'
   statuscode=$?
-  # echo "Status code for Rust update check was: $statuscode"
   if [[ $statuscode -eq 0 ]];
   then
     # there's a rust update
@@ -335,12 +320,10 @@ then
   done
   # remove lock files
   echo "Shutdown complete, proceeding." 
-  find ${installDir}/lgsm/lock/ -type f -delete
 fi
 
 
 # start the server again
-#rm -vr ${installDir}/.disable_monitor
 if [[ ${wipeDoRestartServer} -eq 1 ]]
 then
   echo "Starting server."

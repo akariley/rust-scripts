@@ -55,7 +55,7 @@ fi
 
 #===========================================
 user=$(whoami)
-month=$(date +"%-m")
+month=$(date +"%m")
 scriptDir=$(pwd)
 
 #lgsmConfig=/home/rust-testing/rust/lgsm/config-lgsm/rustserver/rustserver.cfg

@@ -11,11 +11,29 @@ fi
 
 temp_Files
 
+function show_Help {
+  #echo "Syntax:"
+  echo "${rs_selfName} [--full]"
+  echo "This will take a backup of all LGSM servers and config files."
+  echo
+  echo "${rs_selfName} <instancename> [instancename...]"
+  echo "This will backup single instances."
+}
+
 function script_exit {
-    rm -v $tmpFile
+    rm -f $tmpFile
 }
 
 trap script_exit exit
+
+if [[ "$#" -eq 0 ]]
+then
+  # display help.
+  show_Help
+  exit 3
+fi
+
+
 
 fullBackup=0
 mkNice='ionice -c 3'
@@ -33,7 +51,7 @@ do
       if [[ ${1} == "--help" ]] || [[ ${1} == '-h' ]]
       then
         # display help.
-        echo "Help goes here."
+        show_Help
         exit 3
       else
         # it's not help or --all, so it's an instance name.  let's check if it's valid.

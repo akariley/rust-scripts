@@ -59,6 +59,11 @@ wipeDay=''
 
 numRegex='^[0-9]+$'
 
+if [[ -z ${1} ]]
+then
+  show_Help
+fi
+
 # let's parse the arguments
 # it'll look something like ./$0 --option-1 --option-2 <rust server instance name>
 
@@ -156,6 +161,7 @@ done
 # else
 #   instanceName=${1}
 # fi
+
 
 if [[ ! -e ${installDir}/${1} ]]
 then

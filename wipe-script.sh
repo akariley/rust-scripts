@@ -213,6 +213,7 @@ then
   exit 1
 else
   lgsmConfig=${installDir}/lgsm/config-lgsm/rustserver/${1}.cfg
+  instanceName=${1}
 fi
 
 
@@ -257,7 +258,7 @@ echo "Wipe cycle start: $(date +"%c")"
 
 if [[ ${wipeDoBackup} -eq 1 ]]
 then
-  ${backupScript} ${instanceName}
+  ${rs_rootDir}/${backupScript} ${instanceName}
   echo "Backup complete, continuing..."
 fi
 

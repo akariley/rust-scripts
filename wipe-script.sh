@@ -83,7 +83,7 @@ fi
 # let's parse the arguments
 # it'll look something like ./$0 --option-1 --option-2 <rust server instance name>
 
-while [ "$#" -gt 0 ]
+while [[ "$#" -gt 0 ]]
 do
   case ${1} in
     --do-backup)
@@ -133,7 +133,7 @@ do
         echo "Error: --restart-server expects two parameters, <time in seconds> <restart message>"
         exit 1
       else
-        if [ ! ${2} -gt 0 ] 2>/dev/null 
+        if [[ ! ${2} -gt 0 ]] 2>/dev/null 
         then
           echo "Error: seconds needs to be greater than 0."
           exit 1
@@ -142,7 +142,7 @@ do
           # got a valid restart time
           wipeRestartSeconds=${2}
           # grab the restart reason
-          while [ ! ${3} == "@@" ]
+          while [[ ! ${3} == "@@" ]]
           do
             wipeRestartReason+="${3} "
             shift
@@ -245,7 +245,7 @@ rconPort=$(awk -F'=' '/^[Rr][Cc][Oo][Nn][Pp][Oo][Rr][Tt]="?\d{0,5}"?/ {print $2}
 rconPassword=$(awk -F'=' '/^[Rr][Cc][Oo][Nn][Pp][Aa][Ss]{2}[Ww][Oo][Rr][Dd]="?[[:alnum:]]{0,63}"?/ {print $2}' ${lgsmConfig} | tr -d '"')
 
 
-if [ ${execLogging} -eq 1 ]
+if [[ ${execLogging} -eq 1 ]]
 then
   exec  >> ${fullLog} 2>&1
 fi
@@ -255,18 +255,18 @@ echo "Wipe cycle start: $(date +"%c")"
 #touch ${installDir}/.disable_monitor
 
 
-if [ ${wipeDoBackup} -eq 1 ]
+if [[ ${wipeDoBackup} -eq 1 ]]
 then
   ${backupScript} ${instanceName}
   echo "Backup complete, continuing..."
 fi
 
-if [ ${wipeDoLGSMUpdate} -eq 1 ]
+if [[ ${wipeDoLGSMUpdate} -eq 1 ]]
 then
   ${installDir}/${instanceName} update-lgsm
 fi
 
-if [ ${wipeDoRustUpdate} -eq 1 ]
+if [[ ${wipeDoRustUpdate} -eq 1 ]]
 then
   echo "Checking for Rust update..."
   ${installDir}/${instanceName} check-update | grep -q 'Update available'
@@ -282,7 +282,7 @@ then
   fi # end rust update check
 fi
 
-if [ ${wipeDoModsUpdate} -eq 1 ]
+if [[ ${wipeDoModsUpdate} -eq 1 ]]
 then
   ${installDir}/${instanceName} mods-update > /dev/null
 fi
@@ -291,13 +291,13 @@ fi
 # wipe stuff here
 #################
 
-if [ ${wipeDoWipeBackpacks} -eq 1 ]
+if [[ ${wipeDoWipeBackpacks} -eq 1 ]]
 then
   find ${installDir}/serverfiles/oxide/data/Backpacks -type f -delete
 fi
 
 
-if [ ${wipeDoNewSeed} -eq 1 ]
+if [[ ${wipeDoNewSeed} -eq 1 ]]
 then
   # let's get a new map seed.
   newSeed=$(shuf -i 1-2147483647 -n1)
@@ -306,14 +306,14 @@ then
 fi # end seed check
 
 
-if [ ${wipeDoWipeBlueprints} -eq 1 ]
+if [[ ${wipeDoWipeBlueprints} -eq 1 ]]
 then
   echo 'Removing blueprints...'
   /bin/rm -v ${installDir}/serverfiles/server/${instanceName}/player.blueprints.4.db
   /bin/rm -v ${installDir}/serverfiles/server/${instanceName}/player.blueprints.4.db-journal
 fi
 
-if [ ${wipeDoRestartServer} -eq 1 ]
+if [[ ${wipeDoRestartServer} -eq 1 ]]
 then
   echo "Sending restart command to server via rcon..."
   timeout 2 ${webRconCmd} ${rconIp}:${rconPort} ${rconPassword} "restart ${wipeRestartSeconds} '${wipeRestartReason}'"
@@ -329,7 +329,7 @@ fi
 
 # start the server again
 #rm -vr ${installDir}/.disable_monitor
-if [ ${wipeDoRestartServer} -eq 1 ]
+if [[ ${wipeDoRestartServer} -eq 1 ]]
 then
   echo "Starting server."
   ${installDir}/${instanceName} start
@@ -338,7 +338,7 @@ sleep 2
 echo "Done!"
 echo "Wipe cycle ended: $(date +"%c")"
 
-if [ ${execLogging} -eq 1 ]
+if [[ ${execLogging} -eq 1 ]]
 then
   sed -i -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g" ${fullLog}
 fi

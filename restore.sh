@@ -11,6 +11,16 @@ fi
 
 fullRestore=0
 
+function show_Help {
+  echo
+  echo "Syntax: ${rs_selfName} [--full] backupFile [<date>]"
+  echo "or"
+  echo "Syntax: ${rs_selfName} list [<date>]"
+  echo "Note: <date> is defined by backupDirSuffix in the .config file.  Currently it is ${backupDirSuffix}"
+  echo 
+}
+
+
 # return codes
 #
 # 1 = syntax error
@@ -19,12 +29,7 @@ fullRestore=0
 if [[ -z $1 ]] || [[ ${1} == '--help' ]] || [[ ${1} == '-h' ]]
 then
   # no params -- display help
-  echo
-  echo "Syntax: $0 [--full] backupFile [<date>]"
-  echo "or"
-  echo "Syntax: $0 list [<date>]"
-  echo "Note: <date> is defined by backupDirSuffix in the .config file.  Currently it is ${backupDirSuffix}"
-  echo 
+  show_Help
   exit
 fi
 

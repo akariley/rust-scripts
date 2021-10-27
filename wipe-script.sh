@@ -13,6 +13,12 @@ function show_Help {
   echo "${rs_selfName} [option-name] [option-name...] instanceName"
   echo
   #echo "${rs_selfName} accepts multiple options, listed below:"
+  echo "  --wipe-map"
+  echo "    Will delete all *.sav and *.map files in the specified LGSM instance."
+  echo "    (disabled on specified forcewipe days (currently every first Thursday of the month"
+  echo "    use --force-wipe to run this on forcewipe days)"
+  echo "  --force-wipe"
+  echo "    Implies --new-seed, --update-rust, and --update-mods"
   echo "  --new-seed"
   echo "    Will generate a new map seed and update the specified LGSM config."
   echo "  --update-rust"
@@ -122,10 +128,28 @@ do
       fi # end odd check
       shift
       ;;
+    --wipe-map)
+      # we need to check if we can run today.
+      #if [[ ${forceWipeDay} == $(date +%d) ]]
+      if [[ ${allowWipeMapOnForceWipe} -eq 0 ]]
+      then
+        # --wipe-map is disabled on first Thursdays of the month.
+        # let's see if this is one of them.
+        if [[ $(date +%w) -eq 4 ]] && [[ $(date +%-d) -lt 7 ]]
+        then
+          echo "${rs_selfName}: --wipe-map specified, but today is a defined force wipe day.  Ignoring for this run."
+          echo "(change allowWipeMapOnForceWipe to '1' to disable this check)."
+          wipeDoWipe=0
+        else
+          wipeDoWipe=1
+        fi # end date check
+      fi # end force wipe check.
+      ;;
     --force-wipe)
       wipeDoNewSeed=1
       wipeDoModsUpdate=1
       wipeDoRustUpdate=1
+      wipeDoWipe=1
       ;;
     --wipe-backpacks)
       if [[ ! -e ${installDir}/serverfiles/oxide/plugins/Backpacks.cs ]]
@@ -287,6 +311,16 @@ fi
 #################
 # wipe stuff here
 #################
+
+if [[ ${wipeDoWipe} -eq 1 ]]
+then
+  # we're wiping today.
+  echo "Removing map files..."
+  rm -f ${installDir}/serverfiles/server/${instanceName}/*.map > /dev/null
+  rm -f ${installDir}/serverfiles/server/${instanceName}/*.sav* > /dev/null
+fi
+
+
 
 if [[ ${wipeDoWipeBackpacks} -eq 1 ]]
 then

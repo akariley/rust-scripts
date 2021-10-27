@@ -19,7 +19,7 @@ function show_Help {
   echo "    use --force-wipe to run this on forcewipe days)"
   echo "  --force-wipe"
   echo "    Implies --new-seed, --update-rust, and --update-mods."
-  echo "    Intended use: separate cronjob from the normal wipes (will only run on configured wipe days)."
+  echo "    Will exit completely if not a force wipe day."
   echo "  --new-seed"
   echo "    Will generate a new map seed and update the specified LGSM config."
   echo "  --update-rust"
@@ -161,6 +161,9 @@ do
         echo "${rs_selfName}: will update Rust."
         wipeDoWipe=1
         echo "${rs_selfName}: will wipe map (not blueprints)."
+      else
+        # not a defined force wipe day; exit.
+        exit 2
       fi
       ;;
     --wipe-backpacks)

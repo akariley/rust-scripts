@@ -48,9 +48,9 @@ fi
 
 
 # And what are they named?  Uncomment those you use.
-#backupScript=${scriptDir}/backup.sh
-#restoreScript=${scriptDir}/restore.sh
-#wipeScript=${scriptDir}/wipe-script.sh
+#backupScript=${scriptDir}/rs-backup.sh
+#restoreScript=${scriptDir}/rs-restore.sh
+#wipeScript=${scriptDir}/rs-wipe-script.sh
 
 
 #===========================================

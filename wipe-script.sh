@@ -277,7 +277,8 @@ then
   exec  >> ${fullLog} 2>&1
 fi
 
-
+echo "Sleeping for 5 seconds...(ctrl+c to cancel)"
+sleep 5
 echo "Wipe cycle start: $(date +"%c")"
 
 
@@ -312,9 +313,9 @@ then
   ${installDir}/${instanceName} mods-update > /dev/null
 fi
 
-#################
-# wipe stuff here
-#################
+###################
+# wipe stuff here #
+###################
 
 if [[ ${wipeDoWipe} -eq 1 ]]
 then

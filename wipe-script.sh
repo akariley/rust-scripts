@@ -147,9 +147,13 @@ do
       ;;
     --force-wipe)
       wipeDoNewSeed=1
+      echo "${rs_selfName}: will generate new seed."
       wipeDoModsUpdate=1
+      echo "${rs_selfName}: will update mods."
       wipeDoRustUpdate=1
+      echo "${rs_selfName}: will update Rust."
       wipeDoWipe=1
+      echo "${rs_selfName}: will wipe map (not blueprints)."
       ;;
     --wipe-backpacks)
       if [[ ! -e ${installDir}/serverfiles/oxide/plugins/Backpacks.cs ]]

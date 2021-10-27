@@ -314,11 +314,10 @@ if [[ ${wipeDoRestartServer} -eq 1 ]]
 then
   echo "Sending restart command to server via rcon..."
   timeout 2 ${webRconCmd} ${rconIp}:${rconPort} ${rconPassword} "restart ${wipeRestartSeconds} '${wipeRestartReason}'"
-  while pgrep -u $(whoami) RustDedicated > /dev/null
+  while [[ -e ${installDir}/lgsm/lock/${instanceName}.lock ]]
   do
     sleep 5
   done
-  # remove lock files
   echo "Shutdown complete, proceeding." 
 fi
 

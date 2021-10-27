@@ -18,7 +18,8 @@ function show_Help {
   echo "    (disabled on specified forcewipe days (currently every first Thursday of the month"
   echo "    use --force-wipe to run this on forcewipe days)"
   echo "  --force-wipe"
-  echo "    Implies --new-seed, --update-rust, and --update-mods"
+  echo "    Implies --new-seed, --update-rust, and --update-mods."
+  echo "    Intended use: separate cronjob from the normal wipes (will only run on configured wipe days)."
   echo "  --new-seed"
   echo "    Will generate a new map seed and update the specified LGSM config."
   echo "  --update-rust"
@@ -36,9 +37,9 @@ function show_Help {
   echo "    Will update LGSM."
   echo "  --do-backup"
   echo "    Will take a backup."
-  echo "  --cron"
-  echo "    Enables cronjob mode.  Useful if you want to run a command at a specific time."
-  echo "    Requires '--run'."
+  #echo "  --cron"
+  #echo "    Enables cronjob mode.  Useful if you want to run a command at a specific time."
+  #echo "    Requires '--run'."
 
 
 
@@ -141,19 +142,26 @@ do
           echo "(change allowWipeMapOnForceWipe to '1' to disable this check)."
           wipeDoWipe=0
         else
+          echo "${rs_selfName}: will wipe map (not blueprints)."
           wipeDoWipe=1
         fi # end date check
+      else
+        echo "${rs_selfName}: will wipe map (not blueprints)."
+        wipeDoWipe=1
       fi # end force wipe check.
       ;;
     --force-wipe)
-      wipeDoNewSeed=1
-      echo "${rs_selfName}: will generate new seed."
-      wipeDoModsUpdate=1
-      echo "${rs_selfName}: will update mods."
-      wipeDoRustUpdate=1
-      echo "${rs_selfName}: will update Rust."
-      wipeDoWipe=1
-      echo "${rs_selfName}: will wipe map (not blueprints)."
+      if [[ $(date +%w) -eq 4 ]] && [[ $(date +%-d) -lt 7 ]]
+      then
+        wipeDoNewSeed=1
+        echo "${rs_selfName}: will generate new seed."
+        wipeDoModsUpdate=1
+        echo "${rs_selfName}: will update mods."
+        wipeDoRustUpdate=1
+        echo "${rs_selfName}: will update Rust."
+        wipeDoWipe=1
+        echo "${rs_selfName}: will wipe map (not blueprints)."
+      fi
       ;;
     --wipe-backpacks)
       if [[ ! -e ${installDir}/serverfiles/oxide/plugins/Backpacks.cs ]]

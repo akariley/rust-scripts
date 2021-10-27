@@ -13,6 +13,13 @@ function show_Help {
   echo "${rs_selfName} [option-name] [option-name...] instanceName"
   echo
   #echo "${rs_selfName} accepts multiple options, listed below:"
+  echo "  --wipe-map"
+  echo "    Will delete all *.sav and *.map files in the specified LGSM instance."
+  echo "    (disabled on specified forcewipe days (currently every first Thursday of the month"
+  echo "    use --force-wipe to run this on forcewipe days)"
+  echo "  --force-wipe"
+  echo "    Implies --new-seed, --update-rust, and --update-mods."
+  echo "    Will exit completely if not a force wipe day."
   echo "  --new-seed"
   echo "    Will generate a new map seed and update the specified LGSM config."
   echo "  --update-rust"
@@ -30,9 +37,9 @@ function show_Help {
   echo "    Will update LGSM."
   echo "  --do-backup"
   echo "    Will take a backup."
-  echo "  --cron"
-  echo "    Enables cronjob mode.  Useful if you want to run a command at a specific time."
-  echo "    Requires '--run'."
+  #echo "  --cron"
+  #echo "    Enables cronjob mode.  Useful if you want to run a command at a specific time."
+  #echo "    Requires '--run'."
 
 
 
@@ -122,10 +129,42 @@ do
       fi # end odd check
       shift
       ;;
+    --wipe-map)
+      # we need to check if we can run today.
+      #if [[ ${forceWipeDay} == $(date +%d) ]]
+      if [[ ${allowWipeMapOnForceWipe} -eq 0 ]]
+      then
+        # --wipe-map is disabled on first Thursdays of the month.
+        # let's see if this is one of them.
+        if [[ $(date +%w) -eq 4 ]] && [[ $(date +%-d) -lt 7 ]]
+        then
+          echo "${rs_selfName}: --wipe-map specified, but today is a defined force wipe day.  Ignoring for this run."
+          echo "(change allowWipeMapOnForceWipe to '1' to disable this check)."
+          wipeDoWipe=0
+        else
+          echo "${rs_selfName}: will wipe map (not blueprints)."
+          wipeDoWipe=1
+        fi # end date check
+      else
+        echo "${rs_selfName}: will wipe map (not blueprints)."
+        wipeDoWipe=1
+      fi # end force wipe check.
+      ;;
     --force-wipe)
-      wipeDoNewSeed=1
-      wipeDoModsUpdate=1
-      wipeDoRustUpdate=1
+      if [[ $(date +%w) -eq 4 ]] && [[ $(date +%-d) -lt 7 ]]
+      then
+        wipeDoNewSeed=1
+        echo "${rs_selfName}: will generate new seed."
+        wipeDoModsUpdate=1
+        echo "${rs_selfName}: will update mods."
+        wipeDoRustUpdate=1
+        echo "${rs_selfName}: will update Rust."
+        wipeDoWipe=1
+        echo "${rs_selfName}: will wipe map (not blueprints)."
+      else
+        # not a defined force wipe day; exit.
+        exit 2
+      fi
       ;;
     --wipe-backpacks)
       if [[ ! -e ${installDir}/serverfiles/oxide/plugins/Backpacks.cs ]]
@@ -249,7 +288,8 @@ then
   exec  >> ${fullLog} 2>&1
 fi
 
-
+echo "Sleeping for 5 seconds...(ctrl+c to cancel)"
+sleep 5
 echo "Wipe cycle start: $(date +"%c")"
 
 
@@ -284,9 +324,19 @@ then
   ${installDir}/${instanceName} mods-update > /dev/null
 fi
 
-#################
-# wipe stuff here
-#################
+###################
+# wipe stuff here #
+###################
+
+if [[ ${wipeDoWipe} -eq 1 ]]
+then
+  # we're wiping today.
+  echo "Removing map files..."
+  rm -f ${installDir}/serverfiles/server/${instanceName}/*.map > /dev/null
+  rm -f ${installDir}/serverfiles/server/${instanceName}/*.sav* > /dev/null
+fi
+
+
 
 if [[ ${wipeDoWipeBackpacks} -eq 1 ]]
 then

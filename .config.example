@@ -62,6 +62,16 @@ scriptDir=$(pwd)
 #lgsmConfig=/path/to/lgsmserver.cfg
 #===========================================
 
+#################
+# WIPE SETTINGS #
+#################
+
+# by default, we block --wipe-map from running on force wipe days (first Thursday of the month)
+# this helps people who might have a general wipe cron on Thursdays to not have to have TODO WORDING
+# to disable this restriction, set this to 1
+allowWipeMapOnForceWipe=0
+
+
 
 ###################
 # LOGGING OPTIONS #

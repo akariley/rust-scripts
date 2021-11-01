@@ -254,21 +254,21 @@ else
 fi
 
 
-if [[ ${wipeCron} -eq 1 ]]
-then
-  if [[ {$wipeDoRunDay} ]]
-  then
-    # user entered a day to --run and we're in cron mode; lets see if we're running today.
-    if [[ ${wipeDoRunDay} == ${today} ]] || [[ ${wipeDoRunDay} == ${todayAbbr} ]]
-    then
-      # we're running today.
-      runStatus=1
-    else
-      # not running today; exit.
-      exit 2
-    fi # end date check
-  fi # end --run check
-fi # end --cron check
+# if [[ ${wipeCron} -eq 1 ]]
+# then
+#   if [[ {$wipeDoRunDay} ]]
+#   then
+#     # user entered a day to --run and we're in cron mode; lets see if we're running today.
+#     if [[ ${wipeDoRunDay} == ${today} ]] || [[ ${wipeDoRunDay} == ${todayAbbr} ]]
+#     then
+#       # we're running today.
+#       runStatus=1
+#     else
+#       # not running today; exit.
+#       exit 2
+#     fi # end date check
+#   fi # end --run check
+# fi # end --cron check
 
 # read in lgsm vars we need
 
@@ -296,12 +296,20 @@ if [[ ${wipeDoRestartServer} -eq 1 ]]
 then
   echo "Sending restart command to server via rcon..."
   timeout 2 ${webRconCmd} ${rconIp}:${rconPort} ${rconPassword} "restart ${wipeRestartSeconds} '${wipeRestartReason}'"
-  while [[ -e ${installDir}/lgsm/lock/${instanceName}.lock ]]
+  while [[ 1 -eq 1 ]]
   do
-    sleep 5
+    # server running.
+    timeout --preserve-status 2 ${webRconCmd} ${rconIp}:${rconPort} ${rconPassword} 'playerlist' > /dev/null
+    if [[ ! $? -eq 143 ]]
+    then
+      # server is down
+      break
+    fi
+    sleep 60
   done
   echo "Shutdown complete, proceeding." 
 fi
+
 
 if [[ ${wipeDoBackup} -eq 1 ]]
 then

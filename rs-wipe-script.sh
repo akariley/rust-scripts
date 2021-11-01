@@ -299,7 +299,7 @@ then
   while [[ 1 -eq 1 ]]
   do
     # server running.
-    timeout --preserve-status 2 ${webRconCmd} ${rconIp}:${rconPort} ${rconPassword} 'playerlist' > 2>&1 /dev/null
+    timeout --preserve-status 2 ${webRconCmd} ${rconIp}:${rconPort} ${rconPassword} 'playerlist' 2>&1 >/dev/null
     if [[ ! $? -eq 143 ]]
     then
       # server is down

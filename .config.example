@@ -21,7 +21,7 @@ home=${HOME}
 
 if [ ! -z ${rustDir} ]
 then
-  installDir=${home}/${rustDir}
+  installDir=${HOME}/${rustDir}
 else
   installDir=${HOME}
 fi
@@ -90,7 +90,7 @@ execLogging=0
 
 # where are your backups stored? we default to ~/backups/
 #backupDir=/game-backups/${user}
-backupDir=${home}/game-backups
+backupDir=${HOME}/game-backups
 
 # what suffix would you like for the backup directory?  We default to ${backupDir}/<day of month>/
 backupDirSuffix=$(date +%m)

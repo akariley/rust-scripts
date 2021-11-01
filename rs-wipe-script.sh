@@ -295,11 +295,11 @@ echo "Wipe cycle start: $(date +"%c")"
 if [[ ${wipeDoRestartServer} -eq 1 ]]
 then
   echo "Sending restart command to server via rcon..."
-  timeout 2 ${webRconCmd} ${rconIp}:${rconPort} ${rconPassword} "restart ${wipeRestartSeconds} '${wipeRestartReason}'"
+  timeout 2 ${webRconCmd} ${rconIp}:${rconPort} ${rconPassword} "restart ${wipeRestartSeconds} '${wipeRestartReason}'" 2>&1 >/dev/null
   while [[ 1 -eq 1 ]]
   do
     # server running.
-    timeout --preserve-status 2 ${webRconCmd} ${rconIp}:${rconPort} ${rconPassword} 'playerlist' > /dev/null
+    timeout --preserve-status 2 ${webRconCmd} ${rconIp}:${rconPort} ${rconPassword} 'playerlist' > 2>&1 /dev/null
     if [[ ! $? -eq 143 ]]
     then
       # server is down

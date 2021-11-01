@@ -94,12 +94,12 @@ while [[ "$#" -gt 0 ]]
 do
   case ${1} in
     --do-backup)
-      if [[ -z ${backupScript} ]]
+      if [[ -z ${rs_rootDir}/${backupScript} ]]
       then
         echo "Error: backupScript not set in .config."
         exit 1
       else
-        if [[ ! -e ${backupScript} ]]
+        if [[ ! -e ${rs_rootDir}/${backupScript} ]]
         then
           echo "Error: backupScript not a valid path."
           exit 1
@@ -130,29 +130,29 @@ do
       shift
       ;;
     --wipe-map)
-      # we need to check if we can run today.
-      #if [[ ${forceWipeDay} == $(date +%d) ]]
-      if [[ ${allowWipeMapOnForceWipe} -eq 0 ]]
-      then
-        # --wipe-map is disabled on first Thursdays of the month.
-        # let's see if this is one of them.
-        if [[ $(date +%w) -eq 4 ]] && [[ $(date +%-d) -lt 7 ]]
-        then
-          echo "${rs_selfName}: --wipe-map specified, but today is a defined force wipe day.  Ignoring for this run."
-          echo "(change allowWipeMapOnForceWipe to '1' to disable this check)."
-          wipeDoWipe=0
-        else
-          echo "${rs_selfName}: will wipe map (not blueprints)."
-          wipeDoWipe=1
-        fi # end date check
-      else
+      # # we need to check if we can run today.
+      # #if [[ ${forceWipeDay} == $(date +%d) ]]
+      # if [[ ${allowWipeMapOnForceWipe} -eq 0 ]]
+      # then
+      #   # --wipe-map is disabled on first Thursdays of the month.
+      #   # let's see if this is one of them.
+      #   if [[ $(date +%w) -eq 4 ]] && [[ $(date +%-d) -lt 7 ]]
+      #   then
+      #     echo "${rs_selfName}: --wipe-map specified, but today is a defined force wipe day.  Ignoring for this run."
+      #     echo "(change allowWipeMapOnForceWipe to '1' to disable this check)."
+      #     wipeDoWipe=0
+      #   else
+      #     echo "${rs_selfName}: will wipe map (not blueprints)."
+          # wipeDoWipe=1
+      #   fi # end date check
+      # else
         echo "${rs_selfName}: will wipe map (not blueprints)."
         wipeDoWipe=1
-      fi # end force wipe check.
+      # fi # end force wipe check.
       ;;
     --force-wipe)
-      if [[ $(date +%w) -eq 4 ]] && [[ $(date +%-d) -lt 7 ]]
-      then
+      # if [[ $(date +%w) -eq 4 ]] && [[ $(date +%-d) -lt 7 ]]
+      # then
         wipeDoNewSeed=1
         echo "${rs_selfName}: will generate new seed."
         wipeDoModsUpdate=1
@@ -161,10 +161,10 @@ do
         echo "${rs_selfName}: will update Rust."
         wipeDoWipe=1
         echo "${rs_selfName}: will wipe map (not blueprints)."
-      else
+      # else
         # not a defined force wipe day; exit.
-        exit 2
-      fi
+      #   exit 2
+      # fi
       ;;
     --wipe-backpacks)
       if [[ ! -e ${installDir}/serverfiles/oxide/plugins/Backpacks.cs ]]
@@ -292,6 +292,16 @@ echo "Sleeping for 5 seconds...(ctrl+c to cancel)"
 sleep 5
 echo "Wipe cycle start: $(date +"%c")"
 
+if [[ ${wipeDoRestartServer} -eq 1 ]]
+then
+  echo "Sending restart command to server via rcon..."
+  timeout 2 ${webRconCmd} ${rconIp}:${rconPort} ${rconPassword} "restart ${wipeRestartSeconds} '${wipeRestartReason}'"
+  while [[ -e ${installDir}/lgsm/lock/${instanceName}.lock ]]
+  do
+    sleep 5
+  done
+  echo "Shutdown complete, proceeding." 
+fi
 
 if [[ ${wipeDoBackup} -eq 1 ]]
 then
@@ -360,16 +370,16 @@ then
   /bin/rm -v ${installDir}/serverfiles/server/${instanceName}/player.blueprints.4.db-journal
 fi
 
-if [[ ${wipeDoRestartServer} -eq 1 ]]
-then
-  echo "Sending restart command to server via rcon..."
-  timeout 2 ${webRconCmd} ${rconIp}:${rconPort} ${rconPassword} "restart ${wipeRestartSeconds} '${wipeRestartReason}'"
-  while [[ -e ${installDir}/lgsm/lock/${instanceName}.lock ]]
-  do
-    sleep 5
-  done
-  echo "Shutdown complete, proceeding." 
-fi
+# if [[ ${wipeDoRestartServer} -eq 1 ]]
+# then
+#   echo "Sending restart command to server via rcon..."
+#   timeout 2 ${webRconCmd} ${rconIp}:${rconPort} ${rconPassword} "restart ${wipeRestartSeconds} '${wipeRestartReason}'"
+#   while [[ -e ${installDir}/lgsm/lock/${instanceName}.lock ]]
+#   do
+#     sleep 5
+#   done
+#   echo "Shutdown complete, proceeding." 
+# fi
 
 
 # start the server again

@@ -167,10 +167,10 @@ do
       # fi
       ;;
     --wipe-backpacks)
-      if [[ ! -e ${installDir}/serverfiles/oxide/plugins/Backpacks.cs ]]
+      if [[ ! -d ${installDir}/serverfiles/oxide/data/Backpacks ]]
       then
-        # no backpack plugin loaded.
-        echo "--wipe-backpacks entered, but no backpack plugin found.  Disabling this option."
+        # no backpack data found.
+        echo "--wipe-backpacks entered, but no backpack data found.  Disabling this option."
         wipeDoWipeBackpacks=0
       else
         wipeDoWipeBackpacks=1
@@ -292,6 +292,10 @@ echo "Sleeping for 5 seconds...(ctrl+c to cancel)"
 sleep 5
 echo "Wipe cycle start: $(date +"%c")"
 
+###################
+# wipe stuff here #
+###################
+
 if [[ ${wipeDoRestartServer} -eq 1 ]]
 then
   echo "Sending restart command to server via rcon..."
@@ -341,10 +345,6 @@ if [[ ${wipeDoModsUpdate} -eq 1 ]]
 then
   ${installDir}/${instanceName} mods-update > /dev/null
 fi
-
-###################
-# wipe stuff here #
-###################
 
 if [[ ${wipeDoWipe} -eq 1 ]]
 then

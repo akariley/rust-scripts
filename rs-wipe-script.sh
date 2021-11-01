@@ -3,10 +3,10 @@ rs_selfName=$(basename "$(readlink -f ${BASH_SOURCE[0]})")
 rs_rootDir=$(dirname "$(readlink -f ${BASH_SOURCE[0]})")
 if [[ ! -e ${rs_rootDir}/.config ]]
 then
-  echo ".config file does not exist.  Please copy ${rs_rootDir}/.config.example to ${rs_rootDir}/.config and configure the settings as needed."
+  echo "Config file does not exist.  Please copy ${rs_rootDir}/.rs.config.example to ${rs_rootDir}/.rs.config and configure the settings as needed."
   exit 1
 else
-  source ${rs_rootDir}/.config
+  source ${rs_rootDir}/.rs.config
 fi
 
 function show_Help {

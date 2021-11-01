@@ -131,7 +131,7 @@ else
     # do we need to save the server?
     # if [[ -e ${installDir}/lgsm/lock/${instanceName}.lock ]]
     # then
-    timeout 5 ${webRconCmd} ${rconIp}:${rconPort} ${rconPassword} "server.save" 2>&1 /dev/null
+    timeout 5 ${webRconCmd} ${rconIp}:${rconPort} ${rconPassword} "server.save" > /dev/null 2>&1
     # fi
     tar zcf $fullName -C ${installDir} "${instanceBackupList[@]}"
     # let's sleep for a bit to avoid save churning.

@@ -57,4 +57,4 @@ This invocation will only save the data needed to restore the specific instance(
   --update-lgsm
     Will update LGSM.
   --do-backup
-    Will take a backup.```
+    Will take a backup.

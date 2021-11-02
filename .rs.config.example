@@ -17,7 +17,6 @@ webRconCmd=/usr/bin/webrcon-cli
 
 # Set some variables we need.
 
-home=${HOME}
 
 if [ ! -z ${rustDir} ]
 then
@@ -44,7 +43,7 @@ fi
 
 
 # where did you place the scripts?  We default to ~/rust-scripts/
-#scriptDir=${installDir}/rust-scripts/
+#scriptDir=${HOME}/rust-scripts/
 
 
 # And what are they named?  Uncomment those you use.
@@ -66,11 +65,6 @@ scriptDir=$(pwd)
 # WIPE SETTINGS #
 #################
 
-# by default, we block --wipe-map from running on force wipe days (first Thursday of the month)
-# this helps people who might have a general wipe cron on Thursdays to not have to have TODO WORDING
-# to disable this restriction, set this to 1
-allowWipeMapOnForceWipe=0
-
 
 
 ###################
@@ -78,7 +72,7 @@ allowWipeMapOnForceWipe=0
 ###################
 
 logDate=$(date +"%m-%d-%Y-%s")
-logFile=weekly-tasks_${logDate}.log
+logFile=wipe-script_${logDate}.log
 fullLog=${installDir}/log/${logFile}
 
 # we can use exec to pipe the output to a log file.  To enable this, set this to 1.
@@ -94,11 +88,6 @@ backupDir=${HOME}/game-backups
 
 # what suffix would you like for the backup directory?  We default to ${backupDir}/<day of month>/
 backupDirSuffix=$(date +%m)
-
-# do we issue a 'server.save' command to the rust server when the backup script is run?
-# 1 = yes, 0 = no
-# WARNING: backups won't run if your lgsmConfig variable is not correct if this is set.
-#saveOnBackup=1
 
 # date suffix for backups.  we default to YYYY-Month-Numerical_date-24HR_time
 # ex: 2021-Sep-12-0826 is September 12th, 2021 at 8:26am.

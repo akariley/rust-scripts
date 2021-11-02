@@ -42,14 +42,12 @@ then
 fi
 
 
-# where did you place the scripts?  We default to ~/rust-scripts/
-#scriptDir=${HOME}/rust-scripts/
 
 
 # And what are they named?  Uncomment those you use.
-#backupScript=${scriptDir}/rs-backup.sh
-#restoreScript=${scriptDir}/rs-restore.sh
-#wipeScript=${scriptDir}/rs-wipe-script.sh
+backupScript=rs-backup.sh
+#restoreScript=rs-restore.sh
+#wipeScript=rs-wipe-script.sh
 
 
 #===========================================

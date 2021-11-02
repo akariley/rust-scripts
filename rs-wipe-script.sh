@@ -40,20 +40,9 @@ function show_Help {
   #echo "  --cron"
   #echo "    Enables cronjob mode.  Useful if you want to run a command at a specific time."
   #echo "    Requires '--run'."
-
-
-
-
   exit
-
-
-
-
-
 }
 
-
-# ./wipe-script.sh [doforcewipe] [dowipeblueprints] [dorustupdate] [domodsupdate] [dolgsmupdate] [dobackup] [donewSeed] [dowipebackpacks]
 
 # return codes
 #
@@ -96,7 +85,7 @@ do
     --do-backup)
       if [[ -z ${rs_rootDir}/${backupScript} ]]
       then
-        echo "Error: backupScript not set in .config."
+        echo "Error: backupScript not set in .rs.config."
         exit 1
       else
         if [[ ! -e ${rs_rootDir}/${backupScript} ]]

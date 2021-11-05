@@ -43,8 +43,7 @@ fi
 
 
 
-
-# And what are they named?  Uncomment those you use.
+# You can rename the scripts if you need to.  Set the variables here to the filenames.
 backupScript=rs-backup.sh
 #restoreScript=rs-restore.sh
 #wipeScript=rs-wipe-script.sh

@@ -17,21 +17,26 @@ This cron will fire every Thursday at 1PM server time.  It then checks if the da
 ### Backup
 
 `./rs-backup.sh [--full]`
+
 This syntax will take a backup of all instances under the user account running the script.  No save commands are sent.
 
 `./rs-backup.sh <instancename> <instancename...>`
+
 This invocation will only save the data needed to restore the specific instance(s).  If you have webrcon-cli installed and defined, it will also send a save command prior to the backup.
 
 ### Restore
 
 `./rs-restore.sh [--full] backupFile [<date>]`
-  This invocation will restore all Rust instances from the specified `backupFile`.  If you need a file from a different month, then pass the month in `MM` format (as `date`).
+
+  This invocation will restore all Rust instances from the specified `backupFile`.  If you need a file from a different month, then pass the month in `MM` format (as `date`).  If you have redefined `backupDirSuffix` then use that format instead for `date.`
 
 `./rs-restore.sh <instancename> backupFile [<date>]`
+
   This version of the command restores only the given `instancename` from the given `backupFile`
 
 `./re-restore.sh list [<date>]`
-  This will list all backup files available for the current month.  Pass `MM` for `date` if you need a different month.
+
+  This will list all backup files available for the current month.  Pass `MM` for `date` if you need a different month. If you have redefined `backupDirSuffix` then use that format instead for `date.`
 
 ### Wipe script
 

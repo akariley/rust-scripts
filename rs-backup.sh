@@ -92,6 +92,11 @@ then
   ${mkNice} tar zcf $fullName -C ${installDir} "${backupList[@]}" 
   exit
 else
+  if [[ ! -e ${webRconCmd} ]] || [[ ! -z ${webRconCmd} ]]
+  then
+    echo "Error: webRconCmd is not set or is an invalid path.  Aborting."
+    exit 1
+  fi
   while read instanceName
   do
     # let's snag the rcon stuff.

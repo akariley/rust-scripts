@@ -255,10 +255,13 @@ fi
 
 # read in lgsm vars we need
 
-if [[ ! -e ${webRconCmd} ]]
+if [[ ${wipeDoRestartServer} -eq 1 ]] || [[ ${wipeDoBackup} -eq 1 ]]
 then
-  echo "Error: webRconCmd is not set and we need it.  Aborting."
-  exit 1
+  if [[ ! -e ${webRconCmd} ]] || [[ ! -z ${webRconCmd} ]]
+  then
+    echo "Error: webRconCmd is not set and we need it.  Aborting."
+    exit 1
+  fi
 fi
 
 rconIp=$(awk -F'=' '/[Ii][Pp]="?([0-9]{1,3}[\.]){3}[0-9]{1,3}"?/ {print $2}' ${lgsmConfig} | tr -d '"')

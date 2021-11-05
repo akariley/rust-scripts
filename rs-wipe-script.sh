@@ -259,7 +259,7 @@ if [[ ${wipeDoRestartServer} -eq 1 ]] || [[ ${wipeDoBackup} -eq 1 ]]
 then
   if [[ ! -e ${webRconCmd} ]] || [[ ! -z ${webRconCmd} ]]
   then
-    echo "Error: webRconCmd is not set and we need it.  Aborting."
+    echo "Error: webRconCmd is not set or is an invalid path.  Aborting."
     exit 1
   fi
 fi

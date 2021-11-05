@@ -92,11 +92,6 @@ then
   ${mkNice} tar zcf $fullName -C ${installDir} "${backupList[@]}" 
   exit
 else
-  if [[ ! -e ${webRconCmd} ]] || [[ ! -z ${webRconCmd} ]]
-  then
-    echo "Error: webRconCmd is not set or is an invalid path.  Aborting."
-    exit 1
-  fi
   while read instanceName
   do
     # let's snag the rcon stuff.
@@ -136,8 +131,10 @@ else
     # do we need to save the server?
     # if [[ -e ${installDir}/lgsm/lock/${instanceName}.lock ]]
     # then
-    timeout 5 ${webRconCmd} ${rconIp}:${rconPort} ${rconPassword} "server.save" > /dev/null 2>&1
-    # fi
+    if [[ -e ${webRconCmd} ]]
+    then
+      timeout --preserve-status 5 ${webRconCmd} ${rconIp}:${rconPort} ${rconPassword} "server.save" > /dev/null 2>&1
+    fi
     tar zcf $fullName -C ${installDir} "${instanceBackupList[@]}"
     # let's sleep for a bit to avoid save churning.
     sleep 1

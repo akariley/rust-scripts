@@ -259,14 +259,14 @@ fi
 
 # read in lgsm vars we need
 
-if [[ ${wipeDoRestartServer} -eq 1 ]] || [[ ${wipeDoBackup} -eq 1 ]]
-then
-  if [[ ! -e ${webRconCmd} ]] || [[ ! -z ${webRconCmd} ]]
-  then
-    echo "Error: webRconCmd is not set or is an invalid path.  Aborting."
-    exit 1
-  fi
-fi
+# if [[ ${wipeDoRestartServer} -eq 1 ]] || [[ ${wipeDoBackup} -eq 1 ]]
+# then
+#   if [[ ! -e ${webRconCmd} ]] || [[ ! -z ${webRconCmd} ]]
+#   then
+#     echo "Error: webRconCmd is not set or is an invalid path.  Aborting."
+#     exit 1
+#   fi
+# fi
 
 rconIp=$(awk -F'=' '/[Ii][Pp]="?([0-9]{1,3}[\.]){3}[0-9]{1,3}"?/ {print $2}' ${lgsmConfig} | tr -d '"')
 rconPort=$(awk -F'=' '/^[Rr][Cc][Oo][Nn][Pp][Oo][Rr][Tt]="?\d{0,5}"?/ {print $2}' ${lgsmConfig} | tr -d '"')

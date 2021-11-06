@@ -340,6 +340,7 @@ fi
 
 if [[ ${wipeDoModsUpdate} -eq 1 ]]
 then
+  echo "Updating mods..."
   ${installDir}/${instanceName} mods-update > /dev/null
 fi
 

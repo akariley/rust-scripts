@@ -129,8 +129,7 @@ else
     fi
 
     # do we need to save the server?
-    # if [[ -e ${installDir}/lgsm/lock/${instanceName}.lock ]]
-    # then
+
     if [[ -e ${webRconCmd} ]]
     then
       timeout --preserve-status 5 ${webRconCmd} ${rconIp}:${rconPort} ${rconPassword} "server.save" > /dev/null 2>&1

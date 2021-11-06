@@ -12,7 +12,6 @@ fi
 function show_Help {
   echo "${rs_selfName} [option-name] [option-name...] instanceName"
   echo
-  #echo "${rs_selfName} accepts multiple options, listed below:"
   echo "  --wipe-map"
   echo "    Will delete all *.sav and *.map files in the specified LGSM instance."
   echo "  --force-wipe"
@@ -113,29 +112,10 @@ do
       shift
       ;;
     --wipe-map)
-      # # we need to check if we can run today.
-      # #if [[ ${forceWipeDay} == $(date +%d) ]]
-      # if [[ ${allowWipeMapOnForceWipe} -eq 0 ]]
-      # then
-      #   # --wipe-map is disabled on first Thursdays of the month.
-      #   # let's see if this is one of them.
-      #   if [[ $(date +%w) -eq 4 ]] && [[ $(date +%-d) -lt 7 ]]
-      #   then
-      #     echo "${rs_selfName}: --wipe-map specified, but today is a defined force wipe day.  Ignoring for this run."
-      #     echo "(change allowWipeMapOnForceWipe to '1' to disable this check)."
-      #     wipeDoWipe=0
-      #   else
-      #     echo "${rs_selfName}: will wipe map (not blueprints)."
-          # wipeDoWipe=1
-      #   fi # end date check
-      # else
         echo "${rs_selfName}: will wipe map (not blueprints)."
         wipeDoWipe=1
-      # fi # end force wipe check.
       ;;
     --force-wipe)
-      # if [[ $(date +%w) -eq 4 ]] && [[ $(date +%-d) -lt 7 ]]
-      # then
         wipeDoNewSeed=1
         echo "${rs_selfName}: will generate new seed."
         wipeDoModsUpdate=1
@@ -144,10 +124,6 @@ do
         echo "${rs_selfName}: will update Rust."
         wipeDoWipe=1
         echo "${rs_selfName}: will wipe map (not blueprints)."
-      # else
-        # not a defined force wipe day; exit.
-      #   exit 2
-      # fi
       ;;
     --wipe-backpacks)
       if [[ ! -d ${installDir}/serverfiles/oxide/data/Backpacks ]]
@@ -241,33 +217,6 @@ else
   instanceName=${1}
 fi
 
-
-# if [[ ${wipeCron} -eq 1 ]]
-# then
-#   if [[ {$wipeDoRunDay} ]]
-#   then
-#     # user entered a day to --run and we're in cron mode; lets see if we're running today.
-#     if [[ ${wipeDoRunDay} == ${today} ]] || [[ ${wipeDoRunDay} == ${todayAbbr} ]]
-#     then
-#       # we're running today.
-#       runStatus=1
-#     else
-#       # not running today; exit.
-#       exit 2
-#     fi # end date check
-#   fi # end --run check
-# fi # end --cron check
-
-# read in lgsm vars we need
-
-# if [[ ${wipeDoRestartServer} -eq 1 ]] || [[ ${wipeDoBackup} -eq 1 ]]
-# then
-#   if [[ ! -e ${webRconCmd} ]] || [[ ! -z ${webRconCmd} ]]
-#   then
-#     echo "Error: webRconCmd is not set or is an invalid path.  Aborting."
-#     exit 1
-#   fi
-# fi
 
 rconIp=$(awk -F'=' '/[Ii][Pp]="?([0-9]{1,3}[\.]){3}[0-9]{1,3}"?/ {print $2}' ${lgsmConfig} | tr -d '"')
 rconPort=$(awk -F'=' '/^[Rr][Cc][Oo][Nn][Pp][Oo][Rr][Tt]="?\d{0,5}"?/ {print $2}' ${lgsmConfig} | tr -d '"')
@@ -375,17 +324,6 @@ then
   /bin/rm -v ${installDir}/serverfiles/server/${instanceName}/player.blueprints.4.db
   /bin/rm -v ${installDir}/serverfiles/server/${instanceName}/player.blueprints.4.db-journal
 fi
-
-# if [[ ${wipeDoRestartServer} -eq 1 ]]
-# then
-#   echo "Sending restart command to server via rcon..."
-#   timeout 2 ${webRconCmd} ${rconIp}:${rconPort} ${rconPassword} "restart ${wipeRestartSeconds} '${wipeRestartReason}'"
-#   while [[ -e ${installDir}/lgsm/lock/${instanceName}.lock ]]
-#   do
-#     sleep 5
-#   done
-#   echo "Shutdown complete, proceeding." 
-# fi
 
 
 # start the server again

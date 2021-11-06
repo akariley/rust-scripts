@@ -183,12 +183,13 @@ do
         fi # end greater than 0 check
       fi # end int check
       shift 2
+      wipeDoRestartServer=1
       if [[ ! -e ${webRconCmd} ]] || [[ ! -z ${webRconCmd} ]]
       then
         echo "Warning: webRconCmd is not set or is an invalid path.  Will shutdown server via LGSM."
+      else
+        echo "${rs_selfName}: will restart server in (${wipeRestartSeconds}) seconds with reason: ${wipeRestartReason}."
       fi
-      wipeDoRestartServer=1
-      echo "${rs_selfName}: will restart server in (${wipeRestartSeconds}) seconds with reason: ${wipeRestartReason}."
       ;;
     --update-mods)
       wipeDoModsUpdate=1

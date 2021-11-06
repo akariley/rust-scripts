@@ -183,6 +183,10 @@ do
         fi # end greater than 0 check
       fi # end int check
       shift 2
+      if [[ ! -e ${webRconCmd} ]] || [[ ! -z ${webRconCmd} ]]
+      then
+        echo "Warning: webRconCmd is not set or is an invalid path.  Will shutdown server via LGSM."
+      fi
       wipeDoRestartServer=1
       echo "${rs_selfName}: will restart server in (${wipeRestartSeconds}) seconds with reason: ${wipeRestartReason}."
       ;;
@@ -284,20 +288,26 @@ echo "Wipe cycle start: $(date +"%c")"
 
 if [[ ${wipeDoRestartServer} -eq 1 ]]
 then
-  echo "Sending restart command to server via rcon..."
-  timeout 2 ${webRconCmd} ${rconIp}:${rconPort} ${rconPassword} "restart ${wipeRestartSeconds} '${wipeRestartReason}'" > /dev/null 2>&1
-  while [[ 1 -eq 1 ]]
-  do
-    # server running.
-    timeout --preserve-status 2 ${webRconCmd} ${rconIp}:${rconPort} ${rconPassword} 'playerlist' > /dev/null 2>&1
-    if [[ ! $? -eq 143 ]]
-    then
-      # server is down
-      break
-    fi
-    sleep 60
-  done
-  echo "Shutdown complete, proceeding." 
+  if [[ ! -e ${webRconCmd} ]] || [[ ! -z ${webRconCmd} ]]
+  then
+    echo "Sending stop command via LGSM..."
+    ${installDir}/${instanceName} stop
+  else
+    echo "Sending restart command to server via rcon..."
+    timeout 2 ${webRconCmd} ${rconIp}:${rconPort} ${rconPassword} "restart ${wipeRestartSeconds} '${wipeRestartReason}'" > /dev/null 2>&1
+    while [[ 1 -eq 1 ]]
+    do
+      # server running.
+      timeout --preserve-status 2 ${webRconCmd} ${rconIp}:${rconPort} ${rconPassword} 'playerlist' > /dev/null 2>&1
+      if [[ ! $? -eq 143 ]]
+      then
+        # server is down
+        break
+      fi
+      sleep 60
+    done
+    echo "Shutdown complete, proceeding." 
+  fi
 fi
 
 
@@ -379,7 +389,7 @@ fi
 # start the server again
 if [[ ${wipeDoRestartServer} -eq 1 ]]
 then
-  echo "Starting server."
+  echo "Starting server..."
   ${installDir}/${instanceName} start
 fi
 sleep 2

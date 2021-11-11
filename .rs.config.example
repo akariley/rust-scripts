@@ -68,13 +68,11 @@ month=$(date +"%m")
 ###################
 
 # you can change the default logging name format and location here.
-
 logDate=$(date +"%m-%d-%Y-%s")
 logFile=wipe-script_${logDate}.log
 fullLog=${installDir}/log/${logFile}
 
 # we can use exec to pipe the output to a log file.  To enable this, set this to 1.
-
 execLogging=0
 
 ###################
@@ -82,7 +80,6 @@ execLogging=0
 ###################
 
 # where are your backups stored? we default to ~/backups/
-
 backupDir=${HOME}/game-backups
 
 # what suffix would you like for the backup directory?  We default to ${backupDir}/<day of month>/
@@ -92,7 +89,6 @@ backupDirSuffix=$(date +%m)
 # ex: 2021-Sep-12-0826 is September 12th, 2021 at 8:26am.
 # (this is 'date +%Y-%b-%d-%H%M') if curious.
 # The username and instance name will be prefixed (username_instanceName_2021-Sep-12-0826)
-
 backupDate=$(date +%Y-%b-%d-%H%M)
 
 function temp_Files {

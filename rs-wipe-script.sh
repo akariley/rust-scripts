@@ -230,8 +230,20 @@ fi
 
 echo "Sleeping for 5 seconds...(ctrl+c to cancel)"
 sleep 5
-echo "Wipe cycle start: $(date +"%c")"
+echo "Wipe cycle start: $(date +"%c")" 
 
+# we need to check for running scripts other than ours.
+
+if [[ -e ${rs_rootDir}/tmp/${rs_selfName}* ]]
+then
+  # there's a touch file present, abort.
+  echo "Error: touch file present for ${rs_selfName}, exiting."
+  exit 254
+fi
+
+
+
+exit
 ###################
 # wipe stuff here #
 ###################

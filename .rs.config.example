@@ -91,7 +91,7 @@ backupDirSuffix=$(date +%m)
 # The username and instance name will be prefixed (username_instanceName_2021-Sep-12-0826)
 backupDate=$(date +%Y-%b-%d-%H%M)
 
-createTempFiles () {
+createTempFile () {
   # optional parameters
   # $1 = temp file prefix
   if [[ -z $1 ]]
@@ -110,7 +110,13 @@ createTempFiles () {
       # we can't make a temp file in our working dir or in /tmp, exit.
       echo "Error: failed making temporary file in working directory and in /tmp, exiting."
       exit 255
+    else
+      echo $tmpFile
+      return
     fi
+  else
+    echo $tmpFile
+    return
   fi
 }
 

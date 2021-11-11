@@ -9,7 +9,7 @@ else
   source ${rs_rootDir}/.rs.config
 fi
 
-createBackupTempFiles
+createTempFiles
 
 function show_Help {
   #echo "Syntax:"

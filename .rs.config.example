@@ -91,12 +91,20 @@ backupDirSuffix=$(date +%m)
 # The username and instance name will be prefixed (username_instanceName_2021-Sep-12-0826)
 backupDate=$(date +%Y-%b-%d-%H%M)
 
-function createBackupTempFiles {
-  tmpFile=$(mktemp --tmpdir=${rs_rootDir}/tmp instancelist.${rs_selfName}.XXXXXXXX 2>/dev/null)
+createTempFiles () {
+  # optional parameters
+  # $1 = temp file prefix
+  if [[ -z $1 ]]
+  then
+    local tmpPrefix=$1
+  else
+    local tmpPrefix='tmp'
+  fi
+  tmpFile=$(mktemp --tmpdir=${rs_rootDir}/tmp ${tmpPrefix}.${rs_selfName}.XXXXXXXX 2>/dev/null)
   if [[ ! -e $tmpFile ]]
   then
     # couldn't make temp file in our working directory, trying /tmp.
-    tmpFile=$(mktemp --tmpdir=/tmp instancelist.${rs_selfName}.XXXXXXXX 2>/dev/null)
+    tmpFile=$(mktemp --tmpdir=/tmp ${tmpPrefix}.${rs_selfName}.XXXXXXXX 2>/dev/null)
     if [[ ! -e $tmpFile ]]
     then
       # we can't make a temp file in our working dir or in /tmp, exit.

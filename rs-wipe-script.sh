@@ -160,7 +160,7 @@ do
       fi # end int check
       shift 2
       wipeDoRestartServer=1
-      if [[ ! -e ${webRconCmd} ]] || [[ ! -z ${webRconCmd} ]]
+      if [[ ! -e ${webRconCmd} ]]
       then
         echo "Warning: webRconCmd is not set or is an invalid path.  Will shutdown server via LGSM."
       else
@@ -238,7 +238,7 @@ echo "Wipe cycle start: $(date +"%c")"
 
 if [[ ${wipeDoRestartServer} -eq 1 ]]
 then
-  if [[ ! -e ${webRconCmd} ]] || [[ ! -z ${webRconCmd} ]]
+  if [[ ! -e ${webRconCmd} ]]
   then
     echo "Sending stop command via LGSM..."
     ${installDir}/${instanceName} stop

@@ -91,7 +91,7 @@ backupDirSuffix=$(date +%m)
 # The username and instance name will be prefixed (username_instanceName_2021-Sep-12-0826)
 backupDate=$(date +%Y-%b-%d-%H%M)
 
-function temp_Files {
+function createBackupTempFiles {
   tmpFile=$(mktemp --tmpdir=${rs_rootDir}/tmp instancelist.${rs_selfName}.XXXXXXXX 2>/dev/null)
   if [[ ! -e $tmpFile ]]
   then

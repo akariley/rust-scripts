@@ -96,9 +96,9 @@ createTempFile () {
   # $1 = temp file prefix
   if [[ -z $1 ]]
   then
-    local tmpPrefix=$1
+    local tmpPrefix=tmp
   else
-    local tmpPrefix='tmp'
+    local tmpPrefix=${1}
   fi
   tmpFile=$(mktemp --tmpdir=${rs_rootDir}/tmp ${tmpPrefix}.${rs_selfName}.XXXXXXXX 2>/dev/null)
   if [[ ! -e $tmpFile ]]

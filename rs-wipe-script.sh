@@ -9,6 +9,13 @@ else
   source ${rs_rootDir}/.rs.config
 fi
 
+function script_exit {
+    rm -f $tmpFile
+}
+
+trap script_exit exit
+
+
 function show_Help {
   echo "${rs_selfName} [option-name] [option-name...] instanceName"
   echo
@@ -61,6 +68,8 @@ runStatus=0
 
 wipeDoRunDay=''
 wipeDay=''
+
+doInfiniteLoop=0
 
 numRegex='^[0-9]+$'
 
@@ -192,6 +201,9 @@ do
     --cron)
       wipeCron=1
       ;;
+    --loop-forever)
+      doInfiniteLoop=1
+      ;;
     *)
       # end of options with no match, move out of loop.
       break
@@ -230,8 +242,30 @@ fi
 
 echo "Sleeping for 5 seconds...(ctrl+c to cancel)"
 sleep 5
-echo "Wipe cycle start: $(date +"%c")"
+echo "Wipe cycle start: $(date +"%c")" 
 
+# we need to check for running scripts other than ours.
+
+if [[ -e ${rs_rootDir}/tmp/${rs_selfName}* ]] || [[ -e /tmp/${rs_selfName}* ]]
+then
+  # there's a touch file present, abort.
+  echo "Error: touch file present for ${rs_selfName}, exiting."
+  exit 254
+fi
+
+tmpFile=$(createTempFile "${rs_selfName}")
+
+if [[ ${doInfiniteLoop} -eq 1 ]]
+then
+  # loop forever
+  echo "Looping forever, ctrl+c to exit."
+  while [[ 1 -eq 1 ]]
+  do
+    sleep 10
+  done
+fi
+
+exit
 ###################
 # wipe stuff here #
 ###################

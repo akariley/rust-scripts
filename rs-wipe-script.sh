@@ -19,12 +19,17 @@ trap script_exit exit
 function show_Help {
   echo "${rs_selfName} [option-name] [option-name...] instanceName"
   echo
+  echo "  The last parameter *must* be an instance name."
+  echo
   echo "  --wipe-map"
   echo "    Will delete all *.sav and *.map files in the specified LGSM instance."
   echo "  --force-wipe"
   echo "    Implies --new-seed, --update-rust, --update-mods, and --wipe-map."
-  echo "  --new-seed"
+  echo "    If customSeedFile is not set, will generate a random seed, else will use the next value from file."
+  echo "  --new-seed [custom|random]"
   echo "    Will generate a new map seed and update the specified LGSM config."
+  echo "    Use 'custom' to use the next value in customSeedFile if set; will exit if customSeedFile is not set or empty."
+  echo "    'Random' will generate a random seed."
   echo "  --update-rust"
   echo "    Will update Rust."
   echo "  --update-mods"
@@ -48,7 +53,7 @@ function show_Help {
 #
 # 0 = no errors
 # 1 = syntax error
-# 2 = not running today
+# 2 = parameter error
 
 today=$(date +"%A")
 todayAbbr=$(date +"%a")
@@ -100,8 +105,33 @@ do
       echo "${rs_selfName}: will take a backup."
       ;;
       --new-seed)
-      wipeDoNewSeed=1
-      echo "${rs_selfName}: will generate new seed."
+      # check if custom or random
+      if [[ ${2} == 'custom' ]]
+      then
+        # check if the file exists and is non-empty.
+        if [[ -s ${customSeedFile} ]]
+        then
+          # file is non-zero, check for valid seeds.
+          egrep '^[0-9]+$' ${customSeedFile} > /dev/null
+          if [[ $? -eq 1 ]]
+          then
+            # the file is non-zero, but a grep returned no seeds.  must be whitespace only.
+            echo "${rs_selfName}: Error: 'custom was passed to --new-seed, but file contains no valid seeds.  (Is there whitespace in the file?)"
+            exit 2
+          fi # end customSeedFile emptiness check
+        # file has valid seeds
+        $newSeedValue=$(egrep '^[0-9]+$' ${customSeedFile} | head -n 1)
+        echo "${rs_selfName}: will use (${newSeedValue}) as new seed."
+      fi # end custom seed check
+      elif [[ ${2} == 'random' ]]
+      then
+        wipeDoNewSeed=1
+        echo "${rs_selfName}: will generate new seed."
+      else
+        echo "${rs_selfName}: Error: --new-seed passed without 'random' or 'custom'."
+        show_Help
+        exit 2
+      fi
       ;;
     --wipe-blueprints)
       # possible options: odd, even, or now.

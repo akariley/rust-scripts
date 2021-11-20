@@ -106,19 +106,25 @@ do
       ;;
       --new-seed)
       # check if custom or random
-      if [[ ${2} == 'custom' ]]
+      if [[ ${2} == 'custom' ]] 
       then
         # check if the file exists and is non-empty.
-        if [[ -s ${customSeedFile} ]]
+        if [[ ! -e ${customSeedFile} ]]
         then
-          # file is non-zero, check for valid seeds.
+          # file doesn't exist, exit.
+          echo "${rs_selfName}: Error: 'customSeedFile' does not exist."
+          show_Help
+          exit 2
+        else
+          # file exists, check for valid seeds.
           egrep '^[0-9]+$' ${customSeedFile} > /dev/null
           if [[ $? -eq 1 ]]
           then
-            # the file is non-zero, but a grep returned no seeds.  must be whitespace only.
-            echo "${rs_selfName}: Error: 'custom was passed to --new-seed, but file contains no valid seeds.  (Is there whitespace in the file?)"
+            # the file size is non-zero, but a grep returned no seeds.  must be whitespace only.
+            echo "${rs_selfName}: Error: 'custom' was passed to --new-seed, but file contains no valid seeds.  (Is there whitespace in the file?)"
             exit 2
           fi # end customSeedFile emptiness check
+        fi # end customSeedFile existance check
         # file has valid seeds
         $newSeedValue=$(egrep '^[0-9]+$' ${customSeedFile} | head -n 1)
         echo "${rs_selfName}: will use (${newSeedValue}) as new seed."

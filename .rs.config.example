@@ -54,13 +54,16 @@ backupScript=rs-backup.sh
 #===========================================
 user=$(whoami)
 month=$(date +"%m")
-#scriptDir=$(pwd)
 #===========================================
 
 #################
 # WIPE SETTINGS #
 #################
 
+# This option is for custom seed values to cycle through.
+# One seed per line.  The seed will be deleted from the file when used.
+# The filename is relative to the script directory, by default this is ~/rust-scripts/
+customSeedFile=
 
 
 ###################

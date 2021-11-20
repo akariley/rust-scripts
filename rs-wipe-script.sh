@@ -29,7 +29,7 @@ function show_Help {
   echo "  --new-seed [custom|random]"
   echo "    Will generate a new map seed and update the specified LGSM config."
   echo "    Use 'custom' to use the next value in customSeedFile if set; will exit if customSeedFile is not set or empty."
-  echo "    'Random' will generate a random seed."
+  echo "    'random' will generate a random seed."
   echo "  --update-rust"
   echo "    Will update Rust."
   echo "  --update-mods"
@@ -122,7 +122,7 @@ do
         # file has valid seeds
         $newSeedValue=$(egrep '^[0-9]+$' ${customSeedFile} | head -n 1)
         echo "${rs_selfName}: will use (${newSeedValue}) as new seed."
-      fi # end custom seed check
+        fi # end custom seed check
       elif [[ ${2} == 'random' ]]
       then
         wipeDoNewSeed=1
@@ -132,6 +132,7 @@ do
         show_Help
         exit 2
       fi
+      shift
       ;;
     --wipe-blueprints)
       # possible options: odd, even, or now.

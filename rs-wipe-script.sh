@@ -124,10 +124,9 @@ do
             echo "${rs_selfName}: Error: 'custom' was passed to --new-seed, but file contains no valid seeds.  (Is there whitespace in the file?)"
             exit 2
           fi # end customSeedFile emptiness check
-        fi # end customSeedFile existance check
-        # file has valid seeds
-        $newSeedValue=$(egrep '^[0-9]+$' ${customSeedFile} | head -n 1)
-        echo "${rs_selfName}: will use (${newSeedValue}) as new seed."
+          # file has valid seeds
+          newSeedValue=$(egrep '^[0-9]+$' ${customSeedFile} | head -n 1)
+          echo "${rs_selfName}: will use '${newSeedValue}' as new seed."
         fi # end custom seed check
       elif [[ ${2} == 'random' ]]
       then

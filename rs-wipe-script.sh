@@ -113,16 +113,23 @@ do
         if [[ $? -eq 1 ]]
         then
           # the file size is non-zero, but a grep returned no seeds.  must be whitespace only.
-          echo "${rs_selfName}: Error: file ${2} contains no valid seeds.  (Is there whitespace in the file?)"
-          exit 2
+          if [[ ${failOnInvalidSeedFile} -eq 1 ]]
+          then
+            echo "${rs_selfName}: Error: file ${2} contains no valid seeds.  (Is there whitespace in the file?)"
+            exit 2
+          else
+            echo "${rs_selfName}: Warning: file ${2} contains no valid seeds -- generating random one."
+          fi
         fi # end customSeedFile emptiness check
         # file has valid seeds
         newSeedValue=$(egrep '^[0-9]+$' ${2} | head -n 1)
-        echo "${rs_selfName}: will use '${newSeedValue}' as new seed."
+        echo "${rs_selfName}: will use '${newSeedValue}' as new seed from ${2}."
+        wipeDoNewSeed=1
       elif [[ ${2} == 'random' ]]
       then
         wipeDoNewSeed=1
-        echo "${rs_selfName}: will generate new seed."
+        newSeedValue=$(shuf -i 1-2147483647 -n1)
+        echo "${rs_selfName}: using random seed -- ${newSeedValue}."
       else
         echo "${rs_selfName}: Error: --new-seed passed without 'random' or seed file doesn't exist."
         show_Help

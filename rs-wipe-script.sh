@@ -14,21 +14,20 @@ function script_exit {
 }
 
 trap script_exit exit
-
+ 
 
 function show_Help {
   echo "${rs_selfName} [option-name] [option-name...] instanceName"
   echo
-  echo "  The last parameter *must* be an instance name."
+  echo "  The last parameter MUST be an instance name."
   echo
   echo "  --wipe-map"
   echo "    Will delete all *.sav and *.map files in the specified LGSM instance."
   echo "  --force-wipe"
-  echo "    Implies --new-seed, --update-rust, --update-mods, and --wipe-map."
-  echo "    If customSeedFile is not set, will generate a random seed, else will use the next value from file."
-  echo "  --new-seed [custom|random]"
+  echo "    Implies --update-rust, --update-mods, and --wipe-map."
+  echo "  --new-seed [<seedfile.txt>|random]"
   echo "    Will generate a new map seed and update the specified LGSM config."
-  echo "    Use 'custom' to use the next value in customSeedFile if set; will exit if customSeedFile is not set or empty."
+  echo "    Use seedfile.txt to use the next seed from a given file, seed is deleted on use; will exit if seedfile.txt is empty."
   echo "    'random' will generate a random seed."
   echo "  --update-rust"
   echo "    Will update Rust."
@@ -106,34 +105,26 @@ do
       ;;
       --new-seed)
       # check if custom or random
-      if [[ ${2} == 'custom' ]] 
+      # if [[ ${2} == 'custom' ]] 
+      if [[ -e ${2} ]]
       then
-        # check if the file exists and is non-empty.
-        if [[ ! -e ${customSeedFile} ]]
+        # file exists, check for valid seeds.
+        egrep '^[0-9]+$' ${2} > /dev/null
+        if [[ $? -eq 1 ]]
         then
-          # file doesn't exist, exit.
-          echo "${rs_selfName}: Error: 'customSeedFile' does not exist."
-          show_Help
+          # the file size is non-zero, but a grep returned no seeds.  must be whitespace only.
+          echo "${rs_selfName}: Error: file ${2} contains no valid seeds.  (Is there whitespace in the file?)"
           exit 2
-        else
-          # file exists, check for valid seeds.
-          egrep '^[0-9]+$' ${customSeedFile} > /dev/null
-          if [[ $? -eq 1 ]]
-          then
-            # the file size is non-zero, but a grep returned no seeds.  must be whitespace only.
-            echo "${rs_selfName}: Error: 'custom' was passed to --new-seed, but file contains no valid seeds.  (Is there whitespace in the file?)"
-            exit 2
-          fi # end customSeedFile emptiness check
-          # file has valid seeds
-          newSeedValue=$(egrep '^[0-9]+$' ${customSeedFile} | head -n 1)
-          echo "${rs_selfName}: will use '${newSeedValue}' as new seed."
-        fi # end custom seed check
+        fi # end customSeedFile emptiness check
+        # file has valid seeds
+        newSeedValue=$(egrep '^[0-9]+$' ${2} | head -n 1)
+        echo "${rs_selfName}: will use '${newSeedValue}' as new seed."
       elif [[ ${2} == 'random' ]]
       then
         wipeDoNewSeed=1
         echo "${rs_selfName}: will generate new seed."
       else
-        echo "${rs_selfName}: Error: --new-seed passed without 'random' or 'custom'."
+        echo "${rs_selfName}: Error: --new-seed passed without 'random' or seed file doesn't exist."
         show_Help
         exit 2
       fi

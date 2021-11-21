@@ -300,7 +300,6 @@ then
   done
 fi
 
-exit
 ###################
 # wipe stuff here #
 ###################

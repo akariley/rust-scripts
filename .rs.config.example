@@ -54,13 +54,16 @@ backupScript=rs-backup.sh
 #===========================================
 user=$(whoami)
 month=$(date +"%m")
-#scriptDir=$(pwd)
 #===========================================
 
 #################
 # WIPE SETTINGS #
 #################
 
+# Normally if you use a seedfile in conjunction with --new-seed and there are no valid seeds
+# the script will exit.  Set this value to 0 to instead treat an invalid seedfile as if random were 
+# used instead.
+failOnInvalidSeedFile=1
 
 
 ###################

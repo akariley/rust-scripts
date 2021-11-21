@@ -124,6 +124,7 @@ do
         # file has valid seeds
         newSeedValue=$(egrep '^[0-9]+$' ${2} | head -n 1)
         echo "${rs_selfName}: will use '${newSeedValue}' as new seed from ${2}."
+        customSeedFile=${2}
         wipeDoNewSeed=1
       elif [[ ${2} == 'random' ]]
       then
@@ -382,7 +383,8 @@ then
   # let's get a new map seed.
   # newSeed=$(shuf -i 1-2147483647 -n1)
   # echo "New seed is ${newSeed}."
-  sed -i "s/seed=".*"/seed="${newSeedValue}"/g" ${lgsmConfig}
+  sed -i "s/seed=".*"/seed="${newSeedValue}"/g" ${lgsmConfig} 
+  sed -i "/^${newSeedValue}/d" ${customSeedFile}
 fi # end seed check
 
 

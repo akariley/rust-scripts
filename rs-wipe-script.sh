@@ -10,7 +10,11 @@ else
 fi
 
 function script_exit {
-    rm -f $tmpFile
+  rm -f $tmpFile
+  if [[ ${wipeDoNewSeed} -eq 1 ]] && [[ ! -z ${customSeedFile} ]]
+  then
+    sed -i "/^${newSeedValue}/d" ${customSeedFile}
+  fi # end seed check
 }
 
 trap script_exit exit
@@ -62,7 +66,11 @@ wipeDoRustUpdate=0
 wipeDoModsUpdate=0
 wipeDoLGSMUpdate=0
 wipeDoBackup=0
+
 wipeDoNewSeed=0
+newSeedValue=-1
+customSeedFile=
+
 wipeDoWipeBackpacks=0
 wipeDoRestartServer=0
 wipeCron=0
@@ -117,15 +125,20 @@ do
           then
             echo "${rs_selfName}: Error: file ${2} contains no valid seeds.  (Is there whitespace in the file?)"
             exit 2
-          else
-            echo "${rs_selfName}: Warning: file ${2} contains no valid seeds -- generating random one."
           fi
-        fi # end customSeedFile emptiness check
-        # file has valid seeds
+        fi
         newSeedValue=$(egrep '^[0-9]+$' ${2} | head -n 1)
-        echo "${rs_selfName}: will use '${newSeedValue}' as new seed from ${2}."
-        customSeedFile=${2}
-        wipeDoNewSeed=1
+        if [[ -z ${newSeedValue} ]]
+        then
+          # no seed returned, make a random one
+          newSeedValue=$(shuf -i 1-2147483647 -n1)
+          echo "${rs_selfName}: using random seed due to no valid seeds in ${2} -- ${newSeedValue}."
+        else
+          # seed returned
+          echo "${rs_selfName}: will use '${newSeedValue}' as new seed from ${2}."
+          customSeedFile=${2}
+        fi
+      wipeDoNewSeed=1
       elif [[ ${2} == 'random' ]]
       then
         wipeDoNewSeed=1
@@ -383,7 +396,7 @@ then
   # newSeed=$(shuf -i 1-2147483647 -n1)
   # echo "New seed is ${newSeed}."
   sed -i "s/seed=".*"/seed="${newSeedValue}"/g" ${lgsmConfig} 
-  sed -i "/^${newSeedValue}/d" ${customSeedFile}
+  # sed -i "/^${newSeedValue}/d" ${customSeedFile}
 fi # end seed check
 
 

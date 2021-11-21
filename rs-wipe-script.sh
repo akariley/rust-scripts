@@ -392,11 +392,7 @@ fi
 
 if [[ ${wipeDoNewSeed} -eq 1 ]]
 then
-  # let's get a new map seed.
-  # newSeed=$(shuf -i 1-2147483647 -n1)
-  # echo "New seed is ${newSeed}."
   sed -i "s/seed=".*"/seed="${newSeedValue}"/g" ${lgsmConfig} 
-  # sed -i "/^${newSeedValue}/d" ${customSeedFile}
 fi # end seed check
 
 

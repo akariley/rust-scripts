@@ -42,12 +42,18 @@ This invocation will only save the data needed to restore the specific instance(
 
 `./rs-wipe-script.sh [option-name] [option-name...] instanceName`
 ```
+rs-wipe-script.sh [option-name] [option-name...] instanceName
+
+  The last parameter MUST be an instance name.
+
   --wipe-map
     Will delete all *.sav and *.map files in the specified LGSM instance.
   --force-wipe
-    Implies --new-seed, --update-rust, --update-mods, and --wipe-map.
-  --new-seed
+    Implies --update-rust, --update-mods, and --wipe-map.
+  --new-seed [<seedfile.txt>|random]
     Will generate a new map seed and update the specified LGSM config.
+    Use seedfile.txt to use the next seed from a given file, seed is deleted on use; will exit if seedfile.txt is empty.
+    'random' will generate a random seed.
   --update-rust
     Will update Rust.
   --update-mods
@@ -63,3 +69,4 @@ This invocation will only save the data needed to restore the specific instance(
     Will update LGSM.
   --do-backup
     Will take a backup.
+

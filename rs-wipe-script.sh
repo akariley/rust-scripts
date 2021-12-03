@@ -399,8 +399,8 @@ fi # end seed check
 if [[ ${wipeDoWipeBlueprints} -eq 1 ]]
 then
   echo 'Removing blueprints...'
-  /bin/rm -v ${installDir}/serverfiles/server/${instanceName}/player.blueprints.4.db
-  /bin/rm -v ${installDir}/serverfiles/server/${instanceName}/player.blueprints.4.db-journal
+  /bin/rm -v ${installDir}/serverfiles/server/${instanceName}/player.blueprints.5.db
+  /bin/rm -v ${installDir}/serverfiles/server/${instanceName}/player.blueprints.5.db-journal
 fi
 
 

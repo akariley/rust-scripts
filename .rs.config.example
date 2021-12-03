@@ -1,0 +1,125 @@
+#################
+# MAIN SETTINGS #
+#################
+
+# where did you install your Rust server?  This is relative to your home dir.
+# ie: for an install in /home/foo/rust/, put 'rust'
+# leave empty if you installed the server into the home directory.
+rustDir=
+
+# node is used to send commands to a running Rust server.
+# if you installed node globally the default should work (usually /usr/bin/webrcon-cli)
+# otherwise you'll need to know where you installed it.
+# a local npm install usually puts it here: ~/node_modules/webrcon-cli/dist/bin/webrcon-cli.js
+webRconCmd=/usr/bin/webrcon-cli
+
+
+
+# Set some variables we need.
+
+
+if [ ! -z ${rustDir} ]
+then
+  installDir=${HOME}/${rustDir}
+else
+  installDir=${HOME}
+fi
+
+# an array of files and paths to backup.
+# These are relative to your install directory.  Add new ones as needed, formatting as an array.
+
+backupList=(
+  lgsm/config-lgsm/rustserver
+  serverfiles/server/rustserver
+  log/console
+)
+
+# check if there's an oxide directory, if so add it to the backup array.
+
+if [ -d ${installDir}/serverfiles/oxide ]
+then
+  backupList+=(
+    serverfiles/oxide
+  )
+fi
+
+
+
+# You can rename the scripts if you need to.  Set the variables here to the filenames.
+backupScript=rs-backup.sh
+#restoreScript=rs-restore.sh
+#wipeScript=rs-wipe-script.sh
+
+
+#===========================================
+user=$(whoami)
+month=$(date +"%m")
+#===========================================
+
+#################
+# WIPE SETTINGS #
+#################
+
+# Normally if you use a seedfile in conjunction with --new-seed and there are no valid seeds
+# the script will exit.  Set this value to 0 to instead treat an invalid seedfile as if random were 
+# used instead.
+failOnInvalidSeedFile=1
+
+
+###################
+# LOGGING OPTIONS #
+###################
+
+# you can change the default logging name format and location here.
+logDate=$(date +"%m-%d-%Y-%s")
+logFile=wipe-script_${logDate}.log
+fullLog=${installDir}/log/${logFile}
+
+# we can use exec to pipe the output to a log file.  To enable this, set this to 1.
+execLogging=0
+
+###################
+# BACKUP SETTINGS #
+###################
+
+# where are your backups stored? we default to ~/backups/
+backupDir=${HOME}/game-backups
+
+# what suffix would you like for the backup directory?  We default to ${backupDir}/<day of month>/
+backupDirSuffix=$(date +%m)
+
+# date suffix for backups.  we default to YYYY-Month-Numerical_date-24HR_time
+# ex: 2021-Sep-12-0826 is September 12th, 2021 at 8:26am.
+# (this is 'date +%Y-%b-%d-%H%M') if curious.
+# The username and instance name will be prefixed (username_instanceName_2021-Sep-12-0826)
+backupDate=$(date +%Y-%b-%d-%H%M)
+
+createTempFile () {
+  # optional parameters
+  # $1 = temp file prefix
+  if [[ -z $1 ]]
+  then
+    local tmpPrefix=tmp
+  else
+    local tmpPrefix=${1}
+  fi
+  tmpFile=$(mktemp --tmpdir=${rs_rootDir}/tmp ${tmpPrefix}.${rs_selfName}.XXXXXXXX 2>/dev/null)
+  if [[ ! -e $tmpFile ]]
+  then
+    # couldn't make temp file in our working directory, trying /tmp.
+    tmpFile=$(mktemp --tmpdir=/tmp ${tmpPrefix}.${rs_selfName}.XXXXXXXX 2>/dev/null)
+    if [[ ! -e $tmpFile ]]
+    then
+      # we can't make a temp file in our working dir or in /tmp, exit.
+      echo "Error: failed making temporary file in working directory and in /tmp, exiting."
+      exit 255
+    else
+      echo $tmpFile
+      return
+    fi
+  else
+    echo $tmpFile
+    return
+  fi
+}
+

@@ -114,29 +114,29 @@ do
       --new-seed)
       # check if custom or random
       # if [[ ${2} == 'custom' ]] 
-      if [[ -e ${2} ]]
+      if [[ -e ${rs_rootDir}/${2} ]]
       then
         # file exists, check for valid seeds.
-        egrep '^[0-9]+$' ${2} > /dev/null
+        egrep '^[0-9]+$' ${rs_rootDir}/${2} > /dev/null
         if [[ $? -eq 1 ]]
         then
           # the file size is non-zero, but a grep returned no seeds.  must be whitespace only.
           if [[ ${failOnInvalidSeedFile} -eq 1 ]]
           then
-            echo "${rs_selfName}: Error: file ${2} contains no valid seeds.  (Is there whitespace in the file?)"
+            echo "${rs_selfName}: Error: file ${rs_rootDir}/${2} contains no valid seeds.  (Is there whitespace in the file?)"
             exit 2
           fi
         fi
-        newSeedValue=$(egrep '^[0-9]+$' ${2} | head -n 1)
+        newSeedValue=$(egrep '^[0-9]+$' ${rs_rootDir}/${2} | head -n 1)
         if [[ -z ${newSeedValue} ]]
         then
           # no seed returned, make a random one
           newSeedValue=$(shuf -i 1-2147483647 -n1)
-          echo "${rs_selfName}: using random seed due to no valid seeds in ${2} -- ${newSeedValue}."
+          echo "${rs_selfName}: using random seed due to no valid seeds in ${rs_rootDir}/${2} -- ${newSeedValue}."
         else
           # seed returned
-          echo "${rs_selfName}: will use '${newSeedValue}' as new seed from ${2}."
-          customSeedFile=${2}
+          echo "${rs_selfName}: will use '${newSeedValue}' as new seed from ${rs_rootDir}/${2}."
+          customSeedFile=${rs_rootDir}/${2}
         fi
       wipeDoNewSeed=1
       elif [[ ${2} == 'random' ]]

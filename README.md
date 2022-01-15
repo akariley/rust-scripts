@@ -61,6 +61,8 @@ rs-wipe-script.sh [option-name] [option-name...] instanceName
   --wipe-blueprints [odd|even|now]
     Will remove the blueprint files, based on the required option.
     (eg: if the month is divisible by two and 'even' is passed, blueprints will be wiped).
+  --wipe-backpacks
+    Will delete all backpack data from the default location (serverfiles/oxide/data/Backpacks)
   --restart-server <restart time in seconds> <restart reason>
     Will restart the server when done.
     Restart reason can be multiple words; string must be terminated with '@@'

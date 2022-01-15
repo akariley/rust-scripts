@@ -40,6 +40,8 @@ function show_Help {
   echo "  --wipe-blueprints [odd|even|now]"
   echo "    Will remove the blueprint files, based on the required option."
   echo "    (eg: if the month is divisible by two and 'even' is passed, blueprints will be wiped)."
+  echo "  --wipe-backpacks"
+  echo "    Will delete all backpack data from the default location (serverfiles/oxide/data/Backpacks)"
   echo "  --restart-server <restart time in seconds> <restart reason>"
   echo "    Will restart the server when done."
   echo "    Restart reason can be multiple words; string must be terminated with '@@'"

@@ -183,6 +183,7 @@ do
         echo "${rs_selfName}: will update Rust."
         wipeDoWipe=1
         echo "${rs_selfName}: will wipe map (not blueprints)."
+        echo "${rs_selfName}: DEBUG: next run at $(date -d '28 days')}"
       ;;
     --wipe-backpacks)
       if [[ ! -d ${installDir}/serverfiles/oxide/data/Backpacks ]]

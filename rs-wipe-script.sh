@@ -85,6 +85,8 @@ wipeDay=''
 
 doInfiniteLoop=0
 
+doDryRun=0
+
 numRegex='^[0-9]+$'
 
 if [[ -z ${1} ]]
@@ -254,6 +256,9 @@ do
     --loop-forever)
       doInfiniteLoop=1
       ;;
+    --dry-run)
+      doDryRun=1
+      ;;
     *)
       # end of options with no match, move out of loop.
       break
@@ -319,7 +324,7 @@ fi
 # wipe stuff here #
 ###################
 
-if [[ ${wipeDoRestartServer} -eq 1 ]]
+if [[ ${wipeDoRestartServer} -eq 1 ]] && [[ ! ${doDryRun} -eq 1 ]]
 then
   if [[ ! -e ${webRconCmd} ]]
   then
@@ -344,18 +349,18 @@ then
 fi
 
 
-if [[ ${wipeDoBackup} -eq 1 ]]
+if [[ ${wipeDoBackup} -eq 1 ]]  && [[ ! ${doDryRun} -eq 1 ]]
 then
   ${rs_rootDir}/${backupScript} ${instanceName}
   echo "Backup complete, continuing..."
 fi
 
-if [[ ${wipeDoLGSMUpdate} -eq 1 ]]
+if [[ ${wipeDoLGSMUpdate} -eq 1 ]] && [[ ! ${doDryRun} -eq 1 ]]
 then
   ${installDir}/${instanceName} update-lgsm
 fi
 
-if [[ ${wipeDoRustUpdate} -eq 1 ]]
+if [[ ${wipeDoRustUpdate} -eq 1 ]] && [[ ! ${doDryRun} -eq 1 ]]
 then
   echo "Checking for Rust update..."
   ${installDir}/${instanceName} check-update | grep -q 'Update available'
@@ -370,13 +375,13 @@ then
   fi # end rust update check
 fi
 
-if [[ ${wipeDoModsUpdate} -eq 1 ]]
+if [[ ${wipeDoModsUpdate} -eq 1 ]] && [[ ! ${doDryRun} -eq 1 ]]
 then
   echo "Updating mods..."
   ${installDir}/${instanceName} mods-update > /dev/null
 fi
 
-if [[ ${wipeDoWipe} -eq 1 ]]
+if [[ ${wipeDoWipe} -eq 1 ]] && [[ ! ${doDryRun} -eq 1 ]]
 then
   # we're wiping today.
   echo "Removing map files..."
@@ -386,19 +391,19 @@ fi
 
 
 
-if [[ ${wipeDoWipeBackpacks} -eq 1 ]]
+if [[ ${wipeDoWipeBackpacks} -eq 1 ]] && [[ ! ${doDryRun} -eq 1 ]]
 then
   find ${installDir}/serverfiles/oxide/data/Backpacks -type f -delete
 fi
 
 
-if [[ ${wipeDoNewSeed} -eq 1 ]]
+if [[ ${wipeDoNewSeed} -eq 1 ]] && [[ ! ${doDryRun} -eq 1 ]]
 then
   sed -i "s/seed=".*"/seed="${newSeedValue}"/g" ${lgsmConfig} 
 fi # end seed check
 
 
-if [[ ${wipeDoWipeBlueprints} -eq 1 ]]
+if [[ ${wipeDoWipeBlueprints} -eq 1 ]] && [[ ! ${doDryRun} -eq 1 ]]
 then
   echo 'Removing blueprints...'
   /bin/rm -v ${installDir}/serverfiles/server/${instanceName}/player.blueprints.5.db
@@ -407,7 +412,7 @@ fi
 
 
 # start the server again
-if [[ ${wipeDoRestartServer} -eq 1 ]]
+if [[ ${wipeDoRestartServer} -eq 1 ]] && [[ ! ${doDryRun} -eq 1 ]]
 then
   echo "Starting server..."
   ${installDir}/${instanceName} start

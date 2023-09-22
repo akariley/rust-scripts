@@ -116,40 +116,25 @@ do
     --new-seed)
       if [[ -e ${rs_rootDir}/${2} ]]
       then
-        # file exists, check for valid seeds.
-        # egrep '^[0-9]+$' ${rs_rootDir}/${2} > /dev/null
-        # if [[ $? -eq 1 ]]
-        # then
-          # the file size is non-zero, but a grep returned no seeds.  must be whitespace only.
-          # if [[ ${failOnInvalidSeedFile} -eq 1 ]]
-          # then
-            # echo "${rs_selfName}: Warning: file ${rs_rootDir}/${2} contains no valid seeds.  Using random seed."
-          # fi
-        # fi
-          # Pull the next seed.
-          newSeedValue=$(egrep '^[0-9]+$' ${rs_rootDir}/${2} | head -n 1)
-          if [[ -z ${newSeedValue} ]]
-          then
-            # no seed returned, make a random one
-            newSeedValue=$(shuf -i 1-2147483647 -n1)
-            echo "${rs_selfName}: using random seed due to no valid seeds in ${rs_rootDir}/${2} -- ${newSeedValue}."
-          else
-            # seed returned
-            echo "${rs_selfName}: will use '${newSeedValue}' as new seed from ${rs_rootDir}/${2}."
-            customSeedFile=${rs_rootDir}/${2}
-          fi
-        wipeDoNewSeed=1
+        # Pull the next seed.
+        newSeedValue=$(egrep '^[0-9]+$' ${rs_rootDir}/${2} | head -n 1)
+        if [[ -z ${newSeedValue} ]]
+        then
+          # no seed returned, make a random one
+          newSeedValue=$(shuf -i 1-2147483647 -n1)
+          echo "${rs_selfName}: using random seed due to no valid seeds in ${rs_rootDir}/${2} -- ${newSeedValue}."
+        else
+          # seed returned
+          echo "${rs_selfName}: will use '${newSeedValue}' as new seed from ${rs_rootDir}/${2}."
+          customSeedFile=${rs_rootDir}/${2}
         fi
-
+      fi
+      wipeDoNewSeed=1
       if [[ ${2} == 'random' ]]
       then
         wipeDoNewSeed=1
         newSeedValue=$(shuf -i 1-2147483647 -n1)
         echo "${rs_selfName}: using random seed -- ${newSeedValue}."
-      else
-        echo "${rs_selfName}: Warning: --new-seed passed without 'random' or seed file doesn't exist."
-        wipeDoNewSeed=1
-        newSeedValue=$(shuf -i 1-2147483647 -n1)
       fi
       shift
       ;;

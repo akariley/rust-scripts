@@ -31,7 +31,7 @@ function show_Help {
   echo "    Implies --update-rust, --update-mods, and --wipe-map."
   echo "  --new-seed [<seedfile.txt>|random]"
   echo "    Will generate a new map seed and update the specified LGSM config."
-  echo "    Use seedfile.txt to use the next seed from a given file, seed is deleted on use; will exit if seedfile.txt is empty."
+  echo "    Use seedfile.txt to use the next seed from a given file, seed is deleted on use.  Will use a random seed if file is empty."
   echo "    'random' will generate a random seed."
   echo "  --update-rust"
   echo "    Will update Rust."

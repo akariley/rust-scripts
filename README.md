@@ -52,7 +52,8 @@ rs-wipe-script.sh [option-name] [option-name...] instanceName
     Implies --update-rust, --update-mods, and --wipe-map.
   --new-seed [<seedfile.txt>|random]
     Will generate a new map seed and update the specified LGSM config.
-    Use seedfile.txt to use the next seed from a given file, seed is deleted on use; will exit if seedfile.txt is empty.
+    Use seedfile.txt to use the next seed from a given file, seed is deleted on use; will use a random seed if no valid seed
+    is detected.
     'random' will generate a random seed.
   --update-rust
     Will update Rust.

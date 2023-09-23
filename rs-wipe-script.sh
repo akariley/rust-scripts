@@ -130,8 +130,9 @@ do
         fi
       fi
       wipeDoNewSeed=1
-      if [[ ${2} == 'random' ]]
+      if [[ ${2} == 'random' ]] || [[ ${2} == *"--"* ]]
       then
+        # user wants a random seed, or there's an option immediately following
         wipeDoNewSeed=1
         newSeedValue=$(shuf -i 1-2147483647 -n1)
         echo "${rs_selfName}: using random seed -- ${newSeedValue}."

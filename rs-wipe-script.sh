@@ -326,20 +326,39 @@ then
     echo "Sending stop command via LGSM..."
     ${installDir}/${instanceName} stop
   else
-    echo "Sending restart command to server via rcon..."
-    timeout 2 ${webRconCmd} ${rconIp}:${rconPort} ${rconPassword} "restart ${wipeRestartSeconds} '${wipeRestartReason}'" > /dev/null 2>&1
-    while [[ 1 -eq 1 ]]
-    do
-      # server running.
-      timeout --preserve-status 2 ${webRconCmd} ${rconIp}:${rconPort} ${rconPassword} 'playerlist' > /dev/null 2>&1
-      if [[ ! $? -eq 143 ]]
+    #
+    # New code goes here.
+    #
+    # ${wipeRestartSeconds}
+    # Likely the best intervals are 1m,5m,10m. 30m for much higher times. 
+    if [[ ${wipeRestartSeconds} -le 60 ]]
+    then
+      # Restart time is less than 1 minute, just send the restart command.
+      echo ''
+    else
+      # let's figure out how long this is.
+      # test case for now is 3600 seconds (1h)
+      if [[ ${wipeRestartSeconds} -gt 3600 ]]
       then
-        # server is down
-        break
-      fi
-      sleep 60
-    done
-    echo "Shutdown complete, proceeding." 
+        # restart time is longer than an hour.
+        echo ''
+      else
+        # restart time is less than an hour but larger than a minute.
+        # snag the modulo
+        wipeRestartModulo=$(( ${wipeRestartSeconds} % 60 ))
+        wipeRestartMinutes=$(( ${wipeRestartSeconds} / 60 ))
+        # ok, let's get started.  First get the reminder out of the way.
+        echo 'Sleeping for ${wipeRestartModulo} seconds.'
+        sleep ${wipeRestartModulo}
+        while 
+
+
+
+
+      echo ''
+    fi
+    # placeholder
+    echo ''
   fi
 fi
 

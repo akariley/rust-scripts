@@ -348,7 +348,7 @@ then
         wipeRestartModulo=$(( ${wipeRestartSeconds} % 60 )) # 45
         wipeRestartMinutes=$(( ${wipeRestartSeconds} / 60 )) # 35
         # ok, let's get started.  First get the reminder out of the way.
-        echo "RCON: Restarting in ${wipeRestartMinutes} minutes, ${wipeRestartModulo} seconds."
+        timeout 2 ${webRconCmd} ${rconIp}:${rconPort} ${rconPassword} "say Restarting in ${wipeRestartMinutes} minutes, ${wipeRestartModulo} seconds."
         echo "Sleeping for ${wipeRestartModulo} seconds."
         sleep ${wipeRestartModulo}
         # Modulo gone, let's get the minutes to a multiple of 10.
@@ -358,26 +358,26 @@ then
         while [[ ${wipeRestartLoopTimes} -ge 1 ]]
         do
           wipeRestartLoopTimes=$(( ${wipeRestartLoopTimes}-1 ))
+          echo "${wipeRestartLoopTimes} loop(s)."
           sleep 60
         done
         echo "We're now at a multiple of 10." # 30 minutes til restart.
         while [[ ${wipeRestartTrueMinutes} -gt 10 ]]
         do
-          echo "RCON: Restarting in ${wipeRestartTrueMinutes} minutes."
+          timeout 2 ${webRconCmd} ${rconIp}:${rconPort} ${rconPassword} "say Restarting in ${wipeRestartTrueMinutes} minutes."
           wipeRestartTrueMinutes=$(( ${wipeRestartTrueMinutes} - 10 ))
           sleep 600
         done
         # Now we're at 10 minutes.
-        # echo 'RCON: Restarting in ${wipeRestartTrueMinutes} minutes.'
         while [[ ${wipeRestartTrueMinutes} -gt 1 ]]
         do
-          echo "RCON: Restarting in ${wipeRestartTrueMinutes} minutes."
+          timeout 2 ${webRconCmd} ${rconIp}:${rconPort} ${rconPassword} "say Restarting in ${wipeRestartTrueMinutes} minutes."
           wipeRestartTrueMinutes=$(( ${wipeRestartTrueMinutes} - 1 ))
           sleep 60
         done
         # 1 minute until restart, send the rcon command.
         echo "Sending restart command to server via rcon..."
-        timeout 2 ${webRconCmd} ${rconIp}:${rconPort} ${rconPassword} "restart 60 '${wipeRestartReason}'" > /dev/null 2>&1
+        timeout 2 ${webRconCmd} ${rconIp}:${rconPort} ${rconPassword} "restart 60 ${wipeRestartReason}" > /dev/null 2>&1
         while [[ 1 -eq 1 ]]
         do
           # server running.
@@ -388,7 +388,7 @@ then
             echo ''
             break
           fi # end server check
-          sleep 60
+          sleep 10
         done
         echo ''
       fi # end main restart logic.(greater than 3600 seconds or less)

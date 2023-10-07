@@ -350,7 +350,7 @@ then
       wipeRestartLoopTimes=$(( ${wipeRestartMinutes} % 10 )) # 5
       wipeRestartTrueMinutes=$(( ${wipeRestartMinutes} - ${wipeRestartLoopTimes} )) # Set the true minutes, 30m.
       echo "Since restart minutes is ${wipeRestartMinutes}, we're going to loop for ${wipeRestartLoopTimes} cycles."
-      while [[ ${wipeRestartLoopTimes} -ge 1 ]] && [[ ${wipeRestartMinutes} -gt 10 ]] # don't do this if we're already at 10 minutes.
+      while [[ ${wipeRestartLoopTimes} -ge 1 ]]
       do
         wipeRestartLoopTimes=$(( ${wipeRestartLoopTimes}-1 ))
         echo "${wipeRestartLoopTimes} loop(s)."

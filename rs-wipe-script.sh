@@ -390,6 +390,7 @@ then
     # placeholder
     echo ''
   fi # end webRconCmd check
+rm -vf ${installDir}/lgsm/lock/${instanceName}*.lock
 fi # end main restart option.
 
 

@@ -348,7 +348,7 @@ then
       sleep ${wipeRestartModulo}
       # Modulo gone, let's get the minutes to a multiple of 10.
       wipeRestartLoopTimes=$(( ${wipeRestartMinutes} % 10 )) # 5
-      wipeRestartTrueMinutes=$(( ${wipeRestartMinutes} - ${wipeRestartLoopTimes} )) # Set the true minutes, 30m.
+      #wipeRestartTrueMinutes=$(( ${wipeRestartMinutes} - ${wipeRestartLoopTimes} )) # Set the true minutes, 30m.
       echo "Since restart minutes is ${wipeRestartMinutes}, we're going to loop for ${wipeRestartLoopTimes} cycles."
       while [[ ${wipeRestartLoopTimes} -ge 1 ]]
       do
@@ -357,17 +357,17 @@ then
         sleep 60
       done
       echo "We're now at a multiple of 10." # 30 minutes til restart.
-      while [[ ${wipeRestartTrueMinutes} -gt 10 ]]
+      while [[ ${wipeRestartMinutes} -gt 10 ]]
       do
-        timeout 2 ${webRconCmd} ${rconIp}:${rconPort} ${rconPassword} "say Restarting in ${wipeRestartTrueMinutes} minutes."
-        wipeRestartTrueMinutes=$(( ${wipeRestartTrueMinutes} - 10 ))
+        timeout 2 ${webRconCmd} ${rconIp}:${rconPort} ${rconPassword} "say Restarting in ${wipeRestartMinutes} minutes."
+        wipeRestartMinutes=$(( ${wipeRestartMinutes} - 10 ))
         sleep 600
       done
       # Now we're at 10 minutes.
-      while [[ ${wipeRestartTrueMinutes} -gt 1 ]]
+      while [[ ${wipeRestartMinutes} -gt 1 ]]
       do
-        timeout 2 ${webRconCmd} ${rconIp}:${rconPort} ${rconPassword} "say Restarting in ${wipeRestartTrueMinutes} minutes."
-        wipeRestartTrueMinutes=$(( ${wipeRestartTrueMinutes} - 1 ))
+        timeout 2 ${webRconCmd} ${rconIp}:${rconPort} ${rconPassword} "say Restarting in ${wipeRestarteMinutes} minutes."
+        wipeRestartMinutes=$(( ${wipeRestartMinutes} - 1 ))
         sleep 60
       done
       # 1 minute until restart, send the rcon command.

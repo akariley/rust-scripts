@@ -348,6 +348,11 @@ then
       sleep ${wipeRestartModulo}
       # Modulo gone, let's get the minutes to a multiple of 10.
       wipeRestartLoopTimes=$(( ${wipeRestartMinutes} % 10 )) # 5
+      if [[ ${wipeRestartLoopTimes} -eq ${wipeRestartMinutes} ]]
+      then
+        # loop is the same as minutes meaning we're less than 10 already.
+        wipeRestartLoopTimes=0
+      fi
       #wipeRestartTrueMinutes=$(( ${wipeRestartMinutes} - ${wipeRestartLoopTimes} )) # Set the true minutes, 30m.
       echo "Since restart minutes is ${wipeRestartMinutes}, we're going to loop for ${wipeRestartLoopTimes} cycles."
       while [[ ${wipeRestartLoopTimes} -ge 1 ]]

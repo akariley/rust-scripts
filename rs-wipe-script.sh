@@ -367,7 +367,7 @@ then
       # Now we're at 10 minutes.
       while [[ ${wipeRestartMinutes} -gt 1 ]]
       do
-        timeout 2 ${webRconCmd} ${rconIp}:${rconPort} ${rconPassword} "say Restarting in ${wipeRestarteMinutes} minutes."
+        timeout 2 ${webRconCmd} ${rconIp}:${rconPort} ${rconPassword} "say Restarting in ${wipeRestartMinutes} minutes."
         wipeRestartMinutes=$(( ${wipeRestartMinutes} - 1 ))
         sleep 60
       done

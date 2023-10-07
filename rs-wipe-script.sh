@@ -381,7 +381,7 @@ fi
 
 if [[ ${wipeDoNewSeed} -eq 1 ]]
 then
-  sed -i "s/seed=".*"/seed="${newSeedValue}"/g" ${lgsmConfig} 
+  sed -i "s/seed=".*"/seed=\""${newSeedValue}"\"/g" ${lgsmConfig} 
 fi # end seed check
 
 

@@ -122,7 +122,7 @@ do
         then
           # no seed returned, make a random one
           newSeedValue=$(shuf -i 1-2147483647 -n1)
-          echo "${rs_selfName}: using random seed due to no valid seeds in ${rs_rootDir}/${2} -- ${newSeedValue}."
+          echo "${rs_selfName}: using random seed (${newSeedValue}) due to no valid seeds in ${rs_rootDir}/${2}."
         else
           # seed returned
           echo "${rs_selfName}: will use '${newSeedValue}' as new seed from ${rs_rootDir}/${2}."

@@ -354,6 +354,7 @@ then
       do
         wipeRestartLoopTimes=$(( ${wipeRestartLoopTimes}-1 ))
         echo "${wipeRestartLoopTimes} loop(s)."
+        wipeRestartMinutes=$(( ${wipeRestartMinutes} - 1 ))
         sleep 60
       done
       echo "We're now at a multiple of 10." # 30 minutes til restart.

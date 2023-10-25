@@ -15,6 +15,14 @@ function script_exit {
   then
     sed -i "/^${newSeedValue}/d" ${customSeedFile}
   fi # end seed check
+  # We need to abort a restart in case of an script interrupt (running via command line).
+  # There's no issue with aborting a non-existing restart process.
+  if [[ -e ${webRconCmd} ]]
+  then
+    # We've got a webrconcli binary instead of 'lgsm stop', use that.
+    timeout 2 ${webRconCmd} ${rconIp}:${rconPort} ${rconPassword} "restart -1"
+    sleep 2
+  fi
 }
 
 trap script_exit exit

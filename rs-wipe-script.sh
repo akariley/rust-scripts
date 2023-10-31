@@ -20,7 +20,7 @@ function script_exit {
   if [[ -e ${webRconCmd} ]]
   then
     # We've got a webrconcli binary instead of 'lgsm stop', use that.
-    timeout 2 ${webRconCmd} ${rconIp}:${rconPort} ${rconPassword} "restart -1" 2>&1 > /dev/null
+    timeout 2 ${webRconCmd} ${rconIp}:${rconPort} ${rconPassword} "restart -1" > /dev/null 2>&1
     sleep 2
   fi
 }

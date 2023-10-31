@@ -343,6 +343,9 @@ then
     then
       # Restart time is less than 1 minute, just send the restart command.
       echo ''
+      timeout 2 ${webRconCmd} ${rconIp}:${rconPort} ${rconPassword} "say Restarting in 0 minutes, ${wipeRestartSeconds} seconds."
+      timeout 2 ${webRconCmd} ${rconIp}:${rconPort} ${rconPassword} "restart ${wipeRestartSeconds}"
+      sleep 70
     else
       # let's figure out how long this is.
       # test case for now is 2145 seconds 35 minutes, 45 seconds.

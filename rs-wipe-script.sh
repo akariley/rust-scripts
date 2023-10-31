@@ -347,24 +347,33 @@ then
       # let's figure out how long this is.
       # test case for now is 2145 seconds 35 minutes, 45 seconds.
       # restart time is less than an hour but larger than a minute.
-      # snag the modulo
+      # snag the modulo (seconds)
+
       wipeRestartModulo=$(( ${wipeRestartSeconds} % 60 )) # 45
+
+      # convert to minutes
       wipeRestartMinutes=$(( ${wipeRestartSeconds} / 60 )) # 35
+
       # ok, let's get started.  First get the reminder out of the way.
       timeout 2 ${webRconCmd} ${rconIp}:${rconPort} ${rconPassword} "say Restarting in ${wipeRestartMinutes} minutes, ${wipeRestartModulo} seconds."
       echo "Sleeping for ${wipeRestartModulo} seconds."
       sleep ${wipeRestartModulo}
       # Modulo gone, let's get the minutes to a multiple of 10.
+
+      # 35 % 10 = 5
       wipeRestartLoopTimes=$(( ${wipeRestartMinutes} % 10 )) # 5
       if [[ ${wipeRestartLoopTimes} -eq ${wipeRestartMinutes} ]]
       then
         # loop is the same as minutes meaning we're less than 10 already.
+        # example: initial restart seconds are 300.  That's 5 minutes.
+        # 5 % 10 = 5
+        # We don't need to loop to get the minutes to a multiple of 10, so we bypass this.
         wipeRestartLoopTimes=0
       fi
-      #wipeRestartTrueMinutes=$(( ${wipeRestartMinutes} - ${wipeRestartLoopTimes} )) # Set the true minutes, 30m.
-      echo "Since restart minutes is ${wipeRestartMinutes}, we're going to loop for ${wipeRestartLoopTimes} cycles."
+      [[ ! ${wipeRestartLoopTimes} -eq 0 ]] && echo "Since restart minutes is ${wipeRestartMinutes}, we're going to loop for ${wipeRestartLoopTimes} cycles."
       while [[ ${wipeRestartLoopTimes} -ge 1 ]]
       do
+        # now we're going to loop off the excess minute until we're at a multiple of 10.
         wipeRestartLoopTimes=$(( ${wipeRestartLoopTimes}-1 ))
         echo "${wipeRestartLoopTimes} loop(s)."
         wipeRestartMinutes=$(( ${wipeRestartMinutes} - 1 ))

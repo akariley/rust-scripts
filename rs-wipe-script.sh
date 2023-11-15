@@ -129,18 +129,16 @@ do
           customSeedFile=${rs_rootDir}/${2}
         fi
       else
-        # given file doesn't exist, make a new random seed.
-        newSeedValue=$(shuf -i 1-2147483647 -n1)
-        echo "${rs_selfName}: using random seed (${newSeedValue}) due to invalid seed file (${rs_rootDir}/${2})."
+        if [[ ${2} == 'random' ]]
+        then
+          newSeedValue=$(shuf -i 1-2147483647 -n1)
+          echo "${rs_selfName}: using random seed -- ${newSeedValue}."
+        else
+          newSeedValue=$(shuf -i 1-2147483647 -n1)
+          echo "${rs_selfName}: using random seed (${newSeedValue}) due to invalid seed file (${rs_rootDir}/${2})."
+        fi
       fi
       wipeDoNewSeed=1
-      if [[ ${2} == 'random' ]]
-      then
-        # user wants a random seed
-        wipeDoNewSeed=1
-        newSeedValue=$(shuf -i 1-2147483647 -n1)
-        echo "${rs_selfName}: using random seed -- ${newSeedValue}."
-      fi
       shift
       ;;
     --wipe-blueprints)

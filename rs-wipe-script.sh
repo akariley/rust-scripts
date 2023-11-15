@@ -128,8 +128,12 @@ do
           echo "${rs_selfName}: will use '${newSeedValue}' as new seed from ${rs_rootDir}/${2}."
           customSeedFile=${rs_rootDir}/${2}
         fi
-      fi
       wipeDoNewSeed=1
+      else
+        # given file doesn't exist, make a new random seed.
+        newSeedValue=$(shuf -i 1-2147483647 -n1)
+        echo "${rs_selfName}: using random seed (${newSeedValue}) due to invalid seed file (${rs_rootDir}/${2})."
+      fi
       if [[ ${2} == 'random' ]]
       then
         # user wants a random seed
@@ -252,6 +256,10 @@ if [[ -z ${1} ]]
 then
   # we're out of the loop and we processed some options; there should be a parameter.
   echo "Error: you must specify an instance name."
+  if [[ ${wipeDoNewSeed} -eq 1 ]]
+  then
+    echo "(Did you have '--new-seed' followed by your instance name?)"
+  fi
   show_Help
 fi
 

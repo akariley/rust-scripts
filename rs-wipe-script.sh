@@ -128,12 +128,12 @@ do
           echo "${rs_selfName}: will use '${newSeedValue}' as new seed from ${rs_rootDir}/${2}."
           customSeedFile=${rs_rootDir}/${2}
         fi
-      wipeDoNewSeed=1
       else
         # given file doesn't exist, make a new random seed.
         newSeedValue=$(shuf -i 1-2147483647 -n1)
         echo "${rs_selfName}: using random seed (${newSeedValue}) due to invalid seed file (${rs_rootDir}/${2})."
       fi
+      wipeDoNewSeed=1
       if [[ ${2} == 'random' ]]
       then
         # user wants a random seed
@@ -165,14 +165,12 @@ do
         wipeDoWipe=1
       ;;
     --force-wipe)
-        wipeDoNewSeed=1
-        echo "${rs_selfName}: will generate new seed."
         wipeDoModsUpdate=1
-        echo "${rs_selfName}: will update mods."
+        echo "${rs_selfName}: will update mods (--force-wipe)."
         wipeDoRustUpdate=1
-        echo "${rs_selfName}: will update Rust."
+        echo "${rs_selfName}: will update Rust (--force-wipe)."
         wipeDoWipe=1
-        echo "${rs_selfName}: will wipe map (not blueprints)."
+        echo "${rs_selfName}: will wipe map (--force-wipe)."
       ;;
     --wipe-backpacks)
       if [[ ! -d ${installDir}/serverfiles/oxide/data/Backpacks ]]
@@ -252,6 +250,10 @@ do
   shift
 done
 
+echo ''
+echo ''
+echo ''
+
 if [[ -z ${1} ]]
 then
   # we're out of the loop and we processed some options; there should be a parameter.
@@ -260,6 +262,7 @@ then
   then
     echo "(Did you have '--new-seed' followed by your instance name?)"
   fi
+  echo ''
   show_Help
 fi
 

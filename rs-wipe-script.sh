@@ -21,6 +21,8 @@ trap script_exit exit
  
 
 function show_Help {
+  echo "${rs_selfName} v1.0.2-beta 3"
+  echo
   echo "${rs_selfName} [option-name] [option-name...] instanceName"
   echo
   echo "  The last parameter MUST be an instance name."

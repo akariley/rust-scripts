@@ -39,7 +39,7 @@ function show_Help {
   echo "    Implies --update-rust, --update-mods, and --wipe-map."
   echo "  --new-seed [<seedfile.txt>|random]"
   echo "    Will generate a new map seed and update the specified LGSM config."
-  echo "    Use seedfile.txt to use the next seed from a given file, seed is deleted on use; will exit if seedfile.txt is empty."
+  echo "    Use seedfile.txt to use the next seed from a given file, seed is deleted on use.  Will use a random seed if file is empty."
   echo "    'random' will generate a random seed."
   echo "  --update-rust"
   echo "    Will update Rust."
@@ -121,44 +121,32 @@ do
       wipeDoBackup=1
       echo "${rs_selfName}: will take a backup."
       ;;
-      --new-seed)
-      # check if custom or random
-      # if [[ ${2} == 'custom' ]] 
+    --new-seed)
       if [[ -e ${rs_rootDir}/${2} ]]
       then
-        # file exists, check for valid seeds.
-        egrep '^[0-9]+$' ${rs_rootDir}/${2} > /dev/null
-        if [[ $? -eq 1 ]]
-        then
-          # the file size is non-zero, but a grep returned no seeds.  must be whitespace only.
-          if [[ ${failOnInvalidSeedFile} -eq 1 ]]
-          then
-            echo "${rs_selfName}: Error: file ${rs_rootDir}/${2} contains no valid seeds.  (Is there whitespace in the file?)"
-            exit 2
-          fi
-        fi
+        # Pull the next seed.
         newSeedValue=$(egrep '^[0-9]+$' ${rs_rootDir}/${2} | head -n 1)
         if [[ -z ${newSeedValue} ]]
         then
           # no seed returned, make a random one
           newSeedValue=$(shuf -i 1-2147483647 -n1)
-          echo "${rs_selfName}: using random seed due to no valid seeds in ${rs_rootDir}/${2} -- ${newSeedValue}."
+          echo "${rs_selfName}: using random seed (${newSeedValue}) due to no valid seeds in ${rs_rootDir}/${2}."
         else
           # seed returned
           echo "${rs_selfName}: will use '${newSeedValue}' as new seed from ${rs_rootDir}/${2}."
           customSeedFile=${rs_rootDir}/${2}
         fi
-      wipeDoNewSeed=1
-      elif [[ ${2} == 'random' ]]
-      then
-        wipeDoNewSeed=1
-        newSeedValue=$(shuf -i 1-2147483647 -n1)
-        echo "${rs_selfName}: using random seed -- ${newSeedValue}."
       else
-        echo "${rs_selfName}: Error: --new-seed passed without 'random' or seed file doesn't exist."
-        show_Help
-        exit 2
+        if [[ ${2} == 'random' ]]
+        then
+          newSeedValue=$(shuf -i 1-2147483647 -n1)
+          echo "${rs_selfName}: using random seed -- ${newSeedValue}."
+        else
+          newSeedValue=$(shuf -i 1-2147483647 -n1)
+          echo "${rs_selfName}: using random seed (${newSeedValue}) due to invalid seed file (${rs_rootDir}/${2})."
+        fi
       fi
+      wipeDoNewSeed=1
       shift
       ;;
     --wipe-blueprints)
@@ -183,14 +171,12 @@ do
         wipeDoWipe=1
       ;;
     --force-wipe)
-        wipeDoNewSeed=1
-        echo "${rs_selfName}: will generate new seed."
         wipeDoModsUpdate=1
-        echo "${rs_selfName}: will update mods."
+        echo "${rs_selfName}: will update mods (--force-wipe)."
         wipeDoRustUpdate=1
-        echo "${rs_selfName}: will update Rust."
+        echo "${rs_selfName}: will update Rust (--force-wipe)."
         wipeDoWipe=1
-        echo "${rs_selfName}: will wipe map (not blueprints)."
+        echo "${rs_selfName}: will wipe map (--force-wipe)."
       ;;
     --wipe-backpacks)
       if [[ ! -d ${installDir}/serverfiles/oxide/data/Backpacks ]]
@@ -270,10 +256,19 @@ do
   shift
 done
 
+echo ''
+echo ''
+echo ''
+
 if [[ -z ${1} ]]
 then
   # we're out of the loop and we processed some options; there should be a parameter.
   echo "Error: you must specify an instance name."
+  if [[ ${wipeDoNewSeed} -eq 1 ]]
+  then
+    echo "(Did you have '--new-seed' followed by your instance name?)"
+  fi
+  echo ''
   show_Help
 fi
 
@@ -300,6 +295,7 @@ fi
 
 echo "Sleeping for 5 seconds...(ctrl+c to cancel)"
 sleep 5
+
 echo "Wipe cycle start: $(date +"%c")" 
 
 # we need to check for running scripts other than ours.
@@ -470,7 +466,7 @@ fi
 
 if [[ ${wipeDoNewSeed} -eq 1 ]]
 then
-  sed -i "s/seed=".*"/seed="${newSeedValue}"/g" ${lgsmConfig} 
+  sed -i "s/seed=".*"/seed=\""${newSeedValue}"\"/g" ${lgsmConfig} 
 fi # end seed check
 
 

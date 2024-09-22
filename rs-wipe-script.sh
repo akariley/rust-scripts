@@ -67,6 +67,9 @@ function show_Help {
 # 0 = no errors
 # 1 = syntax error
 # 2 = parameter error
+# ...
+# 254 = debug set
+
 
 today=$(date +"%A")
 todayAbbr=$(date +"%a")
@@ -92,6 +95,8 @@ wipeDoRunDay=''
 wipeDay=''
 
 doInfiniteLoop=0
+debug=0
+
 
 numRegex='^[0-9]+$'
 
@@ -106,6 +111,9 @@ fi
 while [[ "$#" -gt 0 ]]
 do
   case ${1} in
+    --debug)
+      debug=1
+      ;;
     --do-backup)
       if [[ -z ${rs_rootDir}/${backupScript} ]]
       then
@@ -292,6 +300,12 @@ if [[ ${execLogging} -eq 1 ]]
 then
   exec  >> ${fullLog} 2>&1
 fi
+
+if [[ ${debug} -eq 1 ]]
+then
+  exit 254
+fi
+
 
 echo "Sleeping for 5 seconds...(ctrl+c to cancel)"
 sleep 5

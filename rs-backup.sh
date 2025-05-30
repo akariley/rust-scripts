@@ -132,7 +132,9 @@ else
 
     if [[ -e ${webRconCmd} ]]
     then
-      timeout --preserve-status 5 ${webRconCmd} ${rconIp}:${rconPort} ${rconPassword} "server.save" > /dev/null 2>&1
+      echo '' # Bash needs something in an if/then, or else it errors.
+              # https://github.com/akariley/rust-scripts/issues/47
+      #timeout --preserve-status 5 ${webRconCmd} ${rconIp}:${rconPort} ${rconPassword} "server.save" > /dev/null 2>&1
     fi
     tar zcf $fullName -C ${installDir} "${instanceBackupList[@]}"
     # let's sleep for a bit to avoid save churning.

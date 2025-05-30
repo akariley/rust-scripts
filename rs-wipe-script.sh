@@ -9,6 +9,35 @@ else
   source ${rs_rootDir}/.rs.config
 fi
 
+
+today=$(date +"%A")
+todayAbbr=$(date +"%a")
+wipeDoWipe=0
+wipeDoWipeBlueprints=0
+wipeDoRustUpdate=0
+wipeDoModsUpdate=0
+wipeDoLGSMUpdate=0
+wipeDoBackup=0
+
+wipeDoNewSeed=0
+newSeedValue=-1
+customSeedFile=
+
+wipeDoWipeBackpacks=0
+wipeDoRestartServer=0
+wipeCron=0
+wipeRestartReason=''
+
+runStatus=0
+
+wipeDoRunDay=''
+wipeDay=''
+
+doInfiniteLoop=0
+
+numRegex='^[0-9]+$'
+
+
 function script_exit {
   rm -f $tmpFile
   if [[ ${wipeDoNewSeed} -eq 1 ]] && [[ ! -z ${customSeedFile} ]]
@@ -26,7 +55,6 @@ function script_exit {
 }
 
 trap script_exit exit
- 
 
 function show_Help {
   echo "${rs_selfName} [option-name] [option-name...] instanceName"
@@ -68,32 +96,7 @@ function show_Help {
 # 1 = syntax error
 # 2 = parameter error
 
-today=$(date +"%A")
-todayAbbr=$(date +"%a")
-wipeDoWipe=0
-wipeDoWipeBlueprints=0
-wipeDoRustUpdate=0
-wipeDoModsUpdate=0
-wipeDoLGSMUpdate=0
-wipeDoBackup=0
 
-wipeDoNewSeed=0
-newSeedValue=-1
-customSeedFile=
-
-wipeDoWipeBackpacks=0
-wipeDoRestartServer=0
-wipeCron=0
-wipeRestartReason=''
-
-runStatus=0
-
-wipeDoRunDay=''
-wipeDay=''
-
-doInfiniteLoop=0
-
-numRegex='^[0-9]+$'
 
 if [[ -z ${1} ]]
 then

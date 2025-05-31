@@ -192,7 +192,7 @@ do
     --restart-server)
       if [[ ! ${2} =~ $numRegex ]] 2>/dev/null 
       then
-        echo "Error: --restart-server expects two parameters, <time in seconds> <restart message>"
+        echo "Error: --restart-server expects two parameters, <time in seconds> <restart message>.  End the restart message with a '@@'."
         exit 1
       else
         if [[ ! ${2} -gt 0 ]] 2>/dev/null 

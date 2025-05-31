@@ -203,12 +203,13 @@ do
           # $1 = --restart-server, $2 = seconds, $3- reason
           # got a valid restart time
           wipeRestartSeconds=${2}
-          # grab the restart reason
-          while [[ ! ${3} == "@@" ]] || [[ -z ${3} ]]
-          do
-            wipeRestartReason+="${3} "
-            shift
-          done # end reason globbing
+          wipeRestartReason=${3}
+          # # grab the restart reason
+          # while [[ ! ${3} == "@@" ]] || [[ -z ${3} ]]
+          # do
+          #   wipeRestartReason+="${3} "
+          #   shift
+          # done # end reason globbing
         fi # end greater than 0 check
       fi # end int check
       shift 2

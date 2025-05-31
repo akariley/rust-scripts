@@ -192,7 +192,7 @@ do
     --restart-server)
       if [[ ! ${2} =~ $numRegex ]] 2>/dev/null 
       then
-        echo "Error: --restart-server expects two parameters, <time in seconds> <restart message>.  End the restart message with a '@@'."
+        echo "Error: --restart-server expects two parameters, <time in seconds> <restart message>.  The restart message must be quoted."
         exit 1
       else
         if [[ ! ${2} -gt 0 ]] 2>/dev/null 
@@ -204,12 +204,6 @@ do
           # got a valid restart time
           wipeRestartSeconds=${2}
           wipeRestartReason=${3}
-          # # grab the restart reason
-          # while [[ ! ${3} == "@@" ]] || [[ -z ${3} ]]
-          # do
-          #   wipeRestartReason+="${3} "
-          #   shift
-          # done # end reason globbing
         fi # end greater than 0 check
       fi # end int check
       shift 2

@@ -10,7 +10,7 @@ These scripts are intended to ease your wipe days for [Rust](https://rust.facepu
 
 Ideally you'll want to set a cron for the wipe script to specify the day, and then use an `if` to execute on a wipe day.  For example, my force map cron looks like this:
 ```
-0 13 * * 4 if [[ $(date +\%-d) -le 7 ]]; then sleep 20; ./rust-scripts/rs-wipe-script.sh --force-wipe --restart-server 3600 weekly server restart @@ --wipe-blueprints odd --do-backup rustserver; fi
+0 13 * * 4 if [[ $(date +\%-d) -le 7 ]]; then sleep 20; ./rust-scripts/rs-wipe-script.sh --force-wipe --restart-server 3600 "weekly server restart" --wipe-blueprints odd --do-backup rustserver; fi
 ```
 This cron will fire every Thursday at 1PM server time.  It then checks if the day is less than '7' (ie, the first Thursday of the month).
 
@@ -65,7 +65,7 @@ rs-wipe-script.sh [option-name] [option-name...] instanceName
     Will delete all backpack data from the default location (serverfiles/oxide/data/Backpacks)
   --restart-server <restart time in seconds> <restart reason>
     Will restart the server when done.
-    Restart reason can be multiple words; string must be terminated with '@@'
+    Restart reason can be multiple words; string must be quoted.
     (requires valid webRconCmd setting in .rs.config).
   --update-lgsm
     Will update LGSM.

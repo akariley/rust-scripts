@@ -80,7 +80,7 @@ function show_Help {
   echo "    Will delete all backpack data from the default location (serverfiles/oxide/data/Backpacks)"
   echo "  --restart-server <restart time in seconds> <restart reason>"
   echo "    Will restart the server when done."
-  echo "    Restart reason can be multiple words; string must be terminated with '@@'"
+  echo "    Restart reason can be multiple words; string must be quoted."
   echo "    (requires valid webRconCmd setting in .rs.config)."
   echo "  --update-lgsm"
   echo "    Will update LGSM."
@@ -195,7 +195,7 @@ do
     --restart-server)
       if [[ ! ${2} =~ $numRegex ]] 2>/dev/null 
       then
-        echo "Error: --restart-server expects two parameters, <time in seconds> <restart message>"
+        echo "Error: --restart-server expects two parameters, <time in seconds> <restart message>.  The restart message must be quoted."
         exit 1
       else
         if [[ ! ${2} -gt 0 ]] 2>/dev/null 
@@ -206,12 +206,7 @@ do
           # $1 = --restart-server, $2 = seconds, $3- reason
           # got a valid restart time
           wipeRestartSeconds=${2}
-          # grab the restart reason
-          while [[ ! ${3} == "@@" ]]
-          do
-            wipeRestartReason+="${3} "
-            shift
-          done # end reason globbing
+          wipeRestartReason=${3}
         fi # end greater than 0 check
       fi # end int check
       shift 2

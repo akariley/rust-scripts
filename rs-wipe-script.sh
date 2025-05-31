@@ -52,7 +52,7 @@ function show_Help {
   echo "    Will delete all backpack data from the default location (serverfiles/oxide/data/Backpacks)"
   echo "  --restart-server <restart time in seconds> <restart reason>"
   echo "    Will restart the server when done."
-  echo "    Restart reason can be multiple words; string must be terminated with '@@'"
+  echo "    Restart reason can be multiple words; string must be quoted."
   echo "    (requires valid webRconCmd setting in .rs.config)."
   echo "  --update-lgsm"
   echo "    Will update LGSM."

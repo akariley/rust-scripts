@@ -204,7 +204,7 @@ do
           # got a valid restart time
           wipeRestartSeconds=${2}
           # grab the restart reason
-          while [[ ! ${3} == "@@" ]]
+          while [[ ! ${3} == "@@" ]] || [[ -z ${3} ]]
           do
             wipeRestartReason+="${3} "
             shift

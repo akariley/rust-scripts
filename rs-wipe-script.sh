@@ -57,6 +57,7 @@ function script_exit {
 trap script_exit exit
 
 function show_Help {
+  exit
   echo "${rs_selfName} [option-name] [option-name...] instanceName"
   echo
   echo "  The last parameter MUST be an instance name."
@@ -113,12 +114,12 @@ do
       if [[ -z ${rs_rootDir}/${backupScript} ]]
       then
         echo "Error: backupScript not set in .rs.config."
-        exit 1
+        #exit 1
       else
         if [[ ! -e ${rs_rootDir}/${backupScript} ]]
         then
           echo "Error: backupScript not a valid path."
-          exit 1
+          #exit 1
         fi
       fi
       wipeDoBackup=1
@@ -196,12 +197,12 @@ do
       if [[ ! ${2} =~ $numRegex ]] 2>/dev/null 
       then
         echo "Error: --restart-server expects two parameters, <time in seconds> <restart message>.  The restart message must be quoted."
-        exit 1
+        #exit 1
       else
         if [[ ! ${2} -gt 0 ]] 2>/dev/null 
         then
           echo "Error: seconds needs to be greater than 0."
-          exit 1
+          #exit 1
         else
           # $1 = --restart-server, $2 = seconds, $3- reason
           # got a valid restart time
@@ -274,7 +275,7 @@ if [[ ! -e ${installDir}/${1} ]]
 then
   echo "Error: ${1} is not a valid instance name."
   show_Help
-  exit 1
+  #exit 1
 else
   lgsmConfig=${installDir}/lgsm/config-lgsm/rustserver/${1}.cfg
   instanceName=${1}

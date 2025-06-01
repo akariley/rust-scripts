@@ -35,6 +35,8 @@ wipeDay=''
 
 doInfiniteLoop=0
 
+verbose=0
+
 numRegex='^[0-9]+$'
 
 
@@ -245,6 +247,9 @@ do
       ;;
     --loop-forever)
       doInfiniteLoop=1
+      ;;
+    --verbose)
+      verbose=1
       ;;
     *)
       # end of options with no match, move out of loop.

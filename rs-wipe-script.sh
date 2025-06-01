@@ -297,7 +297,10 @@ fi
 echo "Sleeping for 5 seconds...(ctrl+c to cancel)"
 sleep 5
 
-echo "Wipe cycle start: $(date +"%c")" 
+echo "Wipe cycle start: $(date +"%c")"
+
+exit
+
 
 # we need to check for running scripts other than ours.
 

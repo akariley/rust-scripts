@@ -111,6 +111,10 @@ fi
 while [[ "$#" -gt 0 ]]
 do
   case ${1} in
+    --debug)
+      echo "Debug mod enabled."
+      debug=1
+      ;;
     --do-backup)
       if [[ -z ${rs_rootDir}/${backupScript} ]]
       then
@@ -247,10 +251,6 @@ do
       ;;
     --loop-forever)
       doInfiniteLoop=1
-      ;;
-    --debug)
-      echo "Debug mod enabled."
-      debug=1
       ;;
     *)
       # end of options with no match, move out of loop.

@@ -115,12 +115,12 @@ do
       if [[ -z ${rs_rootDir}/${backupScript} ]]
       then
         echo "Error: backupScript not set in .rs.config."
-        exit 1
+        [[ ${debug} -eq 0 ]]; exit 1
       else
         if [[ ! -e ${rs_rootDir}/${backupScript} ]]
         then
           echo "Error: backupScript not a valid path."
-          [[ ${debug} -eq 0 ]] exit 1
+          [[ ${debug} -eq 0 ]]; exit 1
         fi
       fi
       wipeDoBackup=1
@@ -198,12 +198,12 @@ do
       if [[ ! ${2} =~ $numRegex ]] 2>/dev/null 
       then
         echo "Error: --restart-server expects two parameters, <time in seconds> <restart message>.  The restart message must be quoted."
-        [[ ${debug} -eq 0 ]] exit 1
+        [[ ${debug} -eq 0 ]]; exit 1
       else
         if [[ ! ${2} -gt 0 ]] 2>/dev/null 
         then
           echo "Error: seconds needs to be greater than 0."
-          [[ ${debug} -eq 0 ]] exit 1
+          [[ ${debug} -eq 0 ]]; exit 1
         else
           # $1 = --restart-server, $2 = seconds, $3- reason
           # got a valid restart time
@@ -239,7 +239,7 @@ do
         shift
       else
         echo "Error: --run requires a value."
-        [[ ${debug} -eq 0 ]] exit 1
+        [[ ${debug} -eq 0 ]]; exit 1
       fi
       ;;
     --cron)
@@ -273,14 +273,14 @@ then
     echo "(Did you have '--new-seed' followed by your instance name?)"
   fi
   echo ''
-  [[ ${debug} -eq 0 ]] show_Help
+  [[ ${debug} -eq 0 ]]; show_Help
 fi
 
 if [[ ! -e ${installDir}/${1} ]]
 then
   echo "Error: ${1} is not a valid instance name."
   #show_Help
-  [[ ${debug} -eq 0 ]] exit 1
+  [[ ${debug} -eq 0 ]]; exit 1
 else
   lgsmConfig=${installDir}/lgsm/config-lgsm/rustserver/${1}.cfg
   instanceName=${1}
@@ -308,7 +308,7 @@ if [[ -e ${rs_rootDir}/tmp/${rs_selfName}* ]] || [[ -e /tmp/${rs_selfName}* ]]
 then
   # there's a touch file present, abort.
   echo "Error: touch file present for ${rs_selfName}, exiting."
-  exit 254
+  [[ ${debug} -eq 0 ]]; exit 254
 fi
 
 tmpFile=$(createTempFile "${rs_selfName}")

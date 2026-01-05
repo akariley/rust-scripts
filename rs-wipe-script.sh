@@ -452,7 +452,19 @@ then
   echo "Removing map files..."
   rm -f ${installDir}/serverfiles/server/${instanceName}/*.map > /dev/null
   rm -f ${installDir}/serverfiles/server/${instanceName}/*.sav* > /dev/null
-fi
+  echo "Removing occlusion files..."
+  rm -f ${installDir}/serverfiles/server/${instanceName}/*_occlusion*.dat > /dev/null
+  echo "Removing SV.Files..."
+  rm -f ${installDir}/serverfiles/server/${instanceName}/sv.files*.db* > /dev/null
+  echo "Removing relationship files..."
+  rm -f ${installDir}/serverfiles/server/${instanceName}/relationship.* > /dev/null
+  echo "Removing player.states files..."
+  rm -f ${installDir}/serverfiles/server/${instanceName}/player.states.* > /dev/null
+  echo "Removing player.death files..."
+  rm -f ${installDir}/serverfiles/server/${instanceName}/player.deaths* > /dev/null
+  echo "Removing player.identities files..."
+  rm -f ${installDir}/serverfiles/server/${instanceName}/player.identities* > /dev/null
+  fi
 
 
 
@@ -471,8 +483,8 @@ fi # end seed check
 if [[ ${wipeDoWipeBlueprints} -eq 1 ]]
 then
   echo 'Removing blueprints...'
-  /bin/rm -v ${installDir}/serverfiles/server/${instanceName}/player.blueprints.5.db
-  /bin/rm -v ${installDir}/serverfiles/server/${instanceName}/player.blueprints.5.db-journal
+  /bin/rm -v ${installDir}/serverfiles/server/${instanceName}/player.blueprint*.db
+  /bin/rm -v ${installDir}/serverfiles/server/${instanceName}/player.blueprint*.db-wal
 fi
 
 

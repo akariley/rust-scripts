@@ -20,10 +20,6 @@ This cron will fire every Thursday at 1PM server time.  It then checks if the da
 
 This syntax will take a backup of all instances under the user account running the script.  No save commands are sent.
 
-~~`./rs-backup.sh <instancename> <instancename...>`~~
-
-~~This invocation will only save the data needed to restore the specific instance(s).  If you have webrcon-cli installed and defined, it will also send a save command prior to the backup.~~
-
 ### Restore
 
 `./rs-restore.sh [--full] backupFile [<date>]`

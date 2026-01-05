@@ -112,7 +112,7 @@ while [[ "$#" -gt 0 ]]
 do
   case ${1} in
     --debug)
-      echo "Debug mod enabled."
+      echo "Debug mode enabled."
       debug=1
       ;;
     --do-backup)

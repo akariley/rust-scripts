@@ -1,6 +1,6 @@
 # Scripts for Rust (game)
 
-These scripts are intended to ease your wipe days for [Rust](https://rust.facepunch.com) servers and generate smaller backups than the stock [LGSM](https://linuxgsm.com/lgsm/) backups by only backing up the map/sav files as opposed to the entire install.
+These scripts are intended to ease your wipe days for [Rust](https://rust.facepunch.com) servers.
 
 ## Requirements
 - [LGSM](https://linuxgsm.com/lgsm/)

@@ -16,6 +16,7 @@ function show_Help {
   echo "${rs_selfName} [--full]"
   echo "This will take a backup of all LGSM servers and config files."
   echo
+  echo "REMOVED -- silently ignored."
   echo "${rs_selfName} <instancename> [instancename...]"
   echo "This will backup single instances."
 }
@@ -57,10 +58,10 @@ do
         # it's not help or --all, so it's an instance name.  let's check if it's valid.
         if [[ ! -e ${installDir}/${1} ]]
         then
-          echo "Error: ${installDir}/${1} does not exist."
+          echo "Warning: ${installDir}/${1} does not exist: ignoring."
+          echo ""
         else
-          lgsmConfig=${installDir}/lgsm/config-lgsm/rustserver/${1}.cfg
-          echo ${1} >> $tmpFile
+          echo "Warning: this functionality has been removed.  Ignoring."
         fi # end instance validation
       fi # end input checking
       ;;

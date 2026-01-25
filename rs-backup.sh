@@ -55,7 +55,7 @@ do
         show_Help
         exit 3
       else
-        # it's not help or --all, so it's an instance name.  let's check if it's valid.
+        # it's not help or --full, so it's an instance name.  let's check if it's valid.
         if [[ ! -e ${installDir}/${1} ]]
         then
           echo "Warning: ${installDir}/${1} does not exist: ignoring."

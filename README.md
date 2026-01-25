@@ -66,5 +66,5 @@ rs-wipe-script.sh [option-name] [option-name...] instanceName
   --update-lgsm
     Will update LGSM.
   --do-backup
-    Will take a backup.
+    Will take a backup of all installed servers under this user.Will take a backup.
 

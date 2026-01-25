@@ -85,7 +85,7 @@ function show_Help {
   echo "  --update-lgsm"
   echo "    Will update LGSM."
   echo "  --do-backup"
-  echo "    Will take a backup."
+  echo "    Will take a backup of all installed servers under this user."
   exit
 }
 
@@ -416,7 +416,7 @@ fi # end main restart option.
 
 if [[ ${wipeDoBackup} -eq 1 ]]
 then
-  ${rs_rootDir}/${backupScript} ${instanceName}
+  ${rs_rootDir}/${backupScript} --full
   echo "Backup complete, continuing..."
 fi
 

@@ -430,7 +430,7 @@ then
   echo "Checking for Rust update..."
   ${installDir}/${instanceName} check-update | grep -q 'Update available'
   statuscode=$?
-  if [[ $statuscode -eq 0 ]];
+  if [[ 1 -eq 1 ]];
   then
     # there's a rust update
     echo "Rust update found, updating..."

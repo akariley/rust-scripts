@@ -20,6 +20,7 @@ wipeDoLGSMUpdate=0
 wipeDoBackup=0
 
 wipeDoNewSeed=0
+wipeNewSizeValue=3000
 newSeedValue=-1
 customSeedFile=
 
@@ -127,8 +128,8 @@ do
     --new-seed)
       if [[ -e ${rs_rootDir}/${2} ]]
       then
-        # Pull the next seed.
-        newSeedValue=$(egrep '^[0-9]+$' ${rs_rootDir}/${2} | head -n 1)
+        # Pull the next seed from the seedfile
+        newSeedValue=$(egrep '^[0-9]+ [1-6][0-9]{3}$' ${rs_rootDir}/${2} | head -n 1)
         if [[ -z ${newSeedValue} ]]
         then
           # no seed returned, make a random one

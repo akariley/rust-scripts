@@ -434,7 +434,7 @@ then
   then
     # there's a rust update
     echo "Rust update found, updating..."
-    ${installDir}/${instanceName} update > /dev/null
+    ${installDir}/${instanceName} force-update > /dev/null
   else
     echo "No Rust update found, proceeding..."
   fi # end rust update check

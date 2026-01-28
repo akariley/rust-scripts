@@ -427,17 +427,8 @@ fi
 
 if [[ ${wipeDoRustUpdate} -eq 1 ]]
 then
-  echo "Checking for Rust update..."
-  ${installDir}/${instanceName} check-update | grep -q 'Update available'
-  statuscode=$?
-  if [[ 1 -eq 1 ]];
-  then
-    # there's a rust update
-    echo "Rust update found, updating..."
-    ${installDir}/${instanceName} force-update > /dev/null
-  else
-    echo "No Rust update found, proceeding..."
-  fi # end rust update check
+  echo "Updating Rust..."
+  ${installDir}/${instanceName} force-update > /dev/null
 fi
 
 if [[ ${wipeDoModsUpdate} -eq 1 ]]

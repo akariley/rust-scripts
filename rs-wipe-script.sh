@@ -206,7 +206,7 @@ do
           # $1 = --restart-server, $2 = seconds, $3- reason
           # got a valid restart time
           wipeRestartSeconds=${2}
-          wipeRestartReason=${3}
+          wipeRestartReason="${3}"
         fi # end greater than 0 check
       fi # end int check
       shift 2
@@ -335,10 +335,10 @@ then
     # Likely the best intervals are 1m,10m. 30m for much higher times. 
     if [[ ${wipeRestartSeconds} -le 60 ]]
     then
-      # Restart time is less than 1 minute, just send the restart command.
+      # Restart time is less than (or equal to, cPan) 1 minute, just send the restart command.
       echo ''
       timeout 2 ${webRconCmd} ${rconIp}:${rconPort} ${rconPassword} "say Restarting in 0 minutes, ${wipeRestartSeconds} seconds."
-      timeout 2 ${webRconCmd} ${rconIp}:${rconPort} ${rconPassword} "restart ${wipeRestartSeconds}"
+      timeout 2 ${webRconCmd} ${rconIp}:${rconPort} ${rconPassword} "restart ${wipeRestartSeconds} \"${wipeRestartReason}\""
       sleep 70
     else
       # let's figure out how long this is.
@@ -392,7 +392,7 @@ then
       done
       # 1 minute until restart, send the rcon command.
       echo "Sending restart command to server via rcon..."
-      timeout 2 ${webRconCmd} ${rconIp}:${rconPort} ${rconPassword} "restart 60 ${wipeRestartReason}" > /dev/null 2>&1
+      timeout 2 ${webRconCmd} ${rconIp}:${rconPort} ${rconPassword} "restart 60 \"${wipeRestartReason}\"" > /dev/null 2>&1
       while [[ 1 -eq 1 ]]
       do
         # server running.
